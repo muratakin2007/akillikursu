@@ -1,5 +1,13 @@
 [
   {
+    "id": "listeleyici",
+    "adi": "E-okul PDF Sınıf Listesini Excel, Word ve TXT'ye Dönüştürme Aracı v2.5",
+    "url": "https://listeleyici.netlify.app/",
+    "kategori": "E-Okul",
+    "ikon": "📝",
+    "aciklama": "E-okul'dan alınan PDF sınıf listelerini; içeriği bozulmadan, gelişmiş filtreleme ve sayfa düzeni seçenekleriyle Excel (.xlsx), Word (.docx), TXT (.txt) formatlarına dönüştürmek veya doğrudan Yazdırmak için tasarlanmıştır. Sınıf Listeleri, kulüp ve gezi listelerini vb. kısa sürede oluşturabilirsiniz."
+  },
+  {
     "id": "portrenot20",
     "adi": "Portre Not v2.0 Beta",
     "url": "https://portrenot.netlify.app/20/",
