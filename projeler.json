@@ -1,5 +1,13 @@
 [
   {
+    "id": "topluisimdegistir",
+    "adi": "Toplu İsim Değiştir v1.2",
+    "url": "https://topluisimdegistir.netlify.app/",
+    "kategori": "Masaüstü",
+    "ikon": "📝",
+    "aciklama": "ilgisayarınızdaki çok sayıdaki dosyanın veya klasörün ismini tek tek değiştirmek yerine, belirlediğiniz kurallara göre tek tıkla ve topluca değiştirmenizi sağlayan ücretsiz ve pratik bir web aracıdır. Tüm işlemler sizin cihazınızda gerçekleşir."
+  },
+  {
     "id": "listeleyici",
     "adi": "E-okul PDF Sınıf Listesini Excel, Word ve TXT'ye Dönüştürme Aracı v2.5",
     "url": "https://listeleyici.netlify.app/",
