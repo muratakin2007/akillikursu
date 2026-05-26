@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Akıllı Kürsü - Dijital Eğitim Araçları Merkezi</title>
     
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Tailwind CSS Karanlık Mod Ayarı (Zorunlu) -->
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -35,58 +33,58 @@
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-200 min-h-screen flex flex-col antialiased transition-colors duration-300">
 
-    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[500px] pointer-events-none overflow-hidden z-0 opacity-70 dark:opacity-40">
-        <div class="absolute -top-[200px] left-1/4 w-[400px] h-[400px] bg-blue-400/20 dark:bg-blue-600/10 rounded-full filter blur-[80px]"></div>
-        <div class="absolute -top-[160px] right-1/4 w-[350px] h-[350px] bg-indigo-400/20 dark:bg-indigo-600/10 rounded-full filter blur-[80px]"></div>
+    <div class="absolute top-0 left-0 w-full h-[600px] pointer-events-none overflow-hidden z-0 opacity-70 dark:opacity-40">
+        <div class="absolute -top-[200px] left-1/4 w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-blue-400/20 dark:bg-blue-600/10 rounded-full filter blur-[100px]"></div>
+        <div class="absolute -top-[160px] right-1/4 w-[350px] md:w-[500px] h-[350px] md:h-[500px] bg-indigo-400/20 dark:bg-indigo-600/10 rounded-full filter blur-[100px]"></div>
     </div>
 
     <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 transition-colors duration-300">
-        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+        <div class="w-full px-4 sm:px-8 lg:px-12 2xl:px-24 mx-auto h-20 flex items-center justify-between">
             
-            <button onclick="toggleAboutModal(true)" class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-xs md:text-sm font-medium transition-all text-slate-600 dark:text-slate-300 active:scale-95 touch-manipulation">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <button onclick="toggleAboutModal(true)" class="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-sm md:text-base font-medium transition-all text-slate-600 dark:text-slate-300 active:scale-95 touch-manipulation">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <span>Hakkında</span>
             </button>
 
-            <div class="flex items-center space-x-2 select-none absolute left-1/2 -translate-x-1/2">
-                <span class="text-xl md:text-2xl">👨‍🏫</span>
-                <span class="text-base md:text-lg font-extrabold tracking-tight bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-400 dark:via-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">
+            <div class="flex items-center space-x-3 select-none absolute left-1/2 -translate-x-1/2">
+                <span class="text-2xl md:text-3xl">👨‍🏫</span>
+                <span class="text-lg md:text-2xl font-extrabold tracking-tight bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-400 dark:via-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">
                     Akıllı Kürsü
                 </span>
             </div>
 
-            <button onclick="toggleTheme()" id="themeBtn" class="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-all active:scale-95 touch-manipulation" aria-label="Tema Değiştir">
-                <svg id="sunIcon" class="h-4 w-4 hidden dark:block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <button onclick="toggleTheme()" id="themeBtn" class="p-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-all active:scale-95 touch-manipulation" aria-label="Tema Değiştir">
+                <svg id="sunIcon" class="h-5 w-5 hidden dark:block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.364l-.707.707M12 5a7 7 0 100 14 7 7 0 000-14z" />
                 </svg>
-                <svg id="moonIcon" class="h-4 w-4 block dark:hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg id="moonIcon" class="h-5 w-5 block dark:hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                 </svg>
             </button>
         </div>
     </header>
 
-    <main class="max-w-6xl mx-auto px-4 py-10 md:py-16 flex-grow w-full z-10">
+    <main class="w-full px-4 sm:px-8 lg:px-12 2xl:px-24 mx-auto py-12 md:py-20 flex-grow z-10">
         
-        <div class="text-center mb-10 md:mb-14">
-            <span class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 text-xs font-semibold mb-4 border border-blue-200/50 dark:border-blue-800/30">
+        <div class="text-center mb-12 md:mb-16">
+            <span class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 text-sm font-semibold mb-5 border border-blue-200/50 dark:border-blue-800/30">
                 <span>🚀 Eğitim odaklı açık kaynak projeler</span>
             </span>
-            <h2 class="text-3xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight mb-4 max-w-3xl mx-auto leading-tight">
+            <h2 class="text-4xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tight mb-5 max-w-4xl mx-auto leading-tight">
                 Geleceğin Sınıfları İçin <br class="hidden sm:inline"><span class="bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 bg-clip-text text-transparent">Akıllı Çözümler</span>
             </h2>
-            <p class="text-sm md:text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto px-2 font-medium">
+            <p class="text-base md:text-xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto px-2 font-medium">
                 Öğretmenlerin günlük işlerini otomatize eden, sınıf yönetimini ve okul bilişim sistemlerini pratikleştiren yeni nesil web uygulamaları.
             </p>
         </div>
 
-        <div class="bg-white/80 dark:bg-slate-900/60 backdrop-blur-md p-4 md:p-6 rounded-2xl shadow-xl shadow-slate-200/40 dark:shadow-none border border-slate-200/60 dark:border-slate-800/60 mb-8 md:mb-12 space-y-4 md:space-y-6">
+        <div class="bg-white/80 dark:bg-slate-900/60 backdrop-blur-md p-5 md:p-8 rounded-3xl shadow-xl shadow-slate-200/40 dark:shadow-none border border-slate-200/60 dark:border-slate-800/60 mb-10 md:mb-16 space-y-5 md:space-y-8 max-w-5xl mx-auto">
             
-            <div class="relative max-w-xl mx-auto w-full group">
-                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-500 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div class="relative max-w-2xl mx-auto w-full group">
+                <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                 </div>
@@ -95,56 +93,56 @@
                     id="searchBar" 
                     inputmode="search"
                     placeholder="Uygulama adı, teknoloji veya açıklama ara..." 
-                    class="w-full pl-11 pr-4 py-3.5 bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-slate-950 transition-all text-sm placeholder-slate-400 dark:placeholder-slate-500 dark:text-white"
+                    class="w-full pl-14 pr-5 py-4 bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-slate-950 transition-all text-base md:text-lg placeholder-slate-400 dark:placeholder-slate-500 dark:text-white"
                 >
             </div>
 
             <div class="w-full overflow-x-auto no-scrollbar -mx-4 px-4 md:mx-0 md:px-0">
-                <div class="flex flex-nowrap md:flex-wrap md:justify-center gap-2 pb-1" id="categoryContainer">
-                    <button onclick="filterCategory('Tümü')" class="cat-btn whitespace-nowrap px-4 py-2 rounded-xl text-xs md:text-sm font-semibold bg-blue-600 text-white shadow-md shadow-blue-500/20 transition-all touch-manipulation">
+                <div class="flex flex-nowrap md:flex-wrap md:justify-center gap-3 pb-2" id="categoryContainer">
+                    <button onclick="filterCategory('Tümü')" class="cat-btn whitespace-nowrap px-5 py-2.5 rounded-xl text-sm md:text-base font-semibold bg-blue-600 text-white shadow-md shadow-blue-500/20 transition-all touch-manipulation">
                         Tümü
                     </button>
                 </div>
             </div>
         </div>
 
-        <div id="projectsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
-            <div class="col-span-full text-center py-16 text-slate-400 dark:text-slate-600">
-                <svg class="animate-spin h-9 w-9 mx-auto mb-4 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <div id="projectsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 md:gap-8">
+            <div class="col-span-full text-center py-20 text-slate-400 dark:text-slate-600">
+                <svg class="animate-spin h-12 w-12 mx-auto mb-5 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
-                <span class="text-sm font-medium">Uygulama havuzu yükleniyor...</span>
+                <span class="text-base font-medium">Uygulama havuzu yükleniyor...</span>
             </div>
         </div>
 
-        <div id="noResults" class="hidden text-center py-16 px-4">
-            <div class="w-16 h-16 bg-slate-100 dark:bg-slate-900 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl shadow-inner">🔍</div>
-            <h3 class="text-base font-bold text-slate-800 dark:text-slate-200">Sonuç Bulunamadı</h3>
-            <p class="text-slate-500 dark:text-slate-400 mt-1 max-w-xs mx-auto text-xs md:text-sm">Farklı anahtar kelimeler aramayı veya kategoriyi değiştirmeyi deneyebilirsiniz.</p>
+        <div id="noResults" class="hidden text-center py-20 px-4">
+            <div class="w-20 h-20 bg-slate-100 dark:bg-slate-900 rounded-3xl flex items-center justify-center mx-auto mb-5 text-3xl shadow-inner">🔍</div>
+            <h3 class="text-lg md:text-xl font-bold text-slate-800 dark:text-slate-200">Sonuç Bulunamadı</h3>
+            <p class="text-slate-500 dark:text-slate-400 mt-2 max-w-sm mx-auto text-sm md:text-base">Farklı anahtar kelimeler aramayı veya kategoriyi değiştirmeyi deneyebilirsiniz.</p>
         </div>
 
     </main>
 
     <div id="aboutModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 w-full max-w-md rounded-3xl p-6 shadow-2xl scale-95 transition-transform duration-300 relative max-h-[90vh] overflow-y-auto">
-            <button onclick="toggleAboutModal(false)" class="absolute top-4 right-4 p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors" aria-label="Kapat">
-                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 w-full max-w-lg rounded-3xl p-8 shadow-2xl scale-95 transition-transform duration-300 relative max-h-[90vh] overflow-y-auto">
+            <button onclick="toggleAboutModal(false)" class="absolute top-5 right-5 p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors" aria-label="Kapat">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
             
-            <div class="text-center mb-5">
-                <span class="text-4xl select-none block mb-2">💡</span>
-                <h3 class="text-xl font-bold text-slate-900 dark:text-white">Akıllı Kürsü Hakkında</h3>
+            <div class="text-center mb-6">
+                <span class="text-5xl select-none block mb-3">💡</span>
+                <h3 class="text-2xl font-bold text-slate-900 dark:text-white">Akıllı Kürsü Hakkında</h3>
             </div>
             
-            <div class="space-y-4 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            <div class="space-y-5 text-base text-slate-600 dark:text-slate-300 leading-relaxed">
                 <p>
                     <strong>Akıllı Kürsü</strong>, eğitim teknolojilerini pratikleştirmek, öğretmenlerin idari yüklerini azaltmak ve okul bilgisayarlarındaki/akıllı tahtalardaki teknik süreçleri kolaylaştırmak amacıyla geliştirilen bağımsız bir dijital ekosistemdir.
                 </p>
                 <p>
-                    Burada listelenen tüm araçlar, sahadaki gerçek sınıf içi ihtiyaçlar ve öğretmen geri bildirimleri doğrultusunda tasarlanmış ogün optimize edilmiştir.
+                    Burada listelenen tüm araçlar, sahadaki gerçek sınıf içi ihtiyaçlar ve öğretmen geri bildirimleri doğrultusunda tasarlanmış ve optimize edilmiştir.
                 </p>
-                <div class="pt-2 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center text-xs text-slate-400">
+                <div class="pt-4 mt-4 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center text-sm text-slate-400">
                     <span>Geliştirici: Murat AKIN</span>
                     <span>Versiyon: 2.0.0</span>
                 </div>
@@ -152,7 +150,7 @@
         </div>
     </div>
 
-    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200/80 dark:border-slate-800/80 py-6 text-center text-xs text-slate-400 dark:text-slate-500 transition-colors duration-300">
+    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200/80 dark:border-slate-800/80 py-8 text-center text-sm text-slate-400 dark:text-slate-500 transition-colors duration-300">
         <p>&copy; 2026 Akıllı Kürsü. Tüm hakları saklıdır.</p>
     </footer>
 
@@ -171,7 +169,7 @@
             } catch (error) {
                 console.error('Veri çekilirken hata oluştu:', error);
                 document.getElementById('projectsGrid').innerHTML = `
-                    <div class="col-span-full text-center py-16 text-red-500 font-medium text-sm">
+                    <div class="col-span-full text-center py-20 text-red-500 font-medium text-base">
                         ❌ Uygulama listesi alınamadı. Lütfen daha sonra tekrar deneyin.
                     </div>`;
             }
@@ -192,25 +190,25 @@
 
             projects.forEach((project, index) => {
                 const card = document.createElement('div');
-                card.className = 'bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/70 dark:border-slate-800/70 p-5 shadow-sm dark:shadow-none active:scale-[0.98] md:hover:scale-[1.02] md:hover:shadow-xl md:hover:shadow-slate-200/50 dark:md:hover:shadow-none md:hover:border-slate-300 dark:md:hover:border-slate-700 transition-all duration-300 flex flex-col justify-between group opacity-0 translate-y-4';
+                card.className = 'bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/70 dark:border-slate-800/70 p-6 shadow-sm dark:shadow-none active:scale-[0.98] md:hover:scale-[1.02] md:hover:shadow-2xl md:hover:shadow-slate-200/50 dark:md:hover:shadow-none md:hover:border-slate-300 dark:md:hover:border-slate-700 transition-all duration-300 flex flex-col justify-between group opacity-0 translate-y-4';
                 card.style.animation = `fadeInUp 0.4s ease forwards ${index * 0.05}s`;
                 
                 card.innerHTML = `
                     <div>
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="text-2xl p-2.5 bg-slate-50 dark:bg-slate-950 rounded-xl group-hover:bg-blue-50 dark:group-hover:bg-blue-950/50 transition-colors select-none shadow-sm">${project.ikon || '🚀'}</span>
-                            <span class="text-[10px] md:text-[11px] font-bold px-2.5 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-lg tracking-wide uppercase">${project.kategori}</span>
+                        <div class="flex items-center justify-between mb-5">
+                            <span class="text-3xl p-3 bg-slate-50 dark:bg-slate-950 rounded-2xl group-hover:bg-blue-50 dark:group-hover:bg-blue-950/50 transition-colors select-none shadow-sm">${project.ikon || '🚀'}</span>
+                            <span class="text-xs md:text-sm font-bold px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-xl tracking-wide uppercase">${project.kategori}</span>
                         </div>
-                        <h3 class="text-base md:text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors">
+                        <h3 class="text-lg md:text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors">
                             ${project.adi}
                         </h3>
-                        <p class="text-slate-600 dark:text-slate-400 text-xs md:text-sm leading-relaxed mb-6 font-medium">
+                        <p class="text-slate-600 dark:text-slate-400 text-sm md:text-base leading-relaxed mb-8 font-medium">
                             ${project.aciklama}
                         </p>
                     </div>
-                    <a href="${project.url}" target="_blank" class="w-full inline-flex items-center justify-center px-4 py-3 bg-slate-50 hover:bg-blue-600 dark:bg-slate-950 dark:hover:bg-blue-600 text-slate-700 hover:text-white dark:text-slate-300 dark:hover:text-white font-bold text-xs md:text-sm rounded-xl border border-slate-200/80 dark:border-slate-800 hover:border-blue-600 dark:hover:border-blue-600 transition-all shadow-sm touch-manipulation">
+                    <a href="${project.url}" target="_blank" class="w-full inline-flex items-center justify-center px-5 py-4 bg-slate-50 hover:bg-blue-600 dark:bg-slate-950 dark:hover:bg-blue-600 text-slate-700 hover:text-white dark:text-slate-300 dark:hover:text-white font-bold text-sm md:text-base rounded-2xl border border-slate-200/80 dark:border-slate-800 hover:border-blue-600 dark:hover:border-blue-600 transition-all shadow-sm touch-manipulation">
                         <span>Uygulamaya Git</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 ml-1.5 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                         </svg>
                     </a>
@@ -228,7 +226,7 @@
             categories.forEach(cat => {
                 const btn = document.createElement('button');
                 btn.textContent = cat;
-                btn.className = `cat-btn whitespace-nowrap px-4 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all touch-manipulation ${
+                btn.className = `cat-btn whitespace-nowrap px-5 py-2.5 rounded-xl text-sm md:text-base font-semibold transition-all touch-manipulation ${
                     cat === activeCategory 
                     ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' 
                     : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
