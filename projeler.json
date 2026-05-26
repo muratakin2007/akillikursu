@@ -1,1 +1,26 @@
-
+[
+  {
+    "id": "e-okul-otomasyon",
+    "adi": "e-Okul Not Giriş Asistanı",
+    "url": "https://not.akillikursu.app",
+    "kategori": "Masaüstü / Otomasyon",
+    "ikon": "⚡",
+    "aciklama": "Öğretmenlerin e-Okul sistemine hızlı, hatasız ve fotoğraflı öğrenci listeleriyle pratik bir şekilde not girişi yapmasını sağlayan otomasyon aracı."
+  },
+  {
+    "id": "akilli-tahta-izleyici",
+    "adi": "Pardus ETAP İzleyici",
+    "url": "https://izleyici.akillikursu.app",
+    "kategori": "Sistem / Akıllı Tahta",
+    "ikon": "🖥️",
+    "aciklama": "Sınıflardaki akıllı tahtaların donanım kimliklerini, performans loglarını ve USB izinlerini arka planda kontrol edip raporlayan sistem betiği."
+  },
+  {
+    "id": "sanat-tarihi-escape-room",
+    "adi": "Sanat Tarihi Macera Oyunu",
+    "url": "https://oyun.akillikursu.app",
+    "kategori": "Web / Oyun",
+    "ikon": "🎨",
+    "aciklama": "Uygur mimarisinden Osmanlı saraylarına uzanan müfredat konularını, öğrencilerin şifreleri çözerek öğrendiği web tabanlı dijital kaçış odası."
+  }
+]
