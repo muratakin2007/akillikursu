@@ -1,9 +1,9 @@
 [
   {
-    "id": "E-Okul",
+    "id": "portrenot",
     "adi": "Portre Not v1.3",
     "url": "https://portrenot.netlify.app/",
-    "kategori": "Masaüstü / Otomasyon",
+    "kategori": "E-Okul",
     "ikon": "📋",
     "aciklama": "E-Okul'dan aldığınız fotoğraflı öğrenci listelerini saniyeler içinde fotoğraflı, düzenli ve not alabileceğiniz şık çizelgelere dönüştürün. Böylece öğrenciler hakkındaki kişisel notlarınızı kolayca alabileceğiniz bir not deftererine sahip olursunuz. Tüm bilgiler sizin cihazınızda tutulur."
   },
