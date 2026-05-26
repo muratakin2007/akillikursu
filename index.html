@@ -4,7 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Akıllı Kürsü - Dijital Eğitim Araçları Merkezi</title>
+    
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind CSS Karanlık Mod Ayarı (Zorunlu) -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script>
         // Sayfa yüklenirken parlamayı önlemek için karanlık mod kontrolü
@@ -132,7 +142,7 @@
                     <strong>Akıllı Kürsü</strong>, eğitim teknolojilerini pratikleştirmek, öğretmenlerin idari yüklerini azaltmak ve okul bilgisayarlarındaki/akıllı tahtalardaki teknik süreçleri kolaylaştırmak amacıyla geliştirilen bağımsız bir dijital ekosistemdir.
                 </p>
                 <p>
-                    Burada listelenen tüm araçlar, sahadaki gerçek sınıf içi ihtiyaçlar ve öğretmen geri bildirimleri doğrultusunda tasarlanmış ve optimize edilmiştir.
+                    Burada listelenen tüm araçlar, sahadaki gerçek sınıf içi ihtiyaçlar ve öğretmen geri bildirimleri doğrultusunda tasarlanmış ogün optimize edilmiştir.
                 </p>
                 <div class="pt-2 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center text-xs text-slate-400">
                     <span>Geliştirici: Murat AKIN</span>
@@ -182,8 +192,7 @@
 
             projects.forEach((project, index) => {
                 const card = document.createElement('div');
-                // Kartlarda daha yumuşak gölgeler, dark mode sınır hatları ve yumuşatılmış geçişler
-                card.className = 'bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/70 dark:border-slate-800/70 p-5 shadow-sm dark:shadow-none active:scale-[0.98] md:hover:scale-[1.02] md:hover:shadow-xl md:hover:shadow-slate-200/50 dark:md:hover:shadow-none md:hover:border-slate-300 dark:md:hover:border-slate-700 transition-all duration-300 flex flex-col justify-between group opacity-0 translate-y-4 animate-fade-in';
+                card.className = 'bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/70 dark:border-slate-800/70 p-5 shadow-sm dark:shadow-none active:scale-[0.98] md:hover:scale-[1.02] md:hover:shadow-xl md:hover:shadow-slate-200/50 dark:md:hover:shadow-none md:hover:border-slate-300 dark:md:hover:border-slate-700 transition-all duration-300 flex flex-col justify-between group opacity-0 translate-y-4';
                 card.style.animation = `fadeInUp 0.4s ease forwards ${index * 0.05}s`;
                 
                 card.innerHTML = `
@@ -249,11 +258,12 @@
 
         // 5. Tema Değiştirme (Dark Mode Kontrolü)
         function toggleTheme() {
-            if (document.documentElement.classList.contains('dark')) {
-                document.documentElement.classList.remove('dark');
+            const html = document.documentElement;
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
                 localStorage.setItem('theme', 'light');
             } else {
-                document.documentElement.classList.add('dark');
+                html.classList.add('dark');
                 localStorage.setItem('theme', 'dark');
             }
         }
