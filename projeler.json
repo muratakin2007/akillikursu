@@ -2,15 +2,15 @@
  {
     "id": "bolbas",
     "adi": "Bölbas v1.3",
-    "url": "https://toplugistir.netlify.app/",
+    "url": "https://bolbas.netlify.app/",
     "kategori": "Ofis",
     "ikon": "📜",
     "aciklama": "Büyük boyutlu görsel veya PDF dosyalarını A4 veya A3 gibi standart kağıt boyutlarına bölerek, ev veya ofis yazıcılarından büyük poster çıktısı almanızı ve bunları birleştirmenizi sağlayan pratik bir web uygulamasıdır. Tüm işlemler sizin cihazınızda gerçekleşir."
   },
  {
     "id": "topludegistirr",
-    "adi": "Toplu Değiştir v1.2",
-    "url": "https://toplugistir.netlify.app/",
+    "adi": "Toplu Değiştir v1.1",
+    "url": "https://topludegistir.netlify.app/",
     "kategori": "Ofis",
     "ikon": "🗂️",
     "aciklama": "Birden fazla Microsoft Office (Word, Excel, PowerPoint) belgesi üzerinde aynı anda metinlerde 'bul ve değiştir' işlemi yapmanızı sağlayan pratik bir web aracıdır. Tüm işlemler sizin cihazınızda gerçekleşir."
