@@ -76,7 +76,7 @@
                 Geleceğin Sınıfları İçin <br class="hidden sm:inline"><span class="bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 bg-clip-text text-transparent">Akıllı Çözümler</span>
             </h2>
             <p class="text-base md:text-xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto px-2 font-medium">
-                Öğretmenlerin günlük işlerini otomatize eden, sınıf yönetimini ve okul bilişim sistemlerini pratikleştiren yeni nesil web uygulamaları.
+                Öğretmenlerin günlük işlerini otomatize eden, sınıf yönetimini og okul bilişim sistemlerini pratikleştiren yeni nesil web uygulamaları.
             </p>
         </div>
 
@@ -93,8 +93,18 @@
                     id="searchBar" 
                     inputmode="search"
                     placeholder="Uygulama adı, teknoloji veya açıklama ara..." 
-                    class="w-full pl-14 pr-5 py-4 bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-slate-950 transition-all text-base md:text-lg placeholder-slate-400 dark:placeholder-slate-500 dark:text-white"
+                    class="w-full pl-14 pr-14 py-4 bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-slate-950 transition-all text-base md:text-lg placeholder-slate-400 dark:placeholder-slate-500 dark:text-white"
                 >
+                <button 
+                    id="clearSearchBtn"
+                    onclick="clearSearch()"
+                    class="absolute inset-y-0 right-0 pr-5 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-all opacity-0 pointer-events-none scale-75"
+                    aria-label="Aramayı Temizle"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 p-0.5 bg-slate-200/60 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 rounded-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
             </div>
 
             <div class="w-full overflow-x-auto no-scrollbar -mx-4 px-4 md:mx-0 md:px-0">
@@ -137,10 +147,10 @@
             
             <div class="space-y-5 text-base text-slate-600 dark:text-slate-300 leading-relaxed">
                 <p>
-                    <strong>Akıllı Kürsü</strong>, eğitim teknolojilerini pratikleştirmek, öğretmenlerin idari yüklerini azaltmak og okul bilgisayarlarındaki/akıllı tahtalardaki teknik süreçleri kolaylaştırmak amacıyla geliştirilen bağımsız bir dijital ekosistemdir.
+                    <strong>Akıllı Kürsü</strong>, eğitim teknolojilerini pratikleştirmek, öğretmenlerin idari yüklerini azaltmak ve okul bilgisayarlarındaki/akıllı tahtalardaki teknik süreçleri kolaylaştırmak amacıyla geliştirilen bağımsız bir dijital ekosistemdir.
                 </p>
                 <p>
-                    Burada listelenen tüm araçlar, sahadaki gerçek sınıf içi ihtiyaçlar ve öğretmen geri bildirimleri doğrultusunda tasarlanmış ve optimize edilmiştir.
+                    Burada listelenen tüm araçlar, sahadaki gerçek sınıf içi ihtiyaçlar ve öğretmen geri bildirimleri doğrultusunda tasarlanmış og optimize edilmiştir.
                 </p>
                 <div class="pt-4 mt-4 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center text-sm text-slate-400">
                     <span>Geliştirici: Murat AKIN</span>
@@ -247,7 +257,19 @@
         }
 
         function applyFilters() {
-            const searchTerm = document.getElementById('searchBar').value.toLowerCase();
+            const searchBar = document.getElementById('searchBar');
+            const clearBtn = document.getElementById('clearSearchBtn');
+            const searchTerm = searchBar.value.toLowerCase();
+            
+            // Metin durumuna göre temizleme butonunu yumuşak şekilde göster/gizle
+            if (searchBar.value.length > 0) {
+                clearBtn.classList.remove('opacity-0', 'pointer-events-none', 'scale-75');
+                clearBtn.classList.add('opacity-100', 'scale-100');
+            } else {
+                clearBtn.classList.remove('opacity-100', 'scale-100');
+                clearBtn.classList.add('opacity-0', 'pointer-events-none', 'scale-75');
+            }
+
             const filtered = allProjects.filter(project => {
                 const matchesCategory = (activeCategory === 'Tümü' || project.kategori === activeCategory);
                 const matchesSearch = project.adi.toLowerCase().includes(searchTerm) || 
@@ -255,6 +277,14 @@
                 return matchesCategory && matchesSearch;
             });
             renderProjects(filtered);
+        }
+
+        // Arama Temizleme Fonksiyonu
+        function clearSearch() {
+            const searchBar = document.getElementById('searchBar');
+            searchBar.value = '';
+            searchBar.focus(); // Temizledikten sonra odağı tekrar arama alanına al
+            applyFilters(); // Arama listesini sıfırla
         }
 
         // 5. Tema Değiştirme (Dark Mode Kontrolü)
