@@ -76,7 +76,7 @@
                 Geleceğin Sınıfları İçin <br class="hidden sm:inline"><span class="bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 bg-clip-text text-transparent">Akıllı Çözümler</span>
             </h2>
             <p class="text-base md:text-xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto px-2 font-medium">
-                Öğretmenlerin günlük işlerini otomatize eden, sınıf yönetimini og okul bilişim sistemlerini pratikleştiren yeni nesil web uygulamaları.
+                Öğretmenlerin günlük işlerini otomatize eden, sınıf yönetimini ve okul bilişim sistemlerini pratikleştiren yeni nesil web uygulamaları.
             </p>
         </div>
 
@@ -150,7 +150,7 @@
                     <strong>Akıllı Kürsü</strong>, eğitim teknolojilerini pratikleştirmek, öğretmenlerin idari yüklerini azaltmak ve okul bilgisayarlarındaki/akıllı tahtalardaki teknik süreçleri kolaylaştırmak amacıyla geliştirilen bağımsız bir dijital ekosistemdir.
                 </p>
                 <p>
-                    Burada listelenen tüm araçlar, sahadaki gerçek sınıf içi ihtiyaçlar ve öğretmen geri bildirimleri doğrultusunda tasarlanmış og optimize edilmiştir.
+                    Burada listelenen tüm araçlar, sahadaki gerçek sınıf içi ihtiyaçlar ve öğretmen geri bildirimleri doğrultusunda tasarlanmış ve optimize edilmiştir.
                 </p>
                 <div class="pt-4 mt-4 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center text-sm text-slate-400">
                     <span>Geliştirici: Murat AKIN</span>
@@ -161,7 +161,7 @@
     </div>
 
     <footer class="bg-white dark:bg-slate-900 border-t border-slate-200/80 dark:border-slate-800/80 py-8 text-center text-sm text-slate-400 dark:text-slate-500 transition-colors duration-300">
-        <p>&copy; 2026 Akıllı Kürsü. Tüm hakları saklıdır.</p>
+        <p>&copy; 2026 Akıllı Kürsü. Tüm hakları sablıdır.</p>
     </footer>
 
     <script>
@@ -259,21 +259,36 @@
         function applyFilters() {
             const searchBar = document.getElementById('searchBar');
             const clearBtn = document.getElementById('clearSearchBtn');
-            const searchTerm = searchBar.value.toLowerCase();
             
-            // Metin durumuna göre temizleme butonunu yumuşak şekilde göster/gizle
-            if (searchBar.value.length > 0) {
-                clearBtn.classList.remove('opacity-0', 'pointer-events-none', 'scale-75');
-                clearBtn.classList.add('opacity-100', 'scale-100');
+            // Arama terimini ve özel temizleme butonunu kontrol et
+            const originalSearchTerm = searchBar.value;
+            
+            if (originalSearchTerm.length > 0) {
+                if (clearBtn) {
+                    clearBtn.classList.remove('opacity-0', 'pointer-events-none', 'scale-75');
+                    clearBtn.classList.add('opacity-100', 'scale-100');
+                }
             } else {
-                clearBtn.classList.remove('opacity-100', 'scale-100');
-                clearBtn.classList.add('opacity-0', 'pointer-events-none', 'scale-75');
+                if (clearBtn) {
+                    clearBtn.classList.remove('opacity-100', 'scale-100');
+                    clearBtn.classList.add('opacity-0', 'pointer-events-none', 'scale-75');
+                }
             }
+
+            // Normalizasyon: Boşlukları, tireleri ve özel karakterleri kaldırarak yakın arama sağlama
+            const normalize = (text) => text.toLowerCase().replace(/[\s-]/g, '');
+            const normalizedSearch = normalize(originalSearchTerm);
 
             const filtered = allProjects.filter(project => {
                 const matchesCategory = (activeCategory === 'Tümü' || project.kategori === activeCategory);
-                const matchesSearch = project.adi.toLowerCase().includes(searchTerm) || 
-                                      project.aciklama.toLowerCase().includes(searchTerm);
+                
+                // Hem orijinal metinlerde klasik arama hem de normalize edilmiş metinlerde yakın arama kontrolü
+                const matchesSearch = 
+                    project.adi.toLowerCase().includes(originalSearchTerm.toLowerCase()) || 
+                    project.aciklama.toLowerCase().includes(originalSearchTerm.toLowerCase()) ||
+                    normalize(project.adi).includes(normalizedSearch) || 
+                    normalize(project.aciklama).includes(normalizedSearch);
+                    
                 return matchesCategory && matchesSearch;
             });
             renderProjects(filtered);
@@ -283,8 +298,8 @@
         function clearSearch() {
             const searchBar = document.getElementById('searchBar');
             searchBar.value = '';
-            searchBar.focus(); // Temizledikten sonra odağı tekrar arama alanına al
-            applyFilters(); // Arama listesini sıfırla
+            searchBar.focus();
+            applyFilters();
         }
 
         // 5. Tema Değiştirme (Dark Mode Kontrolü)
