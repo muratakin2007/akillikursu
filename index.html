@@ -29,6 +29,42 @@
         }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* @keyframes buraya taşındı ve dokunmatik ekranlar için hover koruması eklendi */
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Sadece fare (pointer) desteği olan cihazlarda hover efektlerini aktif et */
+        @media (hover: hover) {
+            .project-card:hover {
+                z-index: 20;
+                transform: scale(1.02);
+                border-color: #60a5fa; /* border-blue-400 */
+                box-shadow: 0 0 40px -10px rgba(59, 130, 246, 0.3);
+                background-image: linear-gradient(to bottom right, #ffffff, rgba(239, 246, 255, 0.5));
+            }
+            .dark .project-card:hover {
+                border-color: #3b82f6; /* border-blue-500 */
+                box-shadow: 0 0 40px -10px rgba(59, 130, 246, 0.2);
+                background-image: linear-gradient(to bottom right, #0f172a, rgba(30, 41, 59, 0.8));
+            }
+            .project-card:hover h3 {
+                color: #3b82f6; /* text-blue-500 */
+            }
+            .dark .project-card:hover h3 {
+                color: #60a5fa; /* text-blue-400 */
+            }
+            .project-card:hover .project-icon {
+                background-color: #eff6ff; /* bg-blue-50 */
+            }
+            .dark .project-card:hover .project-icon {
+                background-color: rgba(30, 58, 138, 0.5); /* bg-blue-950/50 */
+            }
+            .project-card:hover .go-app-btn svg {
+                transform: translateX(4px) translateY(-4px);
+            }
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-200 min-h-screen flex flex-col antialiased transition-colors duration-300">
@@ -159,7 +195,7 @@
     </div>
 
     <footer class="bg-white dark:bg-slate-900 border-t border-slate-200/80 dark:border-slate-800/80 py-8 text-center text-sm text-slate-400 dark:text-slate-500 transition-colors duration-300">
-        <p>&copy; 2026 Akıllı Kürsü. Tüm hakları sablıdır.</p>
+        <p>&copy; 2026 Akıllı Kürsü. Tüm hakları saklıdır.</p>
     </footer>
 
     <script>
@@ -199,27 +235,27 @@
             projects.forEach((project, index) => {
                 const card = document.createElement('div');
                 
-                // Yenilenmiş class listesi: Glow efekti, zemin gradyanı ve z-index kontrolü eklendi
-                card.className = 'bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/70 dark:border-slate-800/70 p-6 shadow-sm dark:shadow-none active:scale-[0.98] transition-all duration-500 flex flex-col justify-between group opacity-0 translate-y-4 relative z-10 hover:z-20 md:hover:scale-[1.02] md:hover:shadow-[0_0_40px_-10px_rgba(59,130,246,0.3)] dark:md:hover:shadow-[0_0_40px_-10px_rgba(59,130,246,0.2)] md:hover:border-blue-400 dark:md:hover:border-blue-500 md:hover:bg-gradient-to-br md:hover:from-white md:hover:to-blue-50/50 dark:md:hover:from-slate-900 dark:md:hover:to-slate-800/80';
+                // JavaScript tarafındaki Tailwind hover sınıfları kaldırıldı, .project-card sınıfı ve alt sınıflar eklendi.
+                card.className = 'project-card bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/70 dark:border-slate-800/70 p-6 shadow-sm dark:shadow-none active:scale-[0.98] transition-all duration-500 flex flex-col justify-between opacity-0 translate-y-4 relative z-10';
                 
                 card.style.animation = `fadeInUp 0.4s ease forwards ${index * 0.05}s`;
                 
                 card.innerHTML = `
                     <div>
                         <div class="flex items-center justify-between mb-5">
-                            <span class="text-3xl p-3 bg-slate-50 dark:bg-slate-950 rounded-2xl group-hover:bg-blue-50 dark:group-hover:bg-blue-950/50 transition-colors select-none shadow-sm">${project.ikon || '🚀'}</span>
+                            <span class="project-icon text-3xl p-3 bg-slate-50 dark:bg-slate-950 rounded-2xl transition-colors select-none shadow-sm">${project.ikon || '🚀'}</span>
                             <span class="text-xs md:text-sm font-bold px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-xl tracking-wide uppercase">${project.kategori}</span>
                         </div>
-                        <h3 class="text-lg md:text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors">
+                        <h3 class="text-lg md:text-xl font-bold text-slate-900 dark:text-white mb-3 transition-colors">
                             ${project.adi}
                         </h3>
                         <p class="text-slate-600 dark:text-slate-400 text-sm md:text-base leading-relaxed mb-8 font-medium">
                             ${project.aciklama}
                         </p>
                     </div>
-                    <a href="${project.url}" target="_blank" class="w-full inline-flex items-center justify-center px-5 py-4 bg-slate-50 hover:bg-blue-600 dark:bg-slate-950 dark:hover:bg-blue-600 text-slate-700 hover:text-white dark:text-slate-300 dark:hover:text-white font-bold text-sm md:text-base rounded-2xl border border-slate-200/80 dark:border-slate-800 hover:border-blue-600 dark:hover:border-blue-600 transition-all shadow-sm touch-manipulation">
+                    <a href="${project.url}" target="_blank" class="go-app-btn w-full inline-flex items-center justify-center px-5 py-4 bg-slate-50 hover:bg-blue-600 dark:bg-slate-950 dark:hover:bg-blue-600 text-slate-700 hover:text-white dark:text-slate-300 dark:hover:text-white font-bold text-sm md:text-base rounded-2xl border border-slate-200/80 dark:border-slate-800 hover:border-blue-600 dark:hover:border-blue-600 transition-all shadow-sm touch-manipulation">
                         <span>Uygulamaya Git</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                         </svg>
                     </a>
@@ -326,15 +362,6 @@
                 inner.classList.add('scale-95');
             }
         }
-
-        // Animasyon Stili Ekleme (CSS keyframes)
-        const style = document.createElement('style');
-        style.innerHTML = `
-            @keyframes fadeInUp {
-                to { opacity: 1; transform: translateY(0); }
-            }
-        `;
-        document.head.appendChild(style);
 
         document.getElementById('searchBar').addEventListener('input', applyFilters);
         window.addEventListener('DOMContentLoaded', fetchProjects);
