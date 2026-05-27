@@ -1,5 +1,13 @@
 [
  {
+    "id": "pratikpdf",
+    "adi": "Paratikpdf v1.0",
+    "url": "https://pratikpdf.netlify.app/",
+    "kategori": "Ofis",
+    "ikon": "📄",
+    "aciklama": "herhangi bir kurulum gerektirmeden doğrudan tarayıcınız üzerinden PDF dosyalarınızı kolayca yönetebileceğiniz pratik bir web aracıdır. Bu araç sayesinde PDF'lerinizdeki sayfaların sırasını sürükle-bırak ile değiştirebilir veya silebilir, birden fazla dosyayı tek bir PDF'te birleştirebilir, dosya boyutunu sıkıştırarak küçültebilir ve PDF sayfalarınızı hızlıca resim (JPG/PNG) formatına dönüştürebilirsiniz. Tüm işlemler sizin cihazınızda gerçekleşir."
+  },
+ {
     "id": "bolbass",
     "adi": "Bölbas v1.3",
     "url": "https://bolbas.netlify.app/",
