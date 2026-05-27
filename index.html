@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Akıllı Kürsü - Dijital Eğitim Araçları Merkezi.</title>
+    <title>Akıllı Kürsü - Dijital Eğitim Araçları Merkezi</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -30,40 +30,50 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* @keyframes buraya taşındı ve dokunmatik ekranlar için hover koruması eklendi */
         @keyframes fadeInUp {
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Sadece fare (pointer) desteği olan cihazlarda hover efektlerini aktif et */
-        @media (hover: hover) {
-            .project-card:hover {
-                z-index: 20;
-                transform: scale(1.02);
-                border-color: #60a5fa; /* border-blue-400 */
-                box-shadow: 0 0 40px -10px rgba(59, 130, 246, 0.3);
-                background-image: linear-gradient(to bottom right, #ffffff, rgba(239, 246, 255, 0.5));
-            }
-            .dark .project-card:hover {
-                border-color: #3b82f6; /* border-blue-500 */
-                box-shadow: 0 0 40px -10px rgba(59, 130, 246, 0.2);
-                background-image: linear-gradient(to bottom right, #0f172a, rgba(30, 41, 59, 0.8));
-            }
-            .project-card:hover h3 {
-                color: #3b82f6; /* text-blue-500 */
-            }
-            .dark .project-card:hover h3 {
-                color: #60a5fa; /* text-blue-400 */
-            }
-            .project-card:hover .project-icon {
-                background-color: #eff6ff; /* bg-blue-50 */
-            }
-            .dark .project-card:hover .project-icon {
-                background-color: rgba(30, 58, 138, 0.5); /* bg-blue-950/50 */
-            }
-            .project-card:hover .go-app-btn svg {
-                transform: translateX(4px) translateY(-4px);
-            }
+        /* Hem fareyle üzerine gelindiğinde (hover) hem de dokunmatik ekranda dokunulduğunda (active) çalışacak ortak efektler */
+        .project-card:hover,
+        .project-card:active {
+            z-index: 20;
+            transform: scale(1.02);
+            border-color: #60a5fa; /* border-blue-400 */
+            box-shadow: 0 0 40px -10px rgba(59, 130, 246, 0.3);
+            background-image: linear-gradient(to bottom right, #ffffff, rgba(239, 246, 255, 0.5));
+        }
+        
+        .dark .project-card:hover,
+        .dark .project-card:active {
+            border-color: #3b82f6; /* border-blue-500 */
+            box-shadow: 0 0 40px -10px rgba(59, 130, 246, 0.2);
+            background-image: linear-gradient(to bottom right, #0f172a, rgba(30, 41, 59, 0.8));
+        }
+
+        .project-card:hover h3,
+        .project-card:active h3 {
+            color: #3b82f6; /* text-blue-500 */
+        }
+
+        .dark .project-card:hover h3,
+        .dark .project-card:active h3 {
+            color: #60a5fa; /* text-blue-400 */
+        }
+
+        .project-card:hover .project-icon,
+        .project-card:active .project-icon {
+            background-color: #eff6ff; /* bg-blue-50 */
+        }
+
+        .dark .project-card:hover .project-icon,
+        .dark .project-card:active .project-icon {
+            background-color: rgba(30, 58, 138, 0.5); /* bg-blue-950/50 */
+        }
+
+        .project-card:hover .go-app-btn svg,
+        .project-card:active .go-app-btn svg {
+            transform: translateX(4px) translateY(-4px);
         }
     </style>
 </head>
@@ -112,7 +122,7 @@
                 Sınıflar İçin <br class="hidden sm:inline"><span class="bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 bg-clip-text text-transparent">Akıllı Çözümler</span>
             </h2>
             <p class="text-base md:text-xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto px-2 font-medium">
-                Öğretmenlerin günlük işlerini otomatize eden, sınıf yönetimini ve okul bilişim sistemlerini pratikleştiren yeni nesil web uygulamaları.
+                Öğretmenlerin günlük işlerini otomatize eden, sınıf yönetimini và okul bilişim sistemlerini pratikleştiren yeni nesil web uygulamaları.
             </p>
         </div>
 
@@ -219,7 +229,7 @@
             }
         }
 
-        // 2. Proje Kartlarını Modern Kart Düzeni ile Basma
+        // 2. Proje Kartlarını Basma
         function renderProjects(projects) {
             const grid = document.getElementById('projectsGrid');
             const noResults = document.getElementById('noResults');
@@ -235,8 +245,8 @@
             projects.forEach((project, index) => {
                 const card = document.createElement('div');
                 
-                // JavaScript tarafındaki Tailwind hover sınıfları kaldırıldı, .project-card sınıfı ve alt sınıflar eklendi.
-                card.className = 'project-card bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/70 dark:border-slate-800/70 p-6 shadow-sm dark:shadow-none active:scale-[0.98] transition-all duration-500 flex flex-col justify-between opacity-0 translate-y-4 relative z-10';
+                // JavaScript tarafındaki animasyon özellikleri ve dokunmatik uyumluluk sınıfları eklendi.
+                card.className = 'project-card bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/70 dark:border-slate-800/70 p-6 shadow-sm dark:shadow-none transition-all duration-500 flex flex-col justify-between opacity-0 translate-y-4 relative z-10 touch-manipulation';
                 
                 card.style.animation = `fadeInUp 0.4s ease forwards ${index * 0.05}s`;
                 
@@ -290,11 +300,10 @@
             applyFilters();
         }
 
+        // Filtreleme Uygulama
         function applyFilters() {
             const searchBar = document.getElementById('searchBar');
             const clearBtn = document.getElementById('clearSearchBtn');
-            
-            // Arama terimini ve özel temizleme butonunu kontrol et
             const originalSearchTerm = searchBar.value;
             
             if (originalSearchTerm.length > 0) {
@@ -309,14 +318,11 @@
                 }
             }
 
-            // Normalizasyon: Boşlukları, tireleri ve özel karakterleri kaldırarak yakın arama sağlama
             const normalize = (text) => text.toLowerCase().replace(/[\s-]/g, '');
             const normalizedSearch = normalize(originalSearchTerm);
 
             const filtered = allProjects.filter(project => {
                 const matchesCategory = (activeCategory === 'Tümü' || project.kategori === activeCategory);
-                
-                // Hem orijinal metinlerde klasik arama hem de normalize edilmiş metinlerde yakın arama kontrolü
                 const matchesSearch = 
                     project.adi.toLowerCase().includes(originalSearchTerm.toLowerCase()) || 
                     project.aciklama.toLowerCase().includes(originalSearchTerm.toLowerCase()) ||
@@ -336,7 +342,7 @@
             applyFilters();
         }
 
-        // 5. Tema Değiştirme (Dark Mode Kontrolü)
+        // 5. Tema Değiştirme
         function toggleTheme() {
             const html = document.documentElement;
             if (html.classList.contains('dark')) {
