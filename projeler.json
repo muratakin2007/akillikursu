@@ -59,7 +59,15 @@
     "url": "https://gezin.netlify.app/",
     "kategori": "Seyahat",
     "ikon": "🗺️",
-    "aciklama": "Bulunduğunuz veya ziyaret etmek istediğiniz bir bölgedeki tarihi yerleri, müzeleri, dini yapıları ve doğal güzellikleri kolayca keşfetmenizi sağlayan pratik ve kullanıcı dostu bir dijital gezi rehberidir. Konumunuzu kullanarak belirli bir kilometre yarıçapındaki gezilecek yerleri anında listeleyebilir; mekanları puanlarına, o an açık olma durumlarına veya ücretsiz olup olmadıklarına göre detaylıca filtreleyebilirsiniz. İlginizi çeken noktaları favorilerinize ekleyerek kendinize özel bir gezi listesi oluşturmanıza ve bu yerler arasında çok duraklı rotalar planlamanıza imkan tanıyan site, seyahatlerinizi hızlıca organize etmenizi sağlayan bir keşif aracıdır."
+    "aciklama": "Bulunduğunuz veya ziyaret etmek istediğiniz bir bölgedeki tarihi yerleri, müzeleri, dini yapıları ve doğal güzellikleri kolayca keşfetmenizi sağlayan pratik ve kullanıcı dostu bir dijital gezi rehberidir. Konumunuzu kullanarak belirli bir kilometre yarıçapındaki gezilecek yerleri anında listeleyebilir; mekanları puanlarına, o an açık olma durumlarına veya ücretsiz olup olmadıklarına göre detaylıca filtreleyebilirsiniz. İlginizi çeken noktaları favorilerinize ekleyerek kendinize özel bir gezi listesi oluşturmanıza ve bu yerler arasında çok duraklı rotalar planlamanıza imkan tanıyan site, seyahatlerinizi hızlıca organize etmenizi sağlayan bir keşif aracıdır. Tüm işlemler sizin cihazınızda gerçekleşir."
+  },
+    {
+    "id": "seslikitap",
+    "adi": "Sesli Kitap v1.0",
+    "url": "https://portrenot.netlify.app/20/",
+    "kategori": "Kitap",
+    "ikon": "▶️",
+    "aciklama": "Sesli Kitap Uygulaması, kendi sesli kitap arşivinizi oluşturmanıza, dinlemenize ve dinlediğiniz bölümleri işaretleyip not almanıza olanak tanıyan tamamen tarayıcı tabanlı, çevrimdışı çalışan bir uygulamadır. Tüm işlemler sizin cihazınızda gerçekleşir"
   },
  
   {
