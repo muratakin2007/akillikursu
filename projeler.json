@@ -22,6 +22,7 @@
     "kategori": "Ofis",
     "ikon": "🗂️",
     "duyur":"YENİ",
+     "durum": "Beta",
     "aciklama": "Birden fazla Microsoft Office (Word, Excel, PowerPoint) belgesi üzerinde aynı anda metinlerde 'bul ve değiştir' işlemi yapmanızı sağlayan pratik bir web aracıdır. Tüm işlemler sizin cihazınızda gerçekleşir."
   },
   {
@@ -31,6 +32,7 @@
     "kategori": "Masaüstü",
     "ikon": "✍️",
     "duyur":"YENİ",
+    "durum": "Beta",
     "aciklama": "Bilgisayarınızdaki çok sayıdaki dosyanın ismini tek tek değiştirmek yerine, belirlediğiniz kurallara göre tek tıkla ve topluca değiştirmenizi sağlayan ücretsiz ve pratik bir web aracıdır. Tüm işlemler sizin cihazınızda gerçekleşir."
   },
   {
