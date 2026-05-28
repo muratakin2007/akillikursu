@@ -5,7 +5,6 @@
     "url": "https://pratikpdf.netlify.app/",
     "kategori": "Ofis",
     "ikon": "📄",
-    "duyur":"YENİ",
     "aciklama": "herhangi bir kurulum gerektirmeden doğrudan tarayıcınız üzerinden PDF dosyalarınızı kolayca yönetebileceğiniz pratik bir web aracıdır. Bu araç sayesinde PDF'lerinizdeki sayfaların sırasını sürükle-bırak ile değiştirebilir veya silebilir, birden fazla dosyayı tek bir PDF'te birleştirebilir, dosya boyutunu sıkıştırarak küçültebilir ve PDF sayfalarınızı hızlıca resim (JPG/PNG) formatına dönüştürebilirsiniz. Tüm işlemler sizin cihazınızda gerçekleşir."
   },
  {
@@ -22,6 +21,7 @@
     "url": "https://topludegistir.netlify.app/",
     "kategori": "Ofis",
     "ikon": "🗂️",
+    "duyur":"YENİ",
     "aciklama": "Birden fazla Microsoft Office (Word, Excel, PowerPoint) belgesi üzerinde aynı anda metinlerde 'bul ve değiştir' işlemi yapmanızı sağlayan pratik bir web aracıdır. Tüm işlemler sizin cihazınızda gerçekleşir."
   },
   {
@@ -30,6 +30,7 @@
     "url": "https://topluisimdegistir.netlify.app/",
     "kategori": "Masaüstü",
     "ikon": "✍️",
+    "duyur":"YENİ",
     "aciklama": "Bilgisayarınızdaki çok sayıdaki dosyanın ismini tek tek değiştirmek yerine, belirlediğiniz kurallara göre tek tıkla ve topluca değiştirmenizi sağlayan ücretsiz ve pratik bir web aracıdır. Tüm işlemler sizin cihazınızda gerçekleşir."
   },
   {
