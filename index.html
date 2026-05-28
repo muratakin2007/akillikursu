@@ -519,6 +519,7 @@
             renderRecents();
         }
 
+        // Son kullanılan projeleri listele
         function renderRecents() {
             const section = document.getElementById('recentSection');
             const container = document.getElementById('recentContainer');
@@ -545,7 +546,7 @@
             });
         }
 
-        // TAM DONANIMLI KLAVYE KISAYOLLARI ENTEGRASYONU (Asenkron requestAnimationFrame ile Odaklanma Kesin Çözümü)
+        // TAM DONANIMLI KLAVYE KISAYOLLARI ENTEGRASYONU (Garanti Odaklanma Çözümü)
         window.addEventListener('keydown', (e) => {
             const searchBar = document.getElementById('searchBar');
             if (!searchBar) return;
@@ -563,16 +564,19 @@
             if (e.key === '/' || ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k')) {
                 e.preventDefault(); // Tarayıcı varsayılan çakışmalarını önler
                 
-                // Aşağı kaydırılmış durumdayken animasyon çakışmalarını önlemek için anlık (instant) hizalama yapar
-                searchBar.scrollIntoView({ behavior: 'instant', block: 'center' });
+                // GARANTİ YÖNTEM: Sayfa aşağı kaydırılmışsa arama kutusunun tam dikey konumuna anında sıçrar
+                const targetY = searchBar.getBoundingClientRect().top + window.scrollY - (window.innerHeight / 3);
+                window.scrollTo({ top: targetY, behavior: 'auto' });
                 
-                // requestAnimationFrame kullanarak tarayıcının DOM'u kaydırdığı tam milisaniyede odağı kilitler
-                requestAnimationFrame(() => {
+                // Tarayıcının render kuyruğunu garantiye almak için iç içe zamanlama ve animasyon kareleri kullanımı
+                setTimeout(() => {
                     requestAnimationFrame(() => {
-                        searchBar.focus();
-                        searchBar.select();
+                        requestAnimationFrame(() => {
+                            searchBar.focus();
+                            searchBar.select();
+                        });
                     });
-                });
+                }, 10);
             }
         });
 
