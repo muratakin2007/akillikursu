@@ -69,6 +69,14 @@
     "ikon": "▶️",
     "aciklama": "Sesli Kitap Uygulaması, kendi sesli kitap arşivinizi oluşturmanıza, dinlemenize ve dinlediğiniz bölümleri işaretleyip not almanıza olanak tanıyan tamamen tarayıcı tabanlı, çevrimdışı çalışan bir uygulamadır. Tüm işlemler sizin cihazınızda gerçekleşir"
   },
+   {
+    "id": "karekod",
+    "adi": "QR Kod Oluşturucu v1.0",
+    "url": "https://karekod-olusturucu.netlify.app/",
+    "kategori": "Ofis",
+    "ikon": "▶️",
+    "aciklama": "Web sitesi linki, düz metin, iletişim bilgileri, Wi-Fi şifresi, konum, IBAN numarası ve sosyal medya profilleri gibi birçok farklı içerik için tamamen ücretsiz ve kalıcı karekodlar hazırlamanızı sağlayan pratik bir web aracıdır. Herhangi bir üyelik gerektirmeyen bu platformda, formu doldurduğunuz anda otomatik olarak eşzamanlı üretilen karekodların boyutunu, kenar boşluklarını ve renklerini kendi zevkinize veya kurumsal kimliğinize göre kolayca kişiselleştirebilirsiniz. Tasarladığınız karekodları yüksek kalitede PNG ya da vektörel SVG formatında cihazınıza indirerek veya doğrudan kopyalayarak broşür, afiş, menü ve kartvizit gibi dijital ya da basılı tüm materyallerinizde saniyeler içinde kullanmaya başlayabilirsiniz."
+  },
  
   {
     "id": "portrenot",
