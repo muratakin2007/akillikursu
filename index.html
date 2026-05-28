@@ -169,6 +169,7 @@
                     class="w-full pl-14 pr-14 py-4 bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-slate-950 transition-all text-base md:text-lg placeholder-slate-400 dark:placeholder-slate-500 dark:text-white"
                     aria-label="Uygulamalarda ara"
                 >
+                <!-- KBD Kısayol Badge Alanı -->
                 <div id="searchKbdBadge" class="absolute inset-y-0 right-4 flex items-center pointer-events-none text-xs text-slate-400 bg-slate-200/60 dark:bg-slate-800/80 my-auto h-7 px-2 rounded-lg border border-slate-300/40 dark:border-slate-700/50 transition-opacity duration-200 select-none hidden md:flex">
                     Ctrl K
                 </div>
@@ -192,6 +193,7 @@
                 </div>
             </div>
 
+            <!-- EN SON KULLANILANLAR BÖLÜMÜ -->
             <div id="recentSection" class="hidden border-t border-slate-100 dark:border-slate-800/80 pt-4 max-w-2xl mx-auto w-full">
                 <div class="flex items-center space-x-2 text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-2.5">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -218,6 +220,7 @@
             <div class="w-20 h-20 bg-slate-100 dark:bg-slate-900 rounded-3xl flex items-center justify-center mx-auto mb-5 text-3xl shadow-inner" aria-hidden="true">🔍</div>
             <h3 class="text-lg md:text-xl font-bold text-slate-800 dark:text-slate-200">Sonuç Bulunamadı</h3>
             <p class="text-slate-500 dark:text-slate-400 mt-2 max-w-sm mx-auto text-sm md:text-base mb-5">Farklı anahtar kelimeler aramayı veya kategoriyi değiştirmeyi deneyebilirsiniz.</p>
+            <!-- ARAMAYI TEMİZLEME AKILLI UX BUTONU -->
             <button onclick="clearSearch()" class="inline-flex items-center space-x-2 px-5 py-2.5 bg-blue-50 hover:bg-blue-100 dark:bg-blue-950/40 dark:hover:bg-blue-900/40 text-blue-600 dark:text-blue-400 border border-blue-200/50 dark:border-blue-800/40 rounded-xl text-sm font-semibold transition-all active:scale-95 touch-manipulation">
                 <span>Aramayı Temizle</span>
             </button>
@@ -238,9 +241,10 @@
             
             <div class="space-y-5 text-base text-slate-600 dark:text-slate-300 leading-relaxed">
                 <p>
-                    <strong>Akıllı Kürsü</strong>, digital eğitim teknolojilerini pratikleştirmek, öğretmenlerin idari yüklerini azaltmak ve okul bilgisayarlarındaki/akıllı tahtalardaki teknik süreçleri kolaylaştırmak amacıyla geliştirilen bağımsız bir dijital ekosistemdir.
+                    <strong>Akıllı Kürsü</strong>, dijital eğitim teknolojilerini pratikleştirmek, öğretmenlerin idari yüklerini azaltmak ve okul bilgisayarlarındaki/akıllı tahtalardaki teknik süreçleri kolaylaştırmak amacıyla geliştirilen bağımsız bir dijital ekosistemdir.
                 </p>
                 
+                <!-- ARAÇ ÖNER BUTONU (GOOGLE FORM ENTEGRASYONU) -->
                 <div class="pt-2">
                     <a href="https://docs.google.com/forms/d/e/1FAIpQLScyO0gO7XnZk_7SgXG0o-XWpOn_FormLinki/viewform" target="_blank" class="w-full inline-flex items-center justify-center px-5 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-2xl shadow-md shadow-blue-500/10 transition-all text-sm md:text-base active:scale-95">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -353,6 +357,7 @@
                                     <span class="text-xs md:text-sm font-bold px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-xl tracking-wide uppercase">${project.kategori}</span>
                                 </div>
                                 
+                                <!-- AKILLI TAHTA İÇİN GENİŞLETİLMİŞ PADDING'Lİ FAVORİ BUTONU -->
                                 <button onclick="toggleFavorite('${project.adi.replace(/'/g, "\\'")}', event)" class="p-3.5 rounded-xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-950 dark:hover:bg-slate-800 border border-slate-200/50 dark:border-slate-800/80 transition-all hover:scale-110 active:scale-90 z-30 touch-manipulation group" aria-label="${favButtonLabel}">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ${starAnimClass} ${isFav ? 'text-amber-400 fill-amber-400' : 'text-slate-300 dark:text-slate-600 group-hover:text-amber-400/60 transition-colors'}" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
@@ -368,6 +373,7 @@
                         </p>
                     </div>
                     
+                    <!-- ERİŞİLEBİLİRLİK İÇİN DİNAMİK ARIA-LABEL EKLENDİ -->
                     <a href="${project.url}" target="_blank" onclick="trackRecent('${project.adi.replace(/'/g, "\\'")}')" class="go-app-btn w-full inline-flex items-center justify-center px-5 py-4 bg-slate-50 hover:bg-blue-600 dark:bg-slate-950 dark:hover:bg-blue-600 text-slate-700 hover:text-white dark:text-slate-300 dark:hover:text-white font-bold text-sm md:text-base rounded-2xl border border-slate-200/80 dark:border-slate-800 hover:border-blue-600 dark:hover:border-blue-600 transition-all shadow-sm touch-manipulation" aria-label="${project.adi} uygulamasına git">
                         <span>Uygulamaya Git</span>
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -513,15 +519,19 @@
             });
         }
 
-        // KLAVYE KISAYOLLARI ENTEGRASYONU (/ ve Ctrl+K)
+        // TAM DONANIMLI KLAVYE KISAYOLLARI ENTEGRASYONU (/ ve Ctrl+K)
         window.addEventListener('keydown', (e) => {
             const searchBar = document.getElementById('searchBar');
+            if (!searchBar) return;
+
+            // Eğer halihazırda arama çubuğuna odaklanılmışsa ekstra bir tetikleme yapma
             if (document.activeElement === searchBar) return;
 
-            if (e.key === '/' || (e.ctrlKey && e.key.toLowerCase() === 'k')) {
-                e.preventDefault();
+            // Tek başına '/' tuşu veya 'Ctrl + K / Cmd + K' kombinasyon kontrolü
+            if (e.key === '/' || ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k')) {
+                e.preventDefault(); // Tarayıcının varsayılan Ctrl+K arama barı davranışını engeller
                 searchBar.focus();
-                searchBar.select();
+                searchBar.select(); // Kullanıcı kolaylığı için mevcut metni seçili hale getirir
             }
         });
 
