@@ -102,6 +102,32 @@
         .project-card:active .go-app-btn svg {
             transform: translateX(4px) translateY(-4px);
         }
+
+        /* Köşe Bandı (Ribbon) için CSS */
+        .ribbon-wrapper {
+            width: 95px;
+            height: 95px;
+            overflow: hidden;
+            position: absolute;
+            top: -1px;
+            right: -1px;
+            z-index: 10;
+        }
+        .ribbon {
+            font-weight: 800;
+            font-size: 10px;
+            text-align: center;
+            letter-spacing: 0.5px;
+            transform: rotate(45deg);
+            position: relative;
+            padding: 5px 0;
+            left: -5px;
+            top: 17px;
+            width: 140px;
+            background-color: #10b981; /* emerald-500 yeşili */
+            color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-200 min-h-screen flex flex-col antialiased transition-colors duration-300">
@@ -331,10 +357,11 @@
                 const isFav = favorites.includes(project.adi);
                 const card = document.createElement('div');
                 
-                card.className = 'project-card bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/70 dark:border-slate-800/70 p-6 shadow-sm dark:shadow-none transition-all duration-500 flex flex-col justify-between opacity-0 translate-y-4 relative z-10 touch-manipulation';
+                // overflow-hidden eklendi, böylece sağ üstteki band kart sınırlarının dışına taşmaz
+                card.className = 'project-card bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/70 dark:border-slate-800/70 p-6 shadow-sm dark:shadow-none transition-all duration-500 flex flex-col justify-between opacity-0 translate-y-4 relative z-10 touch-manipulation overflow-hidden';
                 card.style.animation = `fadeInUp 0.4s ease forwards ${index * 0.05}s`;
                 
-                // Dinamik mikro durum etiketlerinin tespiti (Yeni, Güncellendi, Beta)
+                // Dinamik mikro durum etiketlerinin tespiti (Durum: Yeni, Güncellendi, Beta)
                 let badgeHTML = '';
                 if (project.durum) {
                     let badgeColor = 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400 border-emerald-200/60';
@@ -342,6 +369,16 @@
                     if (project.durum === 'Beta') badgeColor = 'bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400 border-blue-200/60';
                     
                     badgeHTML = `<span class="text-[10px] font-extrabold px-2 py-0.5 rounded-md border ${badgeColor} tracking-wide uppercase mr-2">${project.durum}</span>`;
+                }
+
+                // DUYURU / ÖNERİLEN KÖŞE BANDI YAPISI
+                let ribbonHTML = '';
+                if (project.duyur && project.duyur.trim() !== "") {
+                    ribbonHTML = `
+                        <div class="ribbon-wrapper">
+                            <div class="ribbon">${project.duyur.toUpperCase()}</div>
+                        </div>
+                    `;
                 }
 
                 // Yıldızın animasyon sınıfını belirle (Aktifleşme mi, pasifleşme mi?)
@@ -356,11 +393,12 @@
                 const favButtonLabel = isFav ? `${project.adi} uygulamasını favorilerden çıkar` : `${project.adi} uygulamasını favorilere ekle`;
                 
                 card.innerHTML = `
+                    ${ribbonHTML}
                     <div>
-                        <div class="flex items-center justify-between mb-5">
+                        <div class="flex items-center justify-between mb-5 relative z-20">
                             <span class="project-icon text-3xl p-3 bg-slate-50 dark:bg-slate-950 rounded-2xl transition-colors select-none shadow-sm" aria-hidden="true">${project.ikon || '🚀'}</span>
                             
-                            <div class="flex items-center justify-end gap-5 flex-grow pl-4">
+                            <div class="flex items-center justify-end gap-3 flex-grow pl-4 ${project.duyur ? 'pr-14' : ''}">
                                 <div class="flex items-center select-none">
                                     ${badgeHTML}
                                     <span class="text-xs md:text-sm font-bold px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-xl tracking-wide uppercase">${project.kategori}</span>
@@ -373,15 +411,15 @@
                                 </button>
                             </div>
                         </div>
-                        <h3 class="text-lg md:text-xl font-bold text-slate-900 dark:text-white mb-3 transition-colors">
+                        <h3 class="text-lg md:text-xl font-bold text-slate-900 dark:text-white mb-3 transition-colors relative z-20">
                             ${project.adi}
                         </h3>
-                        <p class="text-slate-600 dark:text-slate-400 text-sm md:text-base leading-relaxed mb-8 font-medium">
+                        <p class="text-slate-600 dark:text-slate-400 text-sm md:text-base leading-relaxed mb-8 font-medium relative z-20">
                             ${project.aciklama}
                         </p>
                     </div>
                     
-                    <a href="${project.url}" target="_blank" onclick="trackRecent('${project.adi.replace(/'/g, "\\'")}')" class="go-app-btn w-full inline-flex items-center justify-center px-5 py-4 bg-slate-50 hover:bg-blue-600 dark:bg-slate-950 dark:hover:bg-blue-600 text-slate-700 hover:text-white dark:text-slate-300 dark:hover:text-white font-bold text-sm md:text-base rounded-2xl border border-slate-200/80 dark:border-slate-800 hover:border-blue-600 dark:hover:border-blue-600 transition-all shadow-sm touch-manipulation" aria-label="${project.adi} uygulamasına git">
+                    <a href="${project.url}" target="_blank" onclick="trackRecent('${project.adi.replace(/'/g, "\\'")}')" class="go-app-btn w-full inline-flex items-center justify-center px-5 py-4 bg-slate-50 hover:bg-blue-600 dark:bg-slate-950 dark:hover:bg-blue-600 text-slate-700 hover:text-white dark:text-slate-300 dark:hover:text-white font-bold text-sm md:text-base rounded-2xl border border-slate-200/80 dark:border-slate-800 hover:border-blue-600 dark:hover:border-blue-600 transition-all shadow-sm touch-manipulation relative z-20" aria-label="${project.adi} uygulamasına git">
                         <span>Uygulamaya Git</span>
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -553,7 +591,6 @@
                 e.preventDefault(); // Tarayıcının adres çubuğu vb. varsayılan çakışmalarını keser
                 
                 // GARANTİ YÖNTEM: Arama kutusu zaten aktif olsa bile sayfa aşağı kaydırılmışsa tam dikey konumuna sıçrar.
-                // Arama kutusunu ekran yüksekliğinin 1/3'ü kadar aşağıya hizalayarak başlıkların ve kutunun tam görünmesini sağlar.
                 const targetY = searchBar.getBoundingClientRect().top + window.scrollY - (window.innerHeight / 3);
                 window.scrollTo({ top: targetY, behavior: 'auto' });
                 
