@@ -73,7 +73,7 @@
         }
 
         /* Akıllı Tahta dahi Mobil için Haptik/Visual Geri Bildirim: Tıklanma anında iç gölge efekti */
-        .project-card:active, .cat-btn:active, .go-app-btn:active, .share-btn:active {
+        .project-card:active, .cat-btn:active, .go-app-btn:active, .share-btn:active, .size-btn:active {
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
             transform: scale(0.99) !important;
         }
@@ -150,6 +150,11 @@
             color: #ffffff;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+        
+        /* Font Sizer geçiş animasyonu */
+        html {
+            transition: font-size 0.2s ease;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-200 min-h-screen flex flex-col antialiased transition-colors duration-300">
@@ -160,23 +165,31 @@
     </div>
 
     <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 transition-colors duration-300">
-        <div class="w-full px-4 sm:px-8 lg:px-12 2xl:px-24 mx-auto h-20 flex items-center justify-between">
+        <div class="w-full px-4 sm:px-8 lg:px-12 2xl:px-24 mx-auto h-20 flex items-center justify-between gap-4">
             
-            <button onclick="toggleAboutModal(true)" class="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-sm md:text-base font-medium transition-all text-slate-600 dark:text-slate-300 active:scale-95 touch-manipulation" aria-haspopup="dialog" aria-expanded="false" id="aboutModalBtn">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span>Hakkında</span>
-            </button>
+            <div class="flex items-center space-x-2 flex-shrink-0">
+                <button onclick="toggleAboutModal(true)" class="inline-flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-sm md:text-base font-medium transition-all text-slate-600 dark:text-slate-300 active:scale-95 touch-manipulation" aria-haspopup="dialog" aria-expanded="false" id="aboutModalBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span class="hidden sm:inline">Hakkında</span>
+                </button>
+
+                <div class="inline-flex items-center p-1 bg-slate-100 dark:bg-slate-800 rounded-xl border border-slate-200/40 dark:border-slate-700/40 select-none">
+                    <button onclick="changeFontSize(-1)" class="size-btn px-2.5 py-1 text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-900 rounded-lg transition-all touch-manipulation" title="Yazıları Küçült">A-</button>
+                    <button onclick="changeFontSize(0)" class="size-btn px-2.5 py-1 text-xs font-extrabold text-blue-600 dark:text-blue-400 hover:bg-white dark:hover:bg-slate-900 rounded-lg transition-all touch-manipulation" title="Boyutu Sıfırla">A</button>
+                    <button onclick="changeFontSize(1)" class="size-btn px-2.5 py-1 text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-900 rounded-lg transition-all touch-manipulation" title="Yazıları Büyüt">A+</button>
+                </div>
+            </div>
 
             <div class="flex items-center space-x-3 select-none absolute left-1/2 -translate-x-1/2">
-                <span class="text-2xl md:text-3xl" aria-hidden="true">👨‍🏫</span>
-                <span class="text-lg md:text-2xl font-extrabold tracking-tight bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-400 dark:via-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">
+                <span class="text-2xl md:text-3xl hidden xs:inline" aria-hidden="true">👨‍🏫</span>
+                <span class="text-lg md:text-2xl font-extrabold tracking-tight bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-400 dark:via-indigo-400 dark:to-purple-400 bg-clip-text text-transparent whitespace-nowrap">
                     Akıllı Kürsü
                 </span>
             </div>
 
-            <button onclick="toggleTheme()" id="themeBtn" class="p-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-all active:scale-95 touch-manipulation" aria-label="Tema Değiştir">
+            <button onclick="toggleTheme()" id="themeBtn" class="p-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-all active:scale-95 touch-manipulation flex-shrink-0" aria-label="Tema Değiştir">
                 <svg id="sunIcon" class="h-5 w-5 hidden dark:block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.364l-.707.707M12 5a7 7 0 100 14 7 7 0 000-14z" />
                 </svg>
@@ -197,7 +210,7 @@
                 Sınıflar İçin <br class="hidden sm:inline"><span class="bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 bg-clip-text text-transparent">Akıllı Çözümler</span>
             </h2>
             <p class="text-base md:text-xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto px-2 font-medium">
-                Öğretmenlerin günlük işlerini otomatize eden, sınıf yönetimini ve okul bilişim sistemlerini pratikleştiren yeni nesil web uygulamaları.
+                Öğretmenlerin günlük işlerini otomatize eden, sınıf yönetimini dahi okul bilişim sistemlerini pratikleştiren yeni nesil web uygulamaları.
             </p>
         </div>
 
@@ -253,7 +266,7 @@
                         Tümünü Temizle
                     </button>
                 </div>
-                <div id="recentContainer" class="flex flex-wrap gap-2"></div>
+                <div id="recentContainer" class="flex flex-wrap gap-2.5"></div>
             </div>
 
         </div>
@@ -667,7 +680,7 @@
             renderRecents();
         }
 
-        // Son kullanılan projeleri listele
+        // Son kullanılan projeleri listele (Dokunmatik Ekranlar ve Akıllı Tahtalar İçin Daha Büyük Tasarlandı)
         function renderRecents() {
             const section = document.getElementById('recentSection');
             const container = document.getElementById('recentContainer');
@@ -683,22 +696,24 @@
                 const foundProj = allProjects.find(p => p.adi === name);
                 if (foundProj) {
                     const wrapper = document.createElement('div');
-                    wrapper.className = 'inline-flex items-center divide-x divide-slate-200 dark:divide-slate-700 bg-slate-50 hover:bg-blue-50 dark:bg-slate-950 dark:hover:bg-blue-950/30 rounded-xl border border-slate-200/60 dark:border-slate-800/80 transition-all';
+                    wrapper.className = 'inline-flex items-center divide-x divide-slate-200 dark:divide-slate-700 bg-slate-50 hover:bg-blue-50 dark:bg-slate-950 dark:hover:bg-blue-950/30 rounded-2xl border border-slate-200/60 dark:border-slate-800/80 transition-all shadow-sm';
                     
+                    // Dokunmatik dostu büyük tıklama alanı (px-4 py-2.5 ve text-sm ile ölçeklendirildi)
                     const link = document.createElement('a');
                     link.href = foundProj.url;
                     link.target = '_blank';
                     link.onclick = () => trackRecent(foundProj.adi);
-                    link.className = 'inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-colors rounded-l-xl active:scale-95';
+                    link.className = 'inline-flex items-center space-x-2 px-4 py-2.5 text-sm font-bold text-slate-700 dark:text-slate-300 transition-colors rounded-l-2xl active:scale-95';
                     link.setAttribute('aria-label', `Son kullanılanlardan ${foundProj.adi} uygulamasını aç`);
-                    link.innerHTML = `<span aria-hidden="true">${foundProj.ikon || '🚀'}</span> <span>${foundProj.adi}</span>`;
+                    link.innerHTML = `<span aria-hidden="true" class="text-lg">${foundProj.ikon || '🚀'}</span> <span>${foundProj.adi}</span>`;
                     
+                    // Daha büyük kapatma (çarpı) butonu dahi ikonu
                     const removeBtn = document.createElement('button');
                     removeBtn.onclick = (e) => removeRecentItem(foundProj.adi, e);
-                    removeBtn.className = 'p-2 text-slate-400 hover:text-red-500 dark:text-slate-500 dark:hover:text-red-400 transition-colors rounded-r-xl focus:outline-none';
+                    removeBtn.className = 'p-3 text-slate-400 hover:text-red-500 dark:text-slate-500 dark:hover:text-red-400 transition-colors rounded-r-2xl focus:outline-none';
                     removeBtn.setAttribute('aria-label', `${foundProj.adi} uygulamasını son kullanılanlardan sil`);
                     removeBtn.innerHTML = `
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     `;
@@ -710,12 +725,33 @@
             });
         }
 
+        // --- WRITING SIZE CONTROLLER (FONT SIZER) ENGINE ---
+        let currentSizeLevel = 0; // 0: Varsayılan, -1: Küçük, 1: Büyük, 2: Çok Büyük...
+        function changeFontSize(action) {
+            if (action === 0) {
+                currentSizeLevel = 0;
+            } else {
+                currentSizeLevel += action;
+                // Sınır güvenliği (Çok fazla büyüyüp küçülerek tasarımı bozmasını engeller)
+                if (currentSizeLevel < -1) currentSizeLevel = -1;
+                if (currentSizeLevel > 3) currentSizeLevel = 3;
+            }
+            
+            // rem tabanlı ölçekleme katsayıları
+            let newFontSize = "100%"; // varsayılan (16px)
+            if (currentSizeLevel === -1) newFontSize = "90%";
+            if (currentSizeLevel === 1) newFontSize = "110%";
+            if (currentSizeLevel === 2) newFontSize = "120%";
+            if (currentSizeLevel === 3) newFontSize = "130%"; // Arka sıradaki öğrenciler için maksimum görünürlük
+            
+            document.documentElement.style.fontSize = newFontSize;
+        }
+
         // --- GELİŞMİŞ PAYLAŞIM ALTYAPISI ---
         function openShareMenu(name, desc, url, icon) {
             activeShareUrl = url;
             const shareText = `Akıllı Kürsü - ${name}: ${desc}`;
             
-            // 1. Özellik: Cihazın kendi orijinal (Hiyerarşik / Sistem) Paylaş Menüsü Desteği varsa (Mobil / Akıllı Tahta vb.)
             if (navigator.share) {
                 navigator.share({
                     title: `Akıllı Kürsü - ${name}`,
@@ -723,19 +759,16 @@
                     url: url
                 }).catch((err) => console.log('Sistem paylaşımı iptal edildi veya hata oluştu'));
             } else {
-                // 2. Özellik: Desteklemeyen masaüstü tarayıcılar için gelişmiş modal kutumuzu açma mantığı
                 document.getElementById('sharePreviewTitle').textContent = name;
                 document.getElementById('sharePreviewDesc').textContent = desc;
                 document.getElementById('sharePreviewIcon').textContent = icon || '🚀';
                 
-                // Sosyal medya URL'lerini hazırlama
                 document.getElementById('shareWA').href = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + url)}`;
                 document.getElementById('shareX').href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(url)}`;
                 document.getElementById('shareTG').href = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(shareText)}`;
                 document.getElementById('shareFB').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
                 document.getElementById('shareLN').href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
                 
-                // Modalı aç
                 const modal = document.getElementById('shareModal');
                 const inner = modal.querySelector('div');
                 modal.classList.remove('opacity-0', 'pointer-events-none');
@@ -757,7 +790,7 @@
             if (!activeShareUrl) return;
             navigator.clipboard.writeText(activeShareUrl).then(() => {
                 closeShareModal();
-                showToast("Bağlantı panova kopyalandı!");
+                showToast("Bağlantı panoya kopyalandı!");
             }).catch(err => {
                 showToast("Kopyalama başarısız oldu.");
             });
@@ -772,7 +805,7 @@
             setTimeout(() => {
                 toast.classList.remove('opacity-100', 'scale-100');
                 toast.classList.add('opacity-0', 'scale-90', 'pointer-events-none');
-            }, 2000); // Kullanıcının rahatça okuması için süre 2 saniyeye optimize edildi
+            }, 2000);
         }
 
         // TAM DONANIMLI KLAVYE KISAYOLLARI ENTEGRASYONU (Her Koşulda Ekranı Ortaya Getiren Garanti Sürüm)
@@ -787,7 +820,7 @@
                 return;
             }
 
-            // Paylaşım modalı veya diğer modalları Esc ile kapatma
+            // Modalları Esc tuşu ile kapatma konforu
             if (e.key === 'Escape') {
                 closeShareModal();
                 toggleAboutModal(false);
