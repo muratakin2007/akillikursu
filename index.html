@@ -169,9 +169,6 @@
                     class="w-full pl-14 pr-14 py-4 bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-slate-950 transition-all text-base md:text-lg placeholder-slate-400 dark:placeholder-slate-500 dark:text-white"
                     aria-label="Uygulamalarda ara"
                 >
-                <div id="searchKbdBadge" class="absolute inset-y-0 right-4 flex items-center pointer-events-none text-xs text-slate-400 bg-slate-200/60 dark:bg-slate-800/80 my-auto h-7 px-2 rounded-lg border border-slate-300/40 dark:border-slate-700/50 transition-opacity duration-200 select-none hidden md:flex">
-                    Ctrl K
-                </div>
                 <button 
                     id="clearSearchBtn"
                     onclick="clearSearch()"
@@ -185,7 +182,7 @@
             </div>
 
             <div id="searchHelpContainer" class="text-center text-xs text-slate-400 dark:text-slate-500 font-medium transition-all duration-300 opacity-0 -mt-2 h-0 overflow-hidden">
-                Kutuyu temizlemek için <kbd class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 font-sans text-[11px] shadow-sm">Esc</kbd> Sub <kbd class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 font-sans text-[11px] shadow-sm">Alt + Backspace</kbd> tuşlarını kullanabilirsiniz.
+                Kutuyu temizlemek için <kbd class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 font-sans text-[11px] shadow-sm">Esc</kbd> veya <kbd class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 font-sans text-[11px] shadow-sm">Alt + Backspace</kbd> tuşlarını kullanabilirsiniz.
             </div>
 
             <div class="w-full overflow-x-auto no-scrollbar -mx-4 px-4 md:mx-0 md:px-0 snap-x snap-mandatory">
@@ -434,7 +431,6 @@
         function applyFilters() {
             const searchBar = document.getElementById('searchBar');
             const clearBtn = document.getElementById('clearSearchBtn');
-            const kbdBadge = document.getElementById('searchKbdBadge');
             const helpText = document.getElementById('searchHelpContainer');
             const originalSearchTerm = searchBar.value;
             
@@ -442,9 +438,6 @@
                 if (clearBtn) {
                     clearBtn.classList.remove('opacity-0', 'pointer-events-none', 'scale-75');
                     clearBtn.classList.add('opacity-100', 'scale-100');
-                }
-                if (kbdBadge) {
-                    kbdBadge.classList.add('opacity-0', 'pointer-events-none');
                 }
                 if (helpText) {
                     helpText.classList.remove('opacity-0', 'h-0', 'overflow-hidden');
@@ -454,9 +447,6 @@
                 if (clearBtn) {
                     clearBtn.classList.remove('opacity-100', 'scale-100');
                     clearBtn.classList.add('opacity-0', 'pointer-events-none', 'scale-75');
-                }
-                if (kbdBadge) {
-                    kbdBadge.classList.remove('opacity-0', 'pointer-events-none');
                 }
                 if (helpText) {
                     helpText.classList.remove('opacity-100', 'mt-2', 'h-auto');
