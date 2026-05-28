@@ -21,19 +21,6 @@
         } else {
             document.documentElement.classList.remove('dark');
         }
-
-        // Yazı boyutu tercihini yükleme
-        const savedTextSize = localStorage.getItem('textSize') || 'md';
-        document.documentElement.setAttribute('data-size', savedTextSize);
-        // Dinamik stil kuralları (Metin boyutları arası geçiş)
-        const style = document.createElement('style');
-        style.innerHTML = `
-            html[data-size="sm"] { font-size: 14px; }
-            html[data-size="md"] { font-size: 16px; }
-            html[data-size="lg"] { font-size: 18px; }
-            html[data-size="xl"] { font-size: 20px; }
-        `;
-        document.head.appendChild(style);
     </script>
     <style>
         body { 
@@ -61,17 +48,7 @@
             </div>
 
             <div class="flex items-center gap-2">
-                <div class="flex items-center border border-slate-200/60 dark:border-slate-800/60 rounded-xl p-0.5 bg-slate-100/50 dark:bg-slate-900/50 mr-1">
-                    <button onclick="changeTextSize('decrease')" class="p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-800 transition-all font-semibold text-xs" title="Yazıyı Küçült (A-)">
-                        A-
-                    </button>
-                    <span id="currentSizeIndicator" class="px-2 text-[10px] font-bold text-slate-400 dark:text-slate-500 min-w-[32px] text-center uppercase">Norm</span>
-                    <button onclick="changeTextSize('increase')" class="p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-800 transition-all font-semibold text-xs" title="Yazıyı Büyüt (A+)">
-                        A+
-                    </button>
-                </div>
-
-                <button id="aboutModalBtn" onclick="toggleAboutModal(true)" class="p-2.5 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-xs sm:text-sm font-medium flex items-center gap-1.5 border border-transparent hover:border-slate-200/60 dark:hover:border-slate-800/50" aria-haspopup="dialog" aria-expanded="false">
+                <button id="aboutModalBtn" onclick="toggleAboutModal(true)" class="p-2.5 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-sm font-medium flex items-center gap-1.5 border border-transparent hover:border-slate-200/60 dark:hover:border-slate-800/50" aria-haspopup="dialog" aria-expanded="false">
                     <span>Hakkında</span>
                 </button>
                 <button onclick="toggleTheme()" class="p-2.5 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all border border-transparent hover:border-slate-200/60 dark:hover:border-slate-800/50" aria-label="Temayı Değiştir">
@@ -178,61 +155,6 @@
         </div>
     </div>
 
-    <div id="shareModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/40 dark:bg-slate-950/60 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-200" role="dialog" aria-modal="true" onclick="closeShareModal(event)">
-        <div id="shareModalContent" class="bg-white dark:bg-slate-900 w-full max-w-sm rounded-3xl p-6 shadow-xl border border-slate-200/50 dark:border-slate-800/50 transform scale-95 transition-transform duration-200 flex flex-col gap-4" onclick="event.stopPropagation()">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h3 class="text-base font-bold text-slate-900 dark:text-white">Uygulamayı Paylaş</h3>
-                    <p id="shareAppTitle" class="text-xs text-slate-400 dark:text-slate-500 truncate max-w-[240px] mt-0.5"></p>
-                </div>
-                <button onclick="closeShareModal()" class="p-1.5 rounded-xl text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-            
-            <div class="grid grid-cols-4 gap-3 my-2">
-                <button id="shareWA" class="flex flex-col items-center gap-1.5 group">
-                    <div class="w-11 h-11 rounded-full bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center text-emerald-600 group-hover:bg-emerald-500 group-hover:text-white transition-all shadow-sm">
-                        <svg class="h-5 w-5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.42 9.864-9.852.002-2.63-1.023-5.101-2.887-6.968C16.528 1.967 14.063.94 11.435.94c-5.44 0-9.866 4.418-9.87 9.851-.001 1.716.453 3.39 1.314 4.877L1.812 21.08l5.835-1.531zM16.586 13.53c-.27-.135-1.602-.79-1.85-.88-.25-.09-.432-.135-.612.135-.18.27-.7.88-.857 1.06-.157.18-.315.2-.585.065-.27-.135-1.14-.42-2.172-1.34-1.03-.92-1.725-2.055-1.928-2.4-.203-.34-.022-.523.147-.69.153-.153.34-.4.51-.6.17-.2.226-.34.34-.56.113-.22.056-.41-.027-.58-.084-.17-.612-1.47-.84-2.015-.22-.53-.445-.46-.613-.46-.16 0-.34-.02-.52-.02-.18 0-.47.07-.715.34-.245.27-.935.915-.935 2.23 0 1.315.955 2.58 1.09 2.76.135.18 1.88 2.87 4.555 4.02.636.273 1.13.438 1.52.56.64.204 1.22.175 1.68.107.513-.075 1.603-.655 1.83-1.29.226-.635.226-1.18.157-1.29-.07-.11-.253-.18-.523-.315z"/></svg>
-                    </div>
-                    <span class="text-[10px] font-semibold text-slate-500 dark:text-slate-400">WhatsApp</span>
-                </button>
-                <button id="shareTG" class="flex flex-col items-center gap-1.5 group">
-                    <div class="w-11 h-11 rounded-full bg-sky-50 dark:bg-sky-950/40 flex items-center justify-center text-sky-500 group-hover:bg-sky-500 group-hover:text-white transition-all shadow-sm">
-                        <svg class="h-5 w-5 fill-current" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.87 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.46c.536-.194.1.1.34.1z"/></svg>
-                    </div>
-                    <span class="text-[10px] font-semibold text-slate-500 dark:text-slate-400">Telegram</span>
-                </button>
-                <button id="shareX" class="flex flex-col items-center gap-1.5 group">
-                    <div class="w-11 h-11 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-800 dark:text-slate-200 group-hover:bg-black group-hover:text-white dark:group-hover:bg-white dark:group-hover:text-black transition-all shadow-sm">
-                        <svg class="h-4 w-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                    </div>
-                    <span class="text-[10px] font-semibold text-slate-500 dark:text-slate-400">X / Twitter</span>
-                </button>
-                <button id="shareMail" class="flex flex-col items-center gap-1.5 group">
-                    <div class="w-11 h-11 rounded-full bg-indigo-50 dark:bg-indigo-950/40 flex items-center justify-center text-indigo-500 group-hover:bg-indigo-500 group-hover:text-white transition-all shadow-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 002-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
-                    </div>
-                    <span class="text-[10px] font-semibold text-slate-500 dark:text-slate-400">E-Posta</span>
-                </button>
-            </div>
-
-            <div class="flex flex-col gap-1.5 mt-1">
-                <label class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Uygulama Bağlantısı</label>
-                <div class="relative flex items-center">
-                    <input type="text" id="shareUrlInput" readonly class="w-full pr-24 pl-3 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-xs text-slate-600 dark:text-slate-300 focus:outline-none select-all font-mono">
-                    <button id="copyBtn" onclick="copyShareUrl()" class="absolute right-1.5 px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-[11px] font-bold transition-all active:scale-[0.95]">
-                        Kopyala
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
         // Örnek Proje Verileri
         const projectsData = [
@@ -245,88 +167,11 @@
 
         let selectedCategory = "Hepsi";
 
-        // Yazı Boyutu Yönetimi (Erişilebilirlik)
-        const sizes = ['sm', 'md', 'lg', 'xl'];
-        const sizeLabels = { 'sm': 'Küçük', 'md': 'Norm', 'lg': 'Büyük', 'xl': 'X-Büyük' };
-
-        function updateSizeIndicator() {
-            const current = document.documentElement.getAttribute('data-size') || 'md';
-            const indicator = document.getElementById('currentSizeIndicator');
-            if(indicator) indicator.innerText = sizeLabels[current];
-        }
-
-        function changeTextSize(direction) {
-            let current = document.documentElement.getAttribute('data-size') || 'md';
-            let index = sizes.indexOf(current);
-            
-            if (direction === 'increase' && index < sizes.length - 1) {
-                index++;
-            } else if (direction === 'decrease' && index > 0) {
-                index--;
-            }
-            
-            const newSize = sizes[index];
-            document.documentElement.setAttribute('data-size', newSize);
-            localStorage.setItem('textSize', newSize);
-            updateSizeIndicator();
-        }
-
-        // Gelişmiş Paylaşım Sistemi Mantığı
-        function openShareModal(id, event) {
-            event.stopPropagation(); // Kart tetiklenerek yeni sekmeye gitmesin
-            const project = projectsData.find(p => p.id === id);
-            if(!project) return;
-
-            document.getElementById('shareAppTitle').innerText = project.title;
-            document.getElementById('shareUrlInput').value = project.url;
-
-            // Paylaşım Butonu Linklerinin Güncellenmesi
-            const encodedUrl = encodeURIComponent(project.url);
-            const encodedText = encodeURIComponent(`Akıllı Kürsü - ${project.title} uygulamasını inceleyin: `);
-
-            document.getElementById('shareWA').onclick = () => window.open(`https://api.whatsapp.com/send?text=${encodedText}${encodedUrl}`, '_blank');
-            document.getElementById('shareTG').onclick = () => window.open(`https://t.me/share/url?url=${encodedUrl}&text=${encodedText}`, '_blank');
-            document.getElementById('shareX').onclick = () => window.open(`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedText}`, '_blank');
-            document.getElementById('shareMail').onclick = () => window.open(`mailto:?subject=${encodedText}&body=${encodedUrl}`, '_blank');
-
-            // Modalı görünür yap
-            const modal = document.getElementById('shareModal');
-            const inner = document.getElementById('shareModalContent');
-            modal.classList.remove('opacity-0', 'pointer-events-none');
-            inner.classList.remove('scale-95');
-            inner.classList.add('scale-100');
-
-            // Kopyala butonunun durumunu sıfırla
-            const copyBtn = document.getElementById('copyBtn');
-            copyBtn.innerText = "Kopyala";
-            copyBtn.className = "absolute right-1.5 px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-[11px] font-bold transition-all active:scale-[0.95]";
-        }
-
-        function closeShareModal() {
-            const modal = document.getElementById('shareModal');
-            const inner = document.getElementById('shareModalContent');
-            modal.classList.add('opacity-0', 'pointer-events-none');
-            inner.classList.remove('scale-100');
-            inner.classList.add('scale-95');
-        }
-
-        function copyShareUrl() {
-            const input = document.getElementById('shareUrlInput');
-            input.select();
-            input.setSelectionRange(0, 99999);
-            navigator.clipboard.writeText(input.value).then(() => {
-                const copyBtn = document.getElementById('copyBtn');
-                copyBtn.innerText = "Kopyalandı!";
-                copyBtn.className = "absolute right-1.5 px-3 py-1.5 bg-blue-500 text-white rounded-lg text-[11px] font-bold transition-all";
-            });
-        }
-
         // 1. Projeleri Listeleme
         function fetchProjects() {
             renderCategories();
             applyFilters();
             renderRecents();
-            updateSizeIndicator();
         }
 
         // 2. Kategorileri Render Etme
@@ -371,7 +216,7 @@
             }
         }
 
-        // 4. Kart HTML Şablonu Oluşturucu (Paylaş Düğmesi Entegre Edilmiş)
+        // 4. Kart HTML Şablonu Oluşturucu
         function createCardHtml(project, isRecent = false) {
             return `
                 <div onclick="openProject(${project.id}, '${project.url}')" class="group relative bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl p-5 hover:border-emerald-500/50 dark:hover:border-emerald-500/30 hover:shadow-lg hover:shadow-slate-100 dark:hover:shadow-none transition-all duration-300 cursor-pointer flex flex-col gap-3 justify-between ${isRecent ? 'border-amber-500/20 dark:border-amber-500/10' : ''}">
@@ -392,21 +237,11 @@
                         <h4 class="text-sm font-bold text-slate-800 dark:text-white group-hover:text-emerald-500 dark:group-hover:text-emerald-400 transition-colors">${project.title}</h4>
                         <p class="text-xs text-slate-400 dark:text-slate-500 line-clamp-2 leading-relaxed">${project.desc}</p>
                     </div>
-                    
-                    <div class="flex flex-col gap-2 pt-2 border-t border-slate-50 dark:border-slate-800/50">
-                        <button onclick="openShareModal(${project.id}, event)" class="w-full py-2 px-3 rounded-xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-950 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-100 dark:border-slate-800 text-xs font-bold transition-all flex items-center justify-center gap-1.5 group/share">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-slate-400 group-hover/share:text-emerald-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-                            </svg>
-                            <span>Paylaş</span>
-                        </button>
-                        
-                        <div class="flex items-center justify-between text-[11px] font-bold text-slate-400 dark:text-slate-500 group-hover:text-emerald-500 transition-colors py-1">
-                            <span>Uygulamaya Git</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 transform group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                            </svg>
-                        </div>
+                    <div class="flex items-center justify-between pt-2 border-t border-slate-50 dark:border-slate-800/50 text-[11px] font-bold text-slate-400 dark:text-slate-500 group-hover:text-emerald-500 transition-colors">
+                        <span>Uygulamaya Git</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 transform group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
                     </div>
                 </div>
             `;
