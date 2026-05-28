@@ -1,21 +1,5 @@
 [
- {
-    "id": "pratikpdf",
-    "adi": "Paratikpdf v1.0",
-    "url": "https://pratikpdf.netlify.app/",
-    "kategori": "Ofis",
-    "ikon": "📄",
-    "aciklama": "herhangi bir kurulum gerektirmeden doğrudan tarayıcınız üzerinden PDF dosyalarınızı kolayca yönetebileceğiniz pratik bir web aracıdır. Bu araç sayesinde PDF'lerinizdeki sayfaların sırasını sürükle-bırak ile değiştirebilir veya silebilir, birden fazla dosyayı tek bir PDF'te birleştirebilir, dosya boyutunu sıkıştırarak küçültebilir ve PDF sayfalarınızı hızlıca resim (JPG/PNG) formatına dönüştürebilirsiniz. Tüm işlemler sizin cihazınızda gerçekleşir."
-  },
- {
-    "id": "bolbass",
-    "adi": "Bölbas v1.3",
-    "url": "https://bolbas.netlify.app/",
-    "kategori": "Ofis",
-    "ikon": "📜",
-    "aciklama": "Büyük boyutlu görsel veya PDF dosyalarını A4 veya A3 gibi standart kağıt boyutlarına bölerek, ev veya ofis yazıcılarından büyük poster çıktısı almanızı ve bunları birleştirmenizi sağlayan pratik bir web uygulamasıdır. Tüm işlemler sizin cihazınızda gerçekleşir."
-  },
- {
+  {
     "id": "topludegistirr",
     "adi": "Toplu Değiştir v1.1",
     "url": "https://topludegistir.netlify.app/",
@@ -35,6 +19,24 @@
     "durum": "Beta",
     "aciklama": "Bilgisayarınızdaki çok sayıdaki dosyanın ismini tek tek değiştirmek yerine, belirlediğiniz kurallara göre tek tıkla ve topluca değiştirmenizi sağlayan ücretsiz ve pratik bir web aracıdır. Tüm işlemler sizin cihazınızda gerçekleşir."
   },
+ {
+    "id": "pratikpdf",
+    "adi": "Paratikpdf v1.0",
+    "url": "https://pratikpdf.netlify.app/",
+    "kategori": "Ofis",
+    "ikon": "📄",
+    "aciklama": "herhangi bir kurulum gerektirmeden doğrudan tarayıcınız üzerinden PDF dosyalarınızı kolayca yönetebileceğiniz pratik bir web aracıdır. Bu araç sayesinde PDF'lerinizdeki sayfaların sırasını sürükle-bırak ile değiştirebilir veya silebilir, birden fazla dosyayı tek bir PDF'te birleştirebilir, dosya boyutunu sıkıştırarak küçültebilir ve PDF sayfalarınızı hızlıca resim (JPG/PNG) formatına dönüştürebilirsiniz. Tüm işlemler sizin cihazınızda gerçekleşir."
+  },
+ {
+    "id": "bolbass",
+    "adi": "Bölbas v1.3",
+    "url": "https://bolbas.netlify.app/",
+    "kategori": "Ofis",
+    "ikon": "📜",
+    "aciklama": "Büyük boyutlu görsel veya PDF dosyalarını A4 veya A3 gibi standart kağıt boyutlarına bölerek, ev veya ofis yazıcılarından büyük poster çıktısı almanızı ve bunları birleştirmenizi sağlayan pratik bir web uygulamasıdır. Tüm işlemler sizin cihazınızda gerçekleşir."
+  },
+
+ 
   {
     "id": "listeleyici",
     "adi": "E-okul PDF Sınıf Listesini Excel, Word ve TXT'ye Dönüştürme Aracı v2.5",
@@ -51,6 +53,15 @@
     "ikon": "📋",
     "aciklama": "E-Okul'dan aldığınız fotoğraflı öğrenci listelerini saniyeler içinde fotoğraflı, düzenli ve not alabileceğiniz şık çizelgelere dönüştürün. Böylece öğrenciler hakkındaki kişisel notlarınızı kolayca alabileceğiniz bir not deftererine sahip olursunuz. Tüm bilgiler sizin cihazınızda tutulur."
   },
+   {
+    "id": "gezin",
+    "adi": "Gezin v1.0",
+    "url": "https://gezin.netlify.app/",
+    "kategori": "Seyahat",
+    "ikon": "🗺️",
+    "aciklama": "Bulunduğunuz veya ziyaret etmek istediğiniz bir bölgedeki tarihi yerleri, müzeleri, dini yapıları ve doğal güzellikleri kolayca keşfetmenizi sağlayan pratik ve kullanıcı dostu bir dijital gezi rehberidir. Konumunuzu kullanarak belirli bir kilometre yarıçapındaki gezilecek yerleri anında listeleyebilir; mekanları puanlarına, o an açık olma durumlarına veya ücretsiz olup olmadıklarına göre detaylıca filtreleyebilirsiniz. İlginizi çeken noktaları favorilerinize ekleyerek kendinize özel bir gezi listesi oluşturmanıza ve bu yerler arasında çok duraklı rotalar planlamanıza imkan tanıyan site, seyahatlerinizi hızlıca organize etmenizi sağlayan bir keşif aracıdır."
+  },
+ 
   {
     "id": "portrenot",
     "adi": "Portre Not v1.3",
