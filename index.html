@@ -51,6 +51,12 @@
             background-image: linear-gradient(to bottom right, #0f172a, rgba(30, 41, 59, 0.8));
         }
 
+        /* Akıllı Tahta ve Mobil için Haptik/Visual Geri Bildirim: Tıklanma anında iç gölge efekti */
+        .project-card:active, .cat-btn:active, .go-app-btn:active {
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+            transform: scale(0.99) !important;
+        }
+
         .project-card:hover h3,
         .project-card:active h3 {
             color: #3b82f6; /* text-blue-500 */
@@ -126,7 +132,7 @@
             </p>
         </div>
 
-        <div class="bg-white/80 dark:bg-slate-900/60 backdrop-blur-md p-5 md:p-8 rounded-3xl shadow-xl shadow-slate-200/40 dark:shadow-none border border-slate-200/60 dark:border-slate-800/60 mb-10 md:mb-16 space-y-5 md:space-y-8 max-w-5xl mx-auto">
+        <div class="bg-white/80 dark:bg-slate-900/60 backdrop-blur-md p-5 md:p-8 rounded-3xl shadow-xl shadow-slate-200/40 dark:shadow-none border border-slate-200/60 dark:border-slate-800/60 mb-10 md:mb-16 space-y-5 md:space-y-6 max-w-5xl mx-auto">
             
             <div class="relative max-w-2xl mx-auto w-full group">
                 <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-500 transition-colors">
@@ -138,7 +144,7 @@
                     type="text" 
                     id="searchBar" 
                     inputmode="search"
-                    placeholder="Uygulama adı, teknoloji veya açıklama ara..." 
+                    placeholder="Aramak için yazın... (Kısayol: / veya Ctrl+K)" 
                     class="w-full pl-14 pr-14 py-4 bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-slate-950 transition-all text-base md:text-lg placeholder-slate-400 dark:placeholder-slate-500 dark:text-white"
                 >
                 <button 
@@ -160,6 +166,18 @@
                     </button>
                 </div>
             </div>
+
+            <!-- EN SON KULLANILANLAR BÖLÜMÜ -->
+            <div id="recentSection" class="hidden border-t border-slate-100 dark:border-slate-800/80 pt-4 max-w-2xl mx-auto w-full">
+                <div class="flex items-center space-x-2 text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-2.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>Son Kullanılanlar</span>
+                </div>
+                <div id="recentContainer" class="flex flex-wrap gap-2"></div>
+            </div>
+
         </div>
 
         <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8">
@@ -196,9 +214,19 @@
                     <strong>Akıllı Kürsü</strong>, eğitim teknolojilerini pratikleştirmek, öğretmenlerin idari yüklerini azaltmak ve okul bilgisayarlarındaki/akıllı tahtalardaki teknik süreçleri kolaylaştırmak amacıyla geliştirilen bağımsız bir dijital ekosistemdir.
                 </p>
                 
+                <!-- ARAÇ ÖNER BUTONU (GOOGLE FORM ENTEGRASYONU) -->
+                <div class="pt-2">
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLScyO0gO7XnZk_7SgXG0o-XWpOn_FormLinki/viewform" target="_blank" class="w-full inline-flex items-center justify-center px-5 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-2xl shadow-md shadow-blue-500/10 transition-all text-sm md:text-base active:scale-95">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>Yeni Bir Araç Öner</span>
+                    </a>
+                </div>
+                
                 <div class="pt-4 mt-4 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center text-sm text-slate-400">
                     <span>Geliştirici: Murat AKIN</span>
-                    <span>Versiyon: 1.0.</span>
+                    <span>Versiyon: 1.1</span>
                 </div>
             </div>
         </div>
@@ -213,6 +241,11 @@
         let allProjects = [];
         let activeCategory = 'Tümü';
 
+        // Tarayıcı hafızası yönetim listeleri
+        let favorites = JSON.parse(localStorage.getItem('ak_favorites')) || [];
+        let recents = JSON.parse(localStorage.getItem('ak_recents')) || [];
+        let likes = JSON.parse(localStorage.getItem('ak_likes')) || [];
+
         // 1. JSON Verisini Çekme
         async function fetchProjects() {
             try {
@@ -220,6 +253,7 @@
                 allProjects = await response.json();
                 generateCategoryButtons();
                 renderProjects(allProjects);
+                renderRecents();
             } catch (error) {
                 console.error('Veri çekilirken hata oluştu:', error);
                 document.getElementById('projectsGrid').innerHTML = `
@@ -242,19 +276,49 @@
                 noResults.classList.add('hidden');
             }
 
-            projects.forEach((project, index) => {
+            // Tümü sekmesindeysek ve favorilerde eleman varsa, favorileri listenin en üstüne taşımak için sıralama yapısı
+            let sortedProjects = [...projects];
+            if (activeCategory === 'Tümü' && favorites.length > 0) {
+                sortedProjects.sort((a, b) => {
+                    const aFav = favorites.includes(a.adi) ? 1 : 0;
+                    const bFav = favorites.includes(b.adi) ? 1 : 0;
+                    return bFav - aFav; 
+                });
+            }
+
+            sortedProjects.forEach((project, index) => {
+                const isFav = favorites.includes(project.adi);
+                const isLiked = likes.includes(project.adi);
                 const card = document.createElement('div');
                 
-                // JavaScript tarafındaki animasyon özellikleri ve dokunmatik uyumluluk sınıfları eklendi.
                 card.className = 'project-card bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/70 dark:border-slate-800/70 p-6 shadow-sm dark:shadow-none transition-all duration-500 flex flex-col justify-between opacity-0 translate-y-4 relative z-10 touch-manipulation';
-                
                 card.style.animation = `fadeInUp 0.4s ease forwards ${index * 0.05}s`;
                 
+                // Dinamik mikro durum etiketlerinin tespiti (Yeni, Güncellendi, Beta)
+                let badgeHTML = '';
+                if (project.durum) {
+                    let badgeColor = 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400 border-emerald-200/60';
+                    if (project.durum === 'Güncellendi') badgeColor = 'bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400 border-amber-200/60';
+                    if (project.durum === 'Beta') badgeColor = 'bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400 border-blue-200/60';
+                    
+                    badgeHTML = `<span class="text-[10px] font-extrabold px-2 py-0.5 rounded-md border ${badgeColor} tracking-wide uppercase mr-2">${project.durum}</span>`;
+                }
+                
                 card.innerHTML = `
-                    <div>
-                        <div class="flex items-center justify-between mb-5">
+                    <div class="relative">
+                        <!-- FAVORİ YILDIZ BUTONU -->
+                        <button onclick="toggleFavorite('${project.adi.replace(/'/g, "\\'")}', event)" class="absolute -top-2 -right-2 p-2 rounded-xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-950 dark:hover:bg-slate-800 border border-slate-200/40 dark:border-slate-800/50 text-slate-300 transition-all active:scale-90 z-30" aria-label="Favorilere Ekle">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ${isFav ? 'text-amber-400 fill-amber-400' : 'text-slate-300 dark:text-slate-600'}" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                        </button>
+
+                        <div class="flex items-center justify-between mb-5 pr-8">
                             <span class="project-icon text-3xl p-3 bg-slate-50 dark:bg-slate-950 rounded-2xl transition-colors select-none shadow-sm">${project.ikon || '🚀'}</span>
-                            <span class="text-xs md:text-sm font-bold px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-xl tracking-wide uppercase">${project.kategori}</span>
+                            <div class="flex items-center">
+                                ${badgeHTML}
+                                <span class="text-xs md:text-sm font-bold px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-xl tracking-wide uppercase">${project.kategori}</span>
+                            </div>
                         </div>
                         <h3 class="text-lg md:text-xl font-bold text-slate-900 dark:text-white mb-3 transition-colors">
                             ${project.adi}
@@ -263,12 +327,25 @@
                             ${project.aciklama}
                         </p>
                     </div>
-                    <a href="${project.url}" target="_blank" class="go-app-btn w-full inline-flex items-center justify-center px-5 py-4 bg-slate-50 hover:bg-blue-600 dark:bg-slate-950 dark:hover:bg-blue-600 text-slate-700 hover:text-white dark:text-slate-300 dark:hover:text-white font-bold text-sm md:text-base rounded-2xl border border-slate-200/80 dark:border-slate-800 hover:border-blue-600 dark:hover:border-blue-600 transition-all shadow-sm touch-manipulation">
-                        <span>Uygulamaya Git</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                        </svg>
-                    </a>
+                    
+                    <div class="space-y-3">
+                        <!-- KALPLİ BEĞENİ BUTONU -->
+                        <div class="flex justify-start">
+                            <button onclick="toggleLike('${project.adi.replace(/'/g, "\\'")}', event)" class="inline-flex items-center space-x-1 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-rose-50 dark:bg-slate-950 dark:hover:bg-rose-950/20 text-xs font-semibold border border-slate-200/60 dark:border-slate-800/80 transition-all active:scale-95">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ${isLiked ? 'text-rose-500 fill-rose-500' : 'text-slate-400 dark:text-slate-500'}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                </svg>
+                                <span class="${isLiked ? 'text-rose-600 dark:text-rose-400' : 'text-slate-500 dark:text-slate-400'}">${isLiked ? 'Beğenildi' : 'Beğen'}</span>
+                            </button>
+                        </div>
+
+                        <a href="${project.url}" target="_blank" onclick="trackRecent('${project.adi.replace(/'/g, "\\'")}')" class="go-app-btn w-full inline-flex items-center justify-center px-5 py-4 bg-slate-50 hover:bg-blue-600 dark:bg-slate-950 dark:hover:bg-blue-600 text-slate-700 hover:text-white dark:text-slate-300 dark:hover:text-white font-bold text-sm md:text-base rounded-2xl border border-slate-200/80 dark:border-slate-800 hover:border-blue-600 dark:hover:border-blue-600 transition-all shadow-sm touch-manipulation">
+                            <span>Uygulamaya Git</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                        </a>
+                    </div>
                 `;
                 grid.appendChild(card);
             });
@@ -341,6 +418,80 @@
             searchBar.focus();
             applyFilters();
         }
+
+        // FAVORİ EKLEME/ÇIKARMA FONKSİYONU
+        function toggleFavorite(projectName, event) {
+            event.preventDefault();
+            event.stopPropagation();
+            const index = favorites.indexOf(projectName);
+            if (index > -1) {
+                favorites.splice(index, 1);
+            } else {
+                favorites.push(projectName);
+            }
+            localStorage.setItem('ak_favorites', JSON.stringify(favorites));
+            applyFilters();
+        }
+
+        // KALPLİ BEĞENİ SİSTEMİ
+        function toggleLike(projectName, event) {
+            event.preventDefault();
+            event.stopPropagation();
+            const index = likes.indexOf(projectName);
+            if (index > -1) {
+                likes.splice(index, 1);
+            } else {
+                likes.push(projectName);
+            }
+            localStorage.setItem('ak_likes', JSON.stringify(likes));
+            applyFilters();
+        }
+
+        // EN SON KULLANILANLAR TAKİP VE YAZDIRMA SİSTEMİ
+        function trackRecent(projectName) {
+            recents = recents.filter(name => name !== projectName);
+            recents.unshift(projectName); // Başa ekle
+            if (recents.length > 3) recents.pop(); // Sınırı 3 yap
+            localStorage.setItem('ak_recents', JSON.stringify(recents));
+            renderRecents();
+        }
+
+        function renderRecents() {
+            const section = document.getElementById('recentSection');
+            const container = document.getElementById('recentContainer');
+            container.innerHTML = '';
+
+            if (recents.length === 0 || allProjects.length === 0) {
+                section.classList.add('hidden');
+                return;
+            }
+
+            section.classList.remove('hidden');
+            recents.forEach(name => {
+                const foundProj = allProjects.find(p => p.adi === name);
+                if (foundProj) {
+                    const link = document.createElement('a');
+                    link.href = foundProj.url;
+                    link.target = '_blank';
+                    link.onclick = () => trackRecent(foundProj.adi);
+                    link.className = 'inline-flex items-center space-x-1 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-blue-50 dark:bg-slate-950 dark:hover:bg-blue-950/30 text-xs font-semibold border border-slate-200/60 dark:border-slate-800/80 transition-all active:scale-95';
+                    link.innerHTML = `<span>${foundProj.ikon || '🚀'}</span> <span>${foundProj.adi}</span>`;
+                    container.appendChild(link);
+                }
+            });
+        }
+
+        // KLAVYE KISAYOLLARI ENTEGRASYONU (/ ve Ctrl+K)
+        window.addEventListener('keydown', (e) => {
+            const searchBar = document.getElementById('searchBar');
+            if (document.activeElement === searchBar) return;
+
+            if (e.key === '/' || (e.ctrlKey && e.key.toLowerCase() === 'k')) {
+                e.preventDefault();
+                searchBar.focus();
+                searchBar.select();
+            }
+        });
 
         // 5. Tema Değiştirme
         function toggleTheme() {
