@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Akıllı Kürsü - Dijital Eğitim Araçları Merkezi</title>
+    <title>Akıllı Kürsü - Dijital Ücretsiz Eğitim Araçları Merkezi</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -15,7 +15,6 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script>
-        // Sayfa yüklenirken parlamayı önlemek için karanlık mod kontrolü
         if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
         } else {
@@ -34,7 +33,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Yıldız Etkileşimi için Pop/Sıçrama Animasyonu */
         @keyframes starPop {
             0% { transform: scale(1); }
             50% { transform: scale(1.35) rotate(12deg); }
@@ -55,24 +53,22 @@
             animation: starUnpop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
-        /* Hem fareyle üzerine gelindiğinde (hover) hem de dokunmatik ekranda dokunulduğunda (active) çalışacak ortak efektler */
         .project-card:hover,
         .project-card:active {
             z-index: 20;
             transform: scale(1.02);
-            border-color: #60a5fa; /* border-blue-400 */
+            border-color: #60a5fa;
             box-shadow: 0 0 40px -10px rgba(59, 130, 246, 0.3);
             background-image: linear-gradient(to bottom right, #ffffff, rgba(239, 246, 255, 0.5));
         }
         
         .dark .project-card:hover,
         .dark .project-card:active {
-            border-color: #3b82f6; /* border-blue-500 */
+            border-color: #3b82f6;
             box-shadow: 0 0 40px -10px rgba(59, 130, 246, 0.2);
             background-image: linear-gradient(to bottom right, #0f172a, rgba(30, 41, 59, 0.8));
         }
 
-        /* Akıllı Tahta dahi Mobil için Haptik/Visual Geri Bildirim: Tıklanma anında iç gölge efekti */
         .project-card:active, .cat-btn:active, .go-app-btn:active, .share-btn:active, .size-btn:active {
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
             transform: scale(0.99) !important;
@@ -80,22 +76,22 @@
 
         .project-card:hover h3,
         .project-card:active h3 {
-            color: #3b82f6; /* text-blue-500 */
+            color: #3b82f6;
         }
 
         .dark .project-card:hover h3,
         .dark .project-card:active h3 {
-            color: #60a5fa; /* text-blue-400 */
+            color: #60a5fa;
         }
 
         .project-card:hover .project-icon,
         .project-card:active .project-icon {
-            background-color: #eff6ff; /* bg-blue-50 */
+            background-color: #eff6ff;
         }
 
         .dark .project-card:hover .project-icon,
         .dark .project-card:active .project-icon {
-            background-color: rgba(30, 58, 138, 0.5); /* bg-blue-950/50 */
+            background-color: rgba(30, 58, 138, 0.5);
         }
 
         .project-card:hover .go-app-btn svg,
@@ -103,20 +99,19 @@
             transform: translateX(4px) translateY(-4px);
         }
 
-        /* Gelişmiş Paylaş Butonu Efektleri */
         .share-btn {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .share-btn:hover {
             transform: scale(1.01);
-            color: #2563eb; /* text-blue-600 */
-            border-color: #93c5fd; /* border-blue-300 */
-            background-color: #f0f7ff; /* bg-blue-50/50 */
+            color: #2563eb;
+            border-color: #93c5fd;
+            background-color: #f0f7ff;
         }
         .dark .share-btn:hover {
-            color: #60a5fa; /* text-blue-400 */
-            border-color: #2563eb; /* border-blue-600 */
-            background-color: rgba(30, 58, 138, 0.2); /* bg-blue-900/20 */
+            color: #60a5fa;
+            border-color: #2563eb;
+            background-color: rgba(30, 58, 138, 0.2);
         }
         .share-btn:hover svg {
             transform: rotate(-12deg) scale(1.08);
@@ -125,7 +120,6 @@
             transition: transform 0.2s ease;
         }
 
-        /* Köşe Bandı (Ribbon) için CSS */
         .ribbon-wrapper {
             width: 95px;
             height: 95px;
@@ -146,12 +140,11 @@
             left: -5px;
             top: 17px;
             width: 140px;
-            background-color: #10b981; /* emerald-500 yeşili */
+            background-color: #10b981;
             color: #ffffff;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
-        /* Font Sizer geçiş animasyonu */
         html {
             transition: font-size 0.2s ease;
         }
@@ -165,17 +158,17 @@
     </div>
 
     <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 transition-colors duration-300">
-        <div class="w-full px-4 sm:px-8 lg:px-12 2xl:px-24 mx-auto h-20 flex items-center justify-between gap-4">
+        <div class="w-full px-4 sm:px-8 lg:px-12 2xl:px-24 mx-auto h-20 flex items-center justify-between gap-4 relative">
             
             <div class="flex items-center space-x-2 flex-shrink-0">
                 <button onclick="toggleAboutModal(true)" class="inline-flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-sm md:text-base font-medium transition-all text-slate-600 dark:text-slate-300 active:scale-95 touch-manipulation" aria-haspopup="dialog" aria-expanded="false" id="aboutModalBtn">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <span class="hidden sm:inline">Hakkında</span>
+                    <span>Hakkında</span>
                 </button>
 
-                <div class="inline-flex items-center p-1 bg-slate-100 dark:bg-slate-800 rounded-xl border border-slate-200/40 dark:border-slate-700/40 select-none">
+                <div class="hidden md:inline-flex items-center p-1 bg-slate-100 dark:bg-slate-800 rounded-xl border border-slate-200/40 dark:border-slate-700/40 select-none">
                     <button onclick="changeFontSize(-1)" class="size-btn px-2.5 py-1 text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-900 rounded-lg transition-all touch-manipulation" title="Yazıları Küçült">A-</button>
                     <button onclick="changeFontSize(0)" class="size-btn px-2.5 py-1 text-xs font-extrabold text-blue-600 dark:text-blue-400 hover:bg-white dark:hover:bg-slate-900 rounded-lg transition-all touch-manipulation" title="Boyutu Sıfırla">A</button>
                     <button onclick="changeFontSize(1)" class="size-btn px-2.5 py-1 text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-900 rounded-lg transition-all touch-manipulation" title="Yazıları Büyüt">A+</button>
@@ -189,14 +182,46 @@
                 </span>
             </div>
 
-            <button onclick="toggleTheme()" id="themeBtn" class="p-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-all active:scale-95 touch-manipulation flex-shrink-0" aria-label="Tema Değiştir">
-                <svg id="sunIcon" class="h-5 w-5 hidden dark:block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.364l-.707.707M12 5a7 7 0 100 14 7 7 0 000-14z" />
-                </svg>
-                <svg id="moonIcon" class="h-5 w-5 block dark:hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                </svg>
-            </button>
+            <div class="flex items-center space-x-2 flex-shrink-0">
+                <button onclick="toggleTheme()" id="themeBtn" class="hidden md:block p-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-all active:scale-95 touch-manipulation" aria-label="Tema Değiştir">
+                    <svg class="h-5 w-5 hidden dark:block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.364l-.707.707M12 5a7 7 0 100 14 7 7 0 000-14z" /></svg>
+                    <svg class="h-5 w-5 block dark:hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+                </button>
+
+                <div class="relative md:hidden">
+                    <button onclick="toggleMobileMenu()" id="mobileMenuBtn" class="p-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-all active:scale-95 touch-manipulation" aria-label="Menüyü Aç" aria-expanded="false" aria-haspopup="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                    
+                    <div id="mobileMenuDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl py-2 z-50 animate-fadeIn text-sm">
+                        <button onclick="toggleTheme(); toggleMobileMenu();" class="w-full flex items-center space-x-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800/60 text-slate-700 dark:text-slate-300 font-medium">
+                            <span class="dark:hidden flex items-center space-x-3 w-full">
+                                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+                                <span>Karanlık Mod</span>
+                            </span>
+                            <span class="hidden dark:flex items-center space-x-3 w-full">
+                                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.364l-.707.707M12 5a7 7 0 100 14 7 7 0 000-14z" /></svg>
+                                <span>Aydınlık Mod</span>
+                            </span>
+                        </button>
+                        <hr class="border-slate-100 dark:border-slate-800 my-1">
+                        <div class="px-4 py-2 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Yazı Boyutu</div>
+                        <div class="flex items-center justify-between px-2.5 pb-1">
+                            <button onclick="changeFontSize(-1)" class="px-3 py-1.5 font-bold text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg flex-1 text-center mx-0.5">A-</button>
+                            <button onclick="changeFontSize(0)" class="px-3 py-1.5 font-extrabold text-blue-600 dark:text-blue-400 bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg flex-1 text-center mx-0.5">A</button>
+                            <button onclick="changeFontSize(1)" class="px-3 py-1.5 font-bold text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg flex-1 text-center mx-0.5">A+</button>
+                        </div>
+                        <hr class="border-slate-100 dark:border-slate-800 my-1">
+                        <button onclick="toggleAboutModal(true); toggleMobileMenu();" class="w-full flex items-center space-x-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800/60 text-slate-700 dark:text-slate-300 font-medium">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            <span>Hakkında</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </header>
 
@@ -271,7 +296,7 @@
 
         </div>
 
-        <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8" aria-live="polite">
+        <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8 items-start" aria-live="polite">
             <div class="col-span-full text-center py-20 text-slate-400 dark:text-slate-600">
                 <svg class="animate-spin h-12 w-12 mx-auto mb-5 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -376,7 +401,7 @@
                     </a>
                 </div>
                 
-                <div class="pt-4 mt-4 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center text-sm text-slate-400">
+                <div class="pt-4 mt-4 border-t border-slate-100 dark:border-slate-800 flex flex-wrap justify-between items-center gap-2 text-sm text-slate-400">
                     <span>Geliştirici: Murat AKIN</span>
                     <span>Versiyon: 1.1</span>
                 </div>
@@ -393,27 +418,21 @@
         let allProjects = [];
         let activeCategory = 'Tümü';
 
-        // Tarayıcı hafızası yönetim listeleri
         let favorites = JSON.parse(localStorage.getItem('ak_favorites')) || [];
         let recents = JSON.parse(localStorage.getItem('ak_recents')) || [];
 
-        // Son animasyon durumlarını takip etmek için yardımcı obje (Görsel devamlılık sağlar)
         let lastAnimatedStars = {};
-        
-        // Aktif olarak paylaşılan projenin linkini geçici tutmak için değişken
         let activeShareUrl = '';
 
-        // 1. JSON Verisini Çekme
         async function fetchProjects() {
             try {
                 const response = await fetch(jsonUrl);
                 allProjects = await response.json();
                 
-                // Toplam uygulama sayacını dinamik olarak güncelle
                 updateTotalAppsCount(allProjects.length);
                 
                 generateCategoryButtons();
-                applyFilters(); // renderProjects'i tetikler
+                applyFilters(); 
                 renderRecents();
             } catch (error) {
                 console.error('Veri çekilirken hata oluştu:', error);
@@ -424,7 +443,6 @@
             }
         }
 
-        // Ana Üst Rozet Sayaç Güncelleyici
         function updateTotalAppsCount(count) {
             const badge = document.getElementById('totalAppsBadge');
             if (badge) {
@@ -432,7 +450,7 @@
             }
         }
 
-        // 2. Proje Kartlarını Basma
+        // Proje Kartlarının render edilmesi (Üst üste binmeyi önleyecek esnek yapı entegre edildi)
         function renderProjects(projects) {
             const grid = document.getElementById('projectsGrid');
             const noResults = document.getElementById('noResults');
@@ -445,7 +463,6 @@
                 noResults.classList.add('hidden');
             }
 
-            // Tümü sekmesindeysek ve favorilerde eleman varsa, favorileri en üstte grupla
             let sortedProjects = [...projects];
             if (activeCategory === 'Tümü' && favorites.length > 0) {
                 sortedProjects.sort((a, b) => {
@@ -459,21 +476,19 @@
                 const isFav = favorites.includes(project.adi);
                 const card = document.createElement('div');
                 
-                // overflow-hidden eklendi, böylece sağ üstteki band kart sınırlarının dışına taşmaz
-                card.className = 'project-card bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/70 dark:border-slate-800/70 p-6 shadow-sm dark:shadow-none transition-all duration-500 flex flex-col justify-between opacity-0 translate-y-4 relative z-10 touch-manipulation overflow-hidden';
+                // h-full ve flex-col yapısıyla elemanların iç esnekliğini garanti altına alıyoruz, minimum yükseklik (min-h-[320px]) üst üste binmeyi engeller.
+                card.className = 'project-card bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/70 dark:border-slate-800/70 p-6 shadow-sm dark:shadow-none transition-all duration-500 flex flex-col justify-between opacity-0 translate-y-4 relative z-10 touch-manipulation overflow-hidden min-h-[320px] h-full gap-4';
                 card.style.animation = `fadeInUp 0.4s ease forwards ${index * 0.05}s`;
                 
-                // Dinamik mikro durum etiketlerinin tespiti (Durum: Yeni, Güncellendi, Beta)
                 let badgeHTML = '';
                 if (project.durum) {
                     let badgeColor = 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400 border-emerald-200/60';
                     if (project.durum === 'Güncellendi') badgeColor = 'bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400 border-amber-200/60';
                     if (project.durum === 'Beta') badgeColor = 'bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400 border-blue-200/60';
                     
-                    badgeHTML = `<span class="text-[10px] font-extrabold px-2 py-0.5 rounded-md border ${badgeColor} tracking-wide uppercase mr-2">${project.durum}</span>`;
+                    badgeHTML = `<span class="text-[10px] font-extrabold px-2 py-0.5 rounded-md border ${badgeColor} tracking-wide uppercase">${project.durum}</span>`;
                 }
 
-                // DUYURU / ÖNERİLEN KÖŞE BANDI YAPISI
                 let ribbonHTML = '';
                 if (project.duyur && project.duyur.trim() !== "") {
                     ribbonHTML = `
@@ -483,7 +498,6 @@
                     `;
                 }
 
-                // Yıldızın animasyon sınıfını belirle (Aktifleşme mi, pasifleşme mi?)
                 let starAnimClass = '';
                 if (lastAnimatedStars[project.adi] === 'active') {
                     starAnimClass = 'animate-star-active';
@@ -491,24 +505,22 @@
                     starAnimClass = 'animate-star-inactive';
                 }
                 
-                // Temiz dinamik aria-label atamaları
                 const favButtonLabel = isFav ? `${project.adi} uygulamasını favorilerden çıkar` : `${project.adi} uygulamasını favorilere ekle`;
                 
-                // Güvenli string kaçışları (Paylaşım metinleri için)
                 const safeName = project.adi.replace(/'/g, "\\'").replace(/"/g, '&quot;');
                 const safeDesc = project.aciklama.replace(/'/g, "\\'").replace(/"/g, '&quot;');
                 const safeIcon = (project.ikon || '🚀').replace(/'/g, "\\'");
 
                 card.innerHTML = `
                     ${ribbonHTML}
-                    <div>
-                        <div class="flex items-center justify-between mb-5 relative z-20">
+                    <div class="flex flex-col gap-3 flex-grow">
+                        <div class="flex flex-wrap items-center justify-between gap-3 relative z-20">
                             <span class="project-icon text-3xl p-3 bg-slate-50 dark:bg-slate-950 rounded-2xl transition-colors select-none shadow-sm" aria-hidden="true">${project.ikon || '🚀'}</span>
                             
-                            <div class="flex items-center justify-end gap-3 flex-grow pl-4 ${project.duyur ? 'pr-14' : ''}">
-                                <div class="flex items-center select-none">
+                            <div class="flex flex-wrap items-center justify-end gap-2 flex-grow pl-2 ${project.duyur ? 'pr-14' : ''}">
+                                <div class="flex flex-wrap items-center gap-1.5 select-none">
                                     ${badgeHTML}
-                                    <span class="text-xs md:text-sm font-bold px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-xl tracking-wide uppercase">${project.kategori}</span>
+                                    <span class="text-xs md:text-sm font-bold px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-xl tracking-wide uppercase whitespace-nowrap">${project.kategori}</span>
                                 </div>
                                 
                                 <button onclick="toggleFavorite('${project.adi.replace(/'/g, "\\'")}', event)" class="p-3.5 rounded-xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-950 dark:hover:bg-slate-800 border border-slate-200/50 dark:border-slate-800/80 transition-all hover:scale-110 active:scale-90 z-30 touch-manipulation group" aria-label="${favButtonLabel}">
@@ -518,15 +530,17 @@
                                 </button>
                             </div>
                         </div>
-                        <h3 class="text-lg md:text-xl font-bold text-slate-900 dark:text-white mb-3 transition-colors relative z-20">
-                            ${project.adi}
-                        </h3>
-                        <p class="text-slate-600 dark:text-slate-400 text-sm md:text-base leading-relaxed mb-8 font-medium relative z-20">
-                            ${project.aciklama}
-                        </p>
+                        <div class="space-y-2">
+                            <h3 class="text-lg md:text-xl font-bold text-slate-900 dark:text-white transition-colors relative z-20">
+                                ${project.adi}
+                            </h3>
+                            <p class="text-slate-600 dark:text-slate-400 text-sm md:text-base leading-relaxed font-medium relative z-20 break-words">
+                                ${project.aciklama}
+                            </p>
+                        </div>
                     </div>
                     
-                    <div class="flex flex-col gap-2 relative z-20">
+                    <div class="flex flex-col gap-2 relative z-20 pt-2 border-t border-slate-100 dark:border-slate-800/60 mt-auto">
                         <button onclick="openShareMenu('${safeName}', '${safeDesc}', '${project.url}', '${safeIcon}')" class="share-btn w-full inline-flex items-center justify-center px-5 py-3 bg-slate-100/80 dark:bg-slate-900/60 text-slate-700 dark:text-slate-300 font-bold text-sm md:text-base rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm touch-manipulation">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
@@ -546,7 +560,6 @@
             });
         }
 
-        // 3. Kategorileri Butonlaştırma ve İçerik Sayılarını Hesaplama
         function generateCategoryButtons() {
             const container = document.getElementById('categoryContainer');
             const uniqueCategories = [...new Set(allProjects.map(p => p.kategori))];
@@ -574,14 +587,12 @@
             });
         }
 
-        // 4. Filtreleme Fonksiyonları
         function filterCategory(category) {
             activeCategory = category;
             generateCategoryButtons();
             applyFilters();
         }
 
-        // Filtreleme Uygulama
         function applyFilters() {
             const searchBar = document.getElementById('searchBar');
             const clearBtn = document.getElementById('clearSearchBtn');
@@ -624,7 +635,6 @@
             renderProjects(filtered);
         }
 
-        // Arama Temizleme Fonksiyonu
         function clearSearch() {
             const searchBar = document.getElementById('searchBar');
             searchBar.value = '';
@@ -632,7 +642,6 @@
             applyFilters();
         }
 
-        // FAVORİ EKLEME/ÇIKARMA FONKSİYONU VE ANİMASYON TETİKLEYİCİSİ
         function toggleFavorite(projectName, event) {
             event.preventDefault();
             event.stopPropagation();
@@ -654,7 +663,6 @@
             }, 450);
         }
 
-        // EN SON KULLANILANLAR TAKİP SİSTEMİ
         function trackRecent(projectName) {
             recents = recents.filter(name => name !== projectName);
             recents.unshift(projectName);
@@ -663,24 +671,21 @@
             renderRecents();
         }
 
-        // Tek bir son kullanılan ögeyi silme fonksiyonu
         function removeRecentItem(projectName, event) {
             event.preventDefault();
-            event.stopPropagation(); // Kart linkinin açılmasını engeller
+            event.stopPropagation(); 
             
             recents = recents.filter(name => name !== projectName);
             localStorage.setItem('ak_recents', JSON.stringify(recents));
             renderRecents();
         }
 
-        // Tüm son kullanılanları temizleme fonksiyonu
         function clearAllRecents() {
             recents = [];
             localStorage.removeItem('ak_recents');
             renderRecents();
         }
 
-        // Son kullanılan projeleri listele (Dokunmatik Ekranlar ve Akıllı Tahtalar İçin Daha Büyük Tasarlandı)
         function renderRecents() {
             const section = document.getElementById('recentSection');
             const container = document.getElementById('recentContainer');
@@ -698,7 +703,6 @@
                     const wrapper = document.createElement('div');
                     wrapper.className = 'inline-flex items-center divide-x divide-slate-200 dark:divide-slate-700 bg-slate-50 hover:bg-blue-50 dark:bg-slate-950 dark:hover:bg-blue-950/30 rounded-2xl border border-slate-200/60 dark:border-slate-800/80 transition-all shadow-sm';
                     
-                    // Dokunmatik dostu büyük tıklama alanı (px-4 py-2.5 ve text-sm ile ölçeklendirildi)
                     const link = document.createElement('a');
                     link.href = foundProj.url;
                     link.target = '_blank';
@@ -707,7 +711,6 @@
                     link.setAttribute('aria-label', `Son kullanılanlardan ${foundProj.adi} uygulamasını aç`);
                     link.innerHTML = `<span aria-hidden="true" class="text-lg">${foundProj.ikon || '🚀'}</span> <span>${foundProj.adi}</span>`;
                     
-                    // Daha büyük kapatma (çarpı) butonu dahi ikonu
                     const removeBtn = document.createElement('button');
                     removeBtn.onclick = (e) => removeRecentItem(foundProj.adi, e);
                     removeBtn.className = 'p-3 text-slate-400 hover:text-red-500 dark:text-slate-500 dark:hover:text-red-400 transition-colors rounded-r-2xl focus:outline-none';
@@ -725,29 +728,50 @@
             });
         }
 
-        // --- WRITING SIZE CONTROLLER (FONT SIZER) ENGINE ---
-        let currentSizeLevel = 0; // 0: Varsayılan, -1: Küçük, 1: Büyük, 2: Çok Büyük...
+        let currentSizeLevel = 0; 
         function changeFontSize(action) {
             if (action === 0) {
                 currentSizeLevel = 0;
             } else {
                 currentSizeLevel += action;
-                // Sınır güvenliği (Çok fazla büyüyüp küçülerek tasarımı bozmasını engeller)
                 if (currentSizeLevel < -1) currentSizeLevel = -1;
                 if (currentSizeLevel > 3) currentSizeLevel = 3;
             }
             
-            // rem tabanlı ölçekleme katsayıları
-            let newFontSize = "100%"; // varsayılan (16px)
+            let newFontSize = "100%"; 
             if (currentSizeLevel === -1) newFontSize = "90%";
             if (currentSizeLevel === 1) newFontSize = "110%";
             if (currentSizeLevel === 2) newFontSize = "120%";
-            if (currentSizeLevel === 3) newFontSize = "130%"; // Arka sıradaki öğrenciler için maksimum görünürlük
+            if (currentSizeLevel === 3) newFontSize = "130%"; 
             
             document.documentElement.style.fontSize = newFontSize;
         }
 
-        // --- GELİŞMİŞ PAYLAŞIM ALTYAPISI ---
+        // --- MOBİL MENÜ KONTROLÜ ---
+        function toggleMobileMenu() {
+            const dropdown = document.getElementById('mobileMenuDropdown');
+            const btn = document.getElementById('mobileMenuBtn');
+            const isHidden = dropdown.classList.contains('hidden');
+            
+            if (isHidden) {
+                dropdown.classList.remove('hidden');
+                btn.setAttribute('aria-expanded', 'true');
+            } else {
+                dropdown.classList.add('hidden');
+                btn.setAttribute('aria-expanded', 'false');
+            }
+        }
+
+        // Menü dışına tıklandığında kapanma güvenliği
+        window.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('mobileMenuDropdown');
+            const btn = document.getElementById('mobileMenuBtn');
+            if (!btn.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.classList.add('hidden');
+                btn.setAttribute('aria-expanded', 'false');
+            }
+        });
+
         function openShareMenu(name, desc, url, icon) {
             activeShareUrl = url;
             const shareText = `Akıllı Kürsü - ${name}: ${desc}`;
@@ -785,7 +809,6 @@
             inner.classList.add('scale-95');
         }
 
-        // Bağlantıyı kopyalama ve Toast uyarısı tetikleme
         function copyShareLink() {
             if (!activeShareUrl) return;
             navigator.clipboard.writeText(activeShareUrl).then(() => {
@@ -808,33 +831,28 @@
             }, 2000);
         }
 
-        // TAM DONANIMLI KLAVYE KISAYOLLARI ENTEGRASYONU (Her Koşulda Ekranı Ortaya Getiren Garanti Sürüm)
         window.addEventListener('keydown', (e) => {
             const searchBar = document.getElementById('searchBar');
             if (!searchBar) return;
 
-            // --- TEMİZLEME KISAYOLLARI ---
             if (searchBar.value.length > 0 && (e.key === 'Escape' || (e.altKey && e.key === 'Backspace'))) {
                 e.preventDefault();
                 clearSearch();
                 return;
             }
 
-            // Modalları Esc tuşu ile kapatma konforu
             if (e.key === 'Escape') {
                 closeShareModal();
                 toggleAboutModal(false);
+                document.getElementById('mobileMenuDropdown').classList.add('hidden');
             }
 
-            // --- ODAKLANMA KISAYOLLARI ---
             if (e.key === '/' || ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k')) {
-                e.preventDefault(); // Tarayıcının adres çubuğu vb. varsayılan çakışmalarını keser
+                e.preventDefault(); 
                 
-                // GARANTİ YÖNTEM: Arama kutusu zaten aktif olsa bile sayfa aşağı kaydırılmışsa tam dikey konumuna sıçrar.
                 const targetY = searchBar.getBoundingClientRect().top + window.scrollY - (window.innerHeight / 3);
                 window.scrollTo({ top: targetY, behavior: 'auto' });
                 
-                // Tarayıcı kaydırma işlemi yaparken girdi (input) odağının kilitlenmesini garanti altına alıyoruz
                 setTimeout(() => {
                     requestAnimationFrame(() => {
                         requestAnimationFrame(() => {
@@ -846,7 +864,6 @@
             }
         });
 
-        // 5. Tema Değiştirme
         function toggleTheme() {
             const html = document.documentElement;
             if (html.classList.contains('dark')) {
@@ -858,7 +875,6 @@
             }
         }
 
-        // 6. Hakkında Modalı Kontrolü
         function toggleAboutModal(show) {
             const modal = document.getElementById('aboutModal');
             const btn = document.getElementById('aboutModalBtn');
