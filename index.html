@@ -186,6 +186,11 @@
                 </button>
             </div>
 
+            <!-- KULLANICIYA SİLME/TEMİZLEME KISAYOLLARINI BELİRTEN DİNAMİK YARDIMCI REHBER METNİ -->
+            <div id="searchHelpContainer" class="text-center text-xs text-slate-400 dark:text-slate-500 font-medium transition-all duration-300 opacity-0 -mt-2 h-0 overflow-hidden">
+                Kutuyu temizlemek için <kbd class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 font-sans text-[11px] shadow-sm">Esc</kbd> veya <kbd class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 font-sans text-[11px] shadow-sm">Alt + Backspace</kbd> tuşlarını kullanabilirsiniz.
+            </div>
+
             <div class="w-full overflow-x-auto no-scrollbar -mx-4 px-4 md:mx-0 md:px-0 snap-x snap-mandatory">
                 <div class="flex flex-nowrap md:flex-wrap md:justify-center gap-3 pb-2" id="categoryContainer">
                     <button onclick="filterCategory('Tümü')" class="cat-btn whitespace-nowrap px-5 py-2.5 rounded-xl text-sm md:text-base font-semibold bg-blue-600 text-white shadow-md shadow-blue-500/20 transition-all touch-manipulation snap-center">
@@ -406,7 +411,6 @@
             container.innerHTML = '';
             
             categories.forEach(cat => {
-                // Her kategori için toplam proje adedini hesapla
                 let count = 0;
                 if (cat === 'Tümü') {
                     count = allProjects.length;
@@ -415,7 +419,6 @@
                 }
 
                 const btn = document.createElement('button');
-                // Buton metnine dinamik olarak adedi parantez içinde ekle
                 btn.textContent = `${cat} (${count})`;
                 btn.className = `cat-btn whitespace-nowrap px-5 py-2.5 rounded-xl text-sm md:text-base font-semibold transition-all touch-manipulation snap-center ${
                     cat === activeCategory 
@@ -440,6 +443,7 @@
             const searchBar = document.getElementById('searchBar');
             const clearBtn = document.getElementById('clearSearchBtn');
             const kbdBadge = document.getElementById('searchKbdBadge');
+            const helpText = document.getElementById('searchHelpContainer');
             const originalSearchTerm = searchBar.value;
             
             if (originalSearchTerm.length > 0) {
@@ -450,6 +454,11 @@
                 if (kbdBadge) {
                     kbdBadge.classList.add('opacity-0', 'pointer-events-none');
                 }
+                // Yazı yazıldığında temizleme ipucu animasyonlu şekilde görünür
+                if (helpText) {
+                    helpText.classList.remove('opacity-0', 'h-0', 'overflow-hidden');
+                    helpText.classList.add('opacity-100', 'mt-2', 'h-auto');
+                }
             } else {
                 if (clearBtn) {
                     clearBtn.classList.remove('opacity-100', 'scale-100');
@@ -457,6 +466,11 @@
                 }
                 if (kbdBadge) {
                     kbdBadge.classList.remove('opacity-0', 'pointer-events-none');
+                }
+                // Kutu boşaldığında temizleme ipucu pürüzsüzce gizlenir
+                if (helpText) {
+                    helpText.classList.remove('opacity-100', 'mt-2', 'h-auto');
+                    helpText.classList.add('opacity-0', 'h-0', 'overflow-hidden');
                 }
             }
 
@@ -492,16 +506,15 @@
             const index = favorites.indexOf(projectName);
             if (index > -1) {
                 favorites.splice(index, 1);
-                lastAnimatedStars[projectName] = 'inactive'; // Pasifleşme animasyonunu kaydet
+                lastAnimatedStars[projectName] = 'inactive';
             } else {
                 favorites.push(projectName);
-                lastAnimatedStars[projectName] = 'active'; // Aktifleşme animasyonunu kaydet
+                lastAnimatedStars[projectName] = 'active';
             }
             
             localStorage.setItem('ak_favorites', JSON.stringify(favorites));
             applyFilters();
 
-            // Animasyon tamamlandıktan sonra durumu sıfırla ki sayfa yenilendiğinde tekrar oynamasın
             setTimeout(() => {
                 delete lastAnimatedStars[projectName];
             }, 450);
