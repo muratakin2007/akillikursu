@@ -142,8 +142,9 @@
     <main class="w-full px-4 sm:px-8 lg:px-12 2xl:px-24 mx-auto py-12 md:py-20 flex-grow z-10">
         
         <div class="text-center mb-12 md:mb-16">
-            <span class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 text-sm font-semibold mb-5 border border-blue-200/50 dark:border-blue-800/30">
-                <span>🚀 Eğitim odaklı ücretsiz projeler</span>
+            <!-- TOPLAM UYGULAMA SAYACININ DİNAMİK OLARAK YAZILACAĞI ROZET -->
+            <span id="totalAppsBadge" class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 text-sm font-semibold mb-5 border border-blue-200/50 dark:border-blue-800/30">
+                <span>🚀 Uygulamalar yükleniyor...</span>
             </span>
             <h2 class="text-4xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tight mb-5 max-w-4xl mx-auto leading-tight">
                 Sınıflar İçin <br class="hidden sm:inline"><span class="bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 bg-clip-text text-transparent">Akıllı Çözümler</span>
@@ -283,6 +284,10 @@
             try {
                 const response = await fetch(jsonUrl);
                 allProjects = await response.json();
+                
+                // Toplam uygulama sayacını dinamik olarak güncelle
+                updateTotalAppsCount(allProjects.length);
+                
                 generateCategoryButtons();
                 applyFilters(); // renderProjects'i tetikler
                 renderRecents();
@@ -292,6 +297,14 @@
                     <div class="col-span-full text-center py-20 text-red-500 font-medium text-base">
                         ❌ Uygulama listesi alınamadı. Lütfen daha sonra tekrar deneyin.
                     </div>`;
+            }
+        }
+
+        // Ana Üst Rozet Sayaç Güncelleyici
+        function updateTotalAppsCount(count) {
+            const badge = document.getElementById('totalAppsBadge');
+            if (badge) {
+                badge.innerHTML = `<span>🚀 ${count} Eğitim Odaklı Ücretsiz Proje</span>`;
             }
         }
 
@@ -385,15 +398,25 @@
             });
         }
 
-        // 3. Kategorileri Butonlaştırma
+        // 3. Kategorileri Butonlaştırma ve İçerik Sayılarını Hesaplama
         function generateCategoryButtons() {
             const container = document.getElementById('categoryContainer');
-            const categories = ['Tümü', ...new Set(allProjects.map(p => p.kategori))];
+            const uniqueCategories = [...new Set(allProjects.map(p => p.kategori))];
+            const categories = ['Tümü', ...uniqueCategories];
             container.innerHTML = '';
             
             categories.forEach(cat => {
+                // Her kategori için toplam proje adedini hesapla
+                let count = 0;
+                if (cat === 'Tümü') {
+                    count = allProjects.length;
+                } else {
+                    count = allProjects.filter(p => p.kategori === cat).length;
+                }
+
                 const btn = document.createElement('button');
-                btn.textContent = cat;
+                // Buton metnine dinamik olarak adedi parantez içinde ekle
+                btn.textContent = `${cat} (${count})`;
                 btn.className = `cat-btn whitespace-nowrap px-5 py-2.5 rounded-xl text-sm md:text-base font-semibold transition-all touch-manipulation snap-center ${
                     cat === activeCategory 
                     ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' 
@@ -519,19 +542,25 @@
             });
         }
 
-        // TAM DONANIMLI KLAVYE KISAYOLLARI ENTEGRASYONU (/ ve Ctrl+K)
+        // TAM DONANIMLI KLAVYE KISAYOLLARI ENTEGRASYONU (Odaklanma ve Gelişmiş Temizleme Mekanizması)
         window.addEventListener('keydown', (e) => {
             const searchBar = document.getElementById('searchBar');
             if (!searchBar) return;
 
-            // Eğer halihazırda arama çubuğuna odaklanılmışsa ekstra bir tetikleme yapma
+            // --- TEMİZLEME KISAYOLLARI ---
+            if (searchBar.value.length > 0 && (e.key === 'Escape' || (e.altKey && e.key === 'Backspace'))) {
+                e.preventDefault();
+                clearSearch();
+                return;
+            }
+
+            // --- ODAKLANMA KISAYOLLARI ---
             if (document.activeElement === searchBar) return;
 
-            // Tek başına '/' tuşu veya 'Ctrl + K / Cmd + K' kombinasyon kontrolü
             if (e.key === '/' || ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k')) {
-                e.preventDefault(); // Tarayıcının varsayılan Ctrl+K arama barı davranışını engeller
+                e.preventDefault();
                 searchBar.focus();
-                searchBar.select(); // Kullanıcı kolaylığı için mevcut metni seçili hale getirir
+                searchBar.select();
             }
         });
 
@@ -557,7 +586,6 @@
                 inner.classList.remove('scale-95');
                 inner.classList.add('scale-100');
                 btn.setAttribute('aria-expanded', 'true');
-                // Erişilebilirlik odağı modal içine taşınabilir
                 setTimeout(() => modal.querySelector('button').focus(), 100);
             } else {
                 modal.classList.add('opacity-0', 'pointer-events-none');
