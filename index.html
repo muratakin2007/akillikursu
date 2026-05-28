@@ -185,7 +185,7 @@
             </div>
 
             <div id="searchHelpContainer" class="text-center text-xs text-slate-400 dark:text-slate-500 font-medium transition-all duration-300 opacity-0 -mt-2 h-0 overflow-hidden">
-                Kutuyu temizlemek için <kbd class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 font-sans text-[11px] shadow-sm">Esc</kbd> veya <kbd class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 font-sans text-[11px] shadow-sm">Alt + Backspace</kbd> tuşlarını kullanabilirsiniz.
+                Kutuyu temizlemek için <kbd class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 font-sans text-[11px] shadow-sm">Esc</kbd> Sub <kbd class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 font-sans text-[11px] shadow-sm">Alt + Backspace</kbd> tuşlarını kullanabilirsiniz.
             </div>
 
             <div class="w-full overflow-x-auto no-scrollbar -mx-4 px-4 md:mx-0 md:px-0 snap-x snap-mandatory">
@@ -546,7 +546,7 @@
             });
         }
 
-        // TAM DONANIMLI KLAVYE KISAYOLLARI ENTEGRASYONU (Garanti Odaklanma Çözümü)
+        // TAM DONANIMLI KLAVYE KISAYOLLARI ENTEGRASYONU (Her Koşulda Ekranı Ortaya Getiren Garanti Sürüm)
         window.addEventListener('keydown', (e) => {
             const searchBar = document.getElementById('searchBar');
             if (!searchBar) return;
@@ -559,16 +559,15 @@
             }
 
             // --- ODAKLANMA KISAYOLLARI ---
-            if (document.activeElement === searchBar) return;
-
             if (e.key === '/' || ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k')) {
-                e.preventDefault(); // Tarayıcı varsayılan çakışmalarını önler
+                e.preventDefault(); // Tarayıcının adres çubuğu vb. varsayılan çakışmalarını keser
                 
-                // GARANTİ YÖNTEM: Sayfa aşağı kaydırılmışsa arama kutusunun tam dikey konumuna anında sıçrar
+                // GARANTİ YÖNTEM: Arama kutusu zaten aktif olsa bile sayfa aşağı kaydırılmışsa tam dikey konumuna sıçrar.
+                // Arama kutusunu ekran yüksekliğinin 1/3'ü kadar aşağıya hizalayarak başlıkların ve kutunun tam görünmesini sağlar.
                 const targetY = searchBar.getBoundingClientRect().top + window.scrollY - (window.innerHeight / 3);
                 window.scrollTo({ top: targetY, behavior: 'auto' });
                 
-                // Tarayıcının render kuyruğunu garantiye almak için iç içe zamanlama ve animasyon kareleri kullanımı
+                // Tarayıcı kaydırma işlemi yaparken girdi (input) odağının kilitlenmesini garanti altına alıyoruz
                 setTimeout(() => {
                     requestAnimationFrame(() => {
                         requestAnimationFrame(() => {
