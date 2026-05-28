@@ -29,279 +29,547 @@
         }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Yıldız Etkileşimi için Pop/Sıçrama Animasyonu */
+        @keyframes starPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.35) rotate(12deg); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes starUnpop {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.8) rotate(-8deg); }
+            100% { transform: scale(1); }
+        }
+
+        .animate-star-active {
+            animation: starPop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .animate-star-inactive {
+            animation: starUnpop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        /* Hem fareyle üzerine gelindiğinde (hover) hem de dokunmatik ekranda dokunulduğunda (active) çalışacak ortak efektler */
+        .project-card:hover,
+        .project-card:active {
+            z-index: 20;
+            transform: scale(1.02);
+            border-color: #60a5fa; /* border-blue-400 */
+            box-shadow: 0 0 40px -10px rgba(59, 130, 246, 0.3);
+            background-image: linear-gradient(to bottom right, #ffffff, rgba(239, 246, 255, 0.5));
+        }
+        
+        .dark .project-card:hover,
+        .dark .project-card:active {
+            border-color: #3b82f6; /* border-blue-500 */
+            box-shadow: 0 0 40px -10px rgba(59, 130, 246, 0.2);
+            background-image: linear-gradient(to bottom right, #0f172a, rgba(30, 41, 59, 0.8));
+        }
+
+        /* Akıllı Tahta ve Mobil için Haptik/Visual Geri Bildirim: Tıklanma anında iç gölge efekti */
+        .project-card:active, .cat-btn:active, .go-app-btn:active {
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+            transform: scale(0.99) !important;
+        }
+
+        .project-card:hover h3,
+        .project-card:active h3 {
+            color: #3b82f6; /* text-blue-500 */
+        }
+
+        .dark .project-card:hover h3,
+        .dark .project-card:active h3 {
+            color: #60a5fa; /* text-blue-400 */
+        }
+
+        .project-card:hover .project-icon,
+        .project-card:active .project-icon {
+            background-color: #eff6ff; /* bg-blue-50 */
+        }
+
+        .dark .project-card:hover .project-icon,
+        .dark .project-card:active .project-icon {
+            background-color: rgba(30, 58, 138, 0.5); /* bg-blue-950/50 */
+        }
+
+        .project-card:hover .go-app-btn svg,
+        .project-card:active .go-app-btn svg {
+            transform: translateX(4px) translateY(-4px);
+        }
     </style>
 </head>
-<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-50 min-h-screen flex flex-col antialiased transition-colors duration-300 select-none">
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-200 min-h-screen flex flex-col antialiased transition-colors duration-300">
 
-    <header class="sticky top-0 z-40 w-full border-b border-slate-200/80 dark:border-slate-900/80 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md transition-colors duration-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                    </svg>
-                </div>
-                <div>
-                    <h1 class="text-base font-bold tracking-tight bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">Akıllı Kürsü</h1>
-                    <p class="text-[11px] font-medium text-slate-500 dark:text-slate-400">Dijital Eğitim Araçları Merkezi</p>
-                </div>
+    <div class="absolute top-0 left-0 w-full h-[600px] pointer-events-none overflow-hidden z-0 opacity-70 dark:opacity-40" aria-hidden="true">
+        <div class="absolute -top-[200px] left-1/4 w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-blue-400/20 dark:bg-blue-600/10 rounded-full filter blur-[100px]"></div>
+        <div class="absolute -top-[160px] right-1/4 w-[350px] md:w-[500px] h-[350px] md:h-[500px] bg-indigo-400/20 dark:bg-indigo-600/10 rounded-full filter blur-[100px]"></div>
+    </div>
+
+    <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 transition-colors duration-300">
+        <div class="w-full px-4 sm:px-8 lg:px-12 2xl:px-24 mx-auto h-20 flex items-center justify-between">
+            
+            <button onclick="toggleAboutModal(true)" class="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-sm md:text-base font-medium transition-all text-slate-600 dark:text-slate-300 active:scale-95 touch-manipulation" aria-haspopup="dialog" aria-expanded="false" id="aboutModalBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>Hakkında</span>
+            </button>
+
+            <div class="flex items-center space-x-3 select-none absolute left-1/2 -translate-x-1/2">
+                <span class="text-2xl md:text-3xl" aria-hidden="true">👨‍🏫</span>
+                <span class="text-lg md:text-2xl font-extrabold tracking-tight bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-400 dark:via-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">
+                    Akıllı Kürsü
+                </span>
             </div>
 
-            <div class="flex items-center gap-2">
-                <button id="aboutModalBtn" onclick="toggleAboutModal(true)" class="p-2.5 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-sm font-medium flex items-center gap-1.5 border border-transparent hover:border-slate-200/60 dark:hover:border-slate-800/50" aria-haspopup="dialog" aria-expanded="false">
-                    <span>Hakkında</span>
-                </button>
-                <button onclick="toggleTheme()" class="p-2.5 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all border border-transparent hover:border-slate-200/60 dark:hover:border-slate-800/50" aria-label="Temayı Değiştir">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 block dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M16.243 17.657l.707.707M6.343 6.343l.707-.707M15.234 12a3.234 3.234 0 11-6.469 0 3.234 3.234 0 016.469 0z" />
-                    </svg>
-                </button>
-            </div>
+            <button onclick="toggleTheme()" id="themeBtn" class="p-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-all active:scale-95 touch-manipulation" aria-label="Tema Değiştir">
+                <svg id="sunIcon" class="h-5 w-5 hidden dark:block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.364l-.707.707M12 5a7 7 0 100 14 7 7 0 000-14z" />
+                </svg>
+                <svg id="moonIcon" class="h-5 w-5 block dark:hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+            </button>
         </div>
     </header>
 
-    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-8">
+    <main class="w-full px-4 sm:px-8 lg:px-12 2xl:px-24 mx-auto py-12 md:py-20 flex-grow z-10">
         
-        <section class="text-center max-w-2xl mx-auto w-full my-4">
-            <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight mb-3 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-700 dark:from-white dark:via-slate-200 dark:to-slate-400 bg-clip-text text-transparent">Aradığınız Araca Hızla Ulaşın</h2>
-            <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Derslerinizde kullanabileceğiniz tüm dijital eğitim asistanları ve uygulamalar tek bir noktada.</p>
+        <div class="text-center mb-12 md:mb-16">
+            <span id="totalAppsBadge" class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 text-sm font-semibold mb-5 border border-blue-200/50 dark:border-blue-800/30">
+                <span>🚀 Uygulamalar yükleniyor...</span>
+            </span>
+            <h2 class="text-4xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tight mb-5 max-w-4xl mx-auto leading-tight">
+                Sınıflar İçin <br class="hidden sm:inline"><span class="bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 bg-clip-text text-transparent">Akıllı Çözümler</span>
+            </h2>
+            <p class="text-base md:text-xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto px-2 font-medium">
+                Öğretmenlerin günlük işlerini otomatize eden, sınıf yönetimini ve okul bilişim sistemlerini pratikleştiren yeni nesil web uygulamaları.
+            </p>
+        </div>
+
+        <div class="bg-white/80 dark:bg-slate-900/60 backdrop-blur-md p-5 md:p-8 rounded-3xl shadow-xl shadow-slate-200/40 dark:shadow-none border border-slate-200/60 dark:border-slate-800/60 mb-10 md:mb-16 space-y-5 md:space-y-6 max-w-5xl mx-auto">
             
-            <div class="relative group">
-                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-emerald-500 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div class="relative max-w-2xl mx-auto w-full group">
+                <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                 </div>
-                <input type="text" id="searchBar" placeholder="Uygulama adı veya açıklama ara... (/)" class="w-full pl-11 pr-4 py-3.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 dark:focus:border-emerald-500 text-slate-900 dark:text-white placeholder-slate-400 shadow-sm shadow-slate-100 dark:shadow-none transition-all" autocomplete="off">
-            </div>
-        </section>
-
-        <section id="categoriesContainer" class="flex items-center gap-2 overflow-x-auto pb-3 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 scroll-smooth">
-            </section>
-
-        <section id="recentSection" class="hidden flex flex-col gap-4">
-            <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-900 pb-2">
-                <div class="flex items-center gap-2">
-                    <span class="w-1.5 h-5 rounded-full bg-amber-500"></span>
-                    <h3 class="text-sm font-bold tracking-wide text-slate-400 dark:text-slate-500 uppercase">Son Kullanılanlar</h3>
-                </div>
-                <button onclick="clearAllRecents()" class="text-xs font-semibold text-rose-500 hover:text-rose-600 dark:text-rose-400 dark:hover:text-rose-300 transition-colors flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-950/30">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-16v1a3 3 0 003 3h10M4 7h16" />
+                <input 
+                    type="text" 
+                    id="searchBar" 
+                    inputmode="search"
+                    placeholder="Aramak için yazın... (Kısayol: / veya Ctrl+K)" 
+                    class="w-full pl-14 pr-14 py-4 bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-slate-950 transition-all text-base md:text-lg placeholder-slate-400 dark:placeholder-slate-500 dark:text-white"
+                    aria-label="Uygulamalarda ara"
+                >
+                <button 
+                    id="clearSearchBtn"
+                    onclick="clearSearch()"
+                    class="absolute inset-y-0 right-0 pr-5 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-all opacity-0 pointer-events-none scale-75 z-10"
+                    aria-label="Aramayı Temizle"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 p-0.5 bg-slate-200/60 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 rounded-full" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
                     </svg>
-                    Tümünü Temizle
                 </button>
             </div>
-            <div id="recentContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                </div>
-        </section>
 
-        <section class="flex flex-col gap-4">
-            <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-900 pb-2">
-                <div class="flex items-center gap-2">
-                    <span class="w-1.5 h-5 rounded-full bg-emerald-500"></span>
-                    <h3 class="text-sm font-bold tracking-wide text-slate-400 dark:text-slate-500 uppercase">Tüm Araçlar</h3>
-                </div>
-                <div id="matchCount" class="text-xs font-medium text-slate-400 dark:text-slate-500"></div>
+            <div id="searchHelpContainer" class="text-center text-xs text-slate-400 dark:text-slate-500 font-medium transition-all duration-300 opacity-0 -mt-2 h-0 overflow-hidden">
+                Kutuyu temizlemek için <kbd class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 font-sans text-[11px] shadow-sm">Esc</kbd> veya <kbd class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 font-sans text-[11px] shadow-sm">Alt + Backspace</kbd> tuşlarını kullanabilirsiniz.
             </div>
-            
-            <div id="noResults" class="hidden text-center py-12 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/60 dark:border-slate-900/50">
-                <div class="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-950 flex items-center justify-center text-slate-400 mx-auto mb-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+
+            <div class="w-full overflow-x-auto no-scrollbar -mx-4 px-4 md:mx-0 md:px-0 snap-x snap-mandatory">
+                <div class="flex flex-nowrap md:flex-wrap md:justify-center gap-3 pb-2" id="categoryContainer">
+                    <button onclick="filterCategory('Tümü')" class="cat-btn whitespace-nowrap px-5 py-2.5 rounded-xl text-sm md:text-base font-semibold bg-blue-600 text-white shadow-md shadow-blue-500/20 transition-all touch-manipulation snap-center">
+                        Tümü
+                    </button>
+                </div>
+            </div>
+
+            <div id="recentSection" class="hidden border-t border-slate-100 dark:border-slate-800/80 pt-4 max-w-2xl mx-auto w-full">
+                <div class="flex items-center space-x-2 text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-2.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
+                    <span>Son Kullanılanlar</span>
                 </div>
-                <h4 class="text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">Aramanızla Eşleşen Araç Bulunamadı</h4>
-                <p class="text-xs text-slate-400 dark:text-slate-500">Farklı anahtar kelimeler deneyebilir veya filtreleri sıfırlayabilirsiniz.</p>
+                <div id="recentContainer" class="flex flex-wrap gap-2"></div>
             </div>
 
-            <div id="projectsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                </div>
-        </section>
+        </div>
+
+        <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8" aria-live="polite">
+            <div class="col-span-full text-center py-20 text-slate-400 dark:text-slate-600">
+                <svg class="animate-spin h-12 w-12 mx-auto mb-5 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span class="text-base font-medium">Uygulama havuzu yükleniyor...</span>
+            </div>
+        </div>
+
+        <div id="noResults" class="hidden text-center py-20 px-4" aria-live="assertive">
+            <div class="w-20 h-20 bg-slate-100 dark:bg-slate-900 rounded-3xl flex items-center justify-center mx-auto mb-5 text-3xl shadow-inner" aria-hidden="true">🔍</div>
+            <h3 class="text-lg md:text-xl font-bold text-slate-800 dark:text-slate-200">Sonuç Bulunamadı</h3>
+            <p class="text-slate-500 dark:text-slate-400 mt-2 max-w-sm mx-auto text-sm md:text-base mb-5">Farklı anahtar kelimeler aramayı veya kategoriyi değiştirmeyi deneyebilirsiniz.</p>
+            <button onclick="clearSearch()" class="inline-flex items-center space-x-2 px-5 py-2.5 bg-blue-50 hover:bg-blue-100 dark:bg-blue-950/40 dark:hover:bg-blue-900/40 text-blue-600 dark:text-blue-400 border border-blue-200/50 dark:border-blue-800/40 rounded-xl text-sm font-semibold transition-all active:scale-95 touch-manipulation">
+                <span>Aramayı Temizle</span>
+            </button>
+        </div>
+
     </main>
 
-    <footer class="w-full border-t border-slate-200/60 dark:border-slate-900/50 bg-white dark:bg-slate-950 py-4 transition-colors duration-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs font-medium text-slate-400 dark:text-slate-500">
-            <p>&copy; 2026 Akıllı Kürsü. Tüm hakları saklıdır.</p>
-            <p>Eğitimi dijitalleştiren pratik asistanlar.</p>
-        </div>
-    </footer>
-
-    <div id="aboutModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/40 dark:bg-slate-950/60 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-200" role="dialog" aria-modal="true">
-        <div class="bg-white dark:bg-slate-900 w-full max-w-md rounded-3xl p-6 shadow-xl border border-slate-200/50 dark:border-slate-800/50 transform scale-95 transition-transform duration-200 flex flex-col gap-4">
-            <div class="flex items-center justify-between">
-                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Akıllı Kürsü Hakkında</h3>
-                <button onclick="toggleAboutModal(false)" class="p-1.5 rounded-xl text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Kapat">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
+    <div id="aboutModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 w-full max-w-lg rounded-3xl p-8 shadow-2xl scale-95 transition-transform duration-300 relative max-h-[90vh] overflow-y-auto">
+            <button onclick="toggleAboutModal(false)" class="absolute top-5 right-5 p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors" aria-label="Kapat">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            
+            <div class="text-center mb-6">
+                <span class="text-5xl select-none block mb-3" aria-hidden="true">💡</span>
+                <h3 id="modalTitle" class="text-2xl font-bold text-slate-900 dark:text-white">Akıllı Kürsü Hakkında</h3>
             </div>
-            <div class="text-sm text-slate-500 dark:text-slate-400 space-y-3 leading-relaxed">
-                <p><strong>Akıllı Kürsü</strong>, akıllı tahtalar ve dijital eğitim ortamları için optimize edilmiş modern bir eğitim araçları kataloğudur.</p>
-                <p>Öğretmenlerin ders esnasında ihtiyaç duyabileceği her türlü web tabanlı uygulamaya, kronometreye, kuraya ve yapay zeka entegrasyonuna saniyeler içinde ulaşmasını amaçlar.</p>
-            </div>
-            <div class="border-t border-slate-100 dark:border-slate-800/60 pt-4 flex flex-col gap-2">
-                <a href="https://forms.gle/xxxx" target="_blank" rel="noopener" class="w-full py-3 px-4 rounded-2xl bg-emerald-500 hover:bg-emerald-600 active:scale-[0.98] text-white text-center text-xs font-bold shadow-md shadow-emerald-500/10 transition-all flex items-center justify-center gap-1.5">
-                    <span>Yeni Bir Araç Öner</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                </a>
+            
+            <div class="space-y-5 text-base text-slate-600 dark:text-slate-300 leading-relaxed">
+                <p>
+                    <strong>Akıllı Kürsü</strong>, dijital eğitim teknolojilerini pratikleştirmek, öğretmenlerin idari yüklerini azaltmak ve okul bilgisayarlarındaki/akıllı tahtalardaki teknik süreçleri kolaylaştırmak amacıyla geliştirilen bağımsız bir dijital ekosistemdir.
+                </p>
+                
+                <div class="pt-2">
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLScyO0gO7XnZk_7SgXG0o-XWpOn_FormLinki/viewform" target="_blank" class="w-full inline-flex items-center justify-center px-5 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-2xl shadow-md shadow-blue-500/10 transition-all text-sm md:text-base active:scale-95">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>Yeni Bir Araç Öner</span>
+                    </a>
+                </div>
+                
+                <div class="pt-4 mt-4 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center text-sm text-slate-400">
+                    <span>Geliştirici: Murat AKIN</span>
+                    <span>Versiyon: 1.1</span>
+                </div>
             </div>
         </div>
     </div>
 
+    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200/80 dark:border-slate-800/80 py-8 text-center text-sm text-slate-400 dark:text-slate-500 transition-colors duration-300">
+        <p>&copy; 2026 Akıllı Kürsü. Tüm hakları saklıdır.</p>
+    </footer>
+
     <script>
-        // Örnek Proje Verileri
-        const projectsData = [
-            { id: 1, title: "Akıllı Kronometre & Sayaç", desc: "Sınavlar, grup çalışmaları ve etkinlikler için özelleştirilebilir tam ekran geri sayım aracı.", url: "https://example.com/timer", category: "Araçlar" },
-            { id: 2, title: "Dijital Kura Çekme Asistanı", desc: "Sınıf listesinden rastgele öğrenci, grup veya görev seçimi yapabileceğiniz eğlenceli kura çarkı.", url: "https://example.com/wheel", category: "Etkinlik" },
-            { id: 3, title: "Yapay Zeka Ders Planlayıcı", desc: "Müfredat konularına uygun, kazanım odaklı ders planı taslakları üreten yapay zeka modülü.", url: "https://example.com/ai-plan", category: "Yapay Zeka" },
-            { id: 4, title: "Matematik Formül Çizici", desc: "Akıllı tahta uyumlu, geometrik ve cebirsel grafikleri anında simüle eden görsel pano.", url: "https://example.com/math", category: "Araçlar" },
-            { id: 5, title: "Kelime Avı Kelime Matrisi", desc: "Dil dersleri ve kavram öğretimi için kelime bulmacaları oluşturma ve çözme platformu.", url: "https://example.com/puzzle", category: "Etkinlik" }
-        ];
+        const jsonUrl = 'projeler.json'; 
+        let allProjects = [];
+        let activeCategory = 'Tümü';
 
-        let selectedCategory = "Hepsi";
+        // Tarayıcı hafızası yönetim listeleri
+        let favorites = JSON.parse(localStorage.getItem('ak_favorites')) || [];
+        let recents = JSON.parse(localStorage.getItem('ak_recents')) || [];
 
-        // 1. Projeleri Listeleme
-        function fetchProjects() {
-            renderCategories();
-            applyFilters();
-            renderRecents();
-        }
+        // Son animasyon durumlarını takip etmek için yardımcı obje (Görsel devamlılık sağlar)
+        let lastAnimatedStars = {};
 
-        // 2. Kategorileri Render Etme
-        function renderCategories() {
-            const container = document.getElementById('categoriesContainer');
-            const categories = ["Hepsi", ...new Set(projectsData.map(p => p.category))];
-            
-            container.innerHTML = categories.map(cat => `
-                <button onclick="setCategory('${cat}')" class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all border ${
-                    selectedCategory === cat 
-                    ? 'bg-emerald-500 text-white border-emerald-500 shadow-md shadow-emerald-500/10' 
-                    : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border-slate-200/60 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
-                }">${cat}</button>
-            `).join('');
-        }
-
-        function setCategory(cat) {
-            selectedCategory = cat;
-            renderCategories();
-            applyFilters();
-        }
-
-        // 3. Arama ve Filtreleme Mantığı
-        function applyFilters() {
-            const query = document.getElementById('searchBar').value.toLowerCase().trim();
-            const container = document.getElementById('projectsContainer');
-            
-            const filtered = projectsData.filter(p => {
-                const matchesCat = selectedCategory === "Hepsi" || p.category === selectedCategory;
-                const matchesSearch = p.title.toLowerCase().includes(query) || p.desc.toLowerCase().includes(query);
-                return matchesCat && matchesSearch;
-            });
-
-            document.getElementById('matchCount').innerText = `${filtered.length} Araç Listeleniyor`;
-
-            if(filtered.length === 0) {
-                container.innerHTML = "";
-                document.getElementById('noResults').classList.remove('hidden');
-            } else {
-                document.getElementById('noResults').classList.add('hidden');
-                container.innerHTML = filtered.map(p => createCardHtml(p, false)).join('');
+        // 1. JSON Verisini Çekme
+        async function fetchProjects() {
+            try {
+                const response = await fetch(jsonUrl);
+                allProjects = await response.json();
+                
+                // Toplam uygulama sayacını dinamik olarak güncelle
+                updateTotalAppsCount(allProjects.length);
+                
+                generateCategoryButtons();
+                applyFilters(); // renderProjects'i tetikler
+                renderRecents();
+            } catch (error) {
+                console.error('Veri çekilirken hata oluştu:', error);
+                document.getElementById('projectsGrid').innerHTML = `
+                    <div class="col-span-full text-center py-20 text-red-500 font-medium text-base">
+                        ❌ Uygulama listesi alınamadı. Lütfen daha sonra tekrar deneyin.
+                    </div>`;
             }
         }
 
-        // 4. Kart HTML Şablonu Oluşturucu
-        function createCardHtml(project, isRecent = false) {
-            return `
-                <div onclick="openProject(${project.id}, '${project.url}')" class="group relative bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl p-5 hover:border-emerald-500/50 dark:hover:border-emerald-500/30 hover:shadow-lg hover:shadow-slate-100 dark:hover:shadow-none transition-all duration-300 cursor-pointer flex flex-col gap-3 justify-between ${isRecent ? 'border-amber-500/20 dark:border-amber-500/10' : ''}">
-                    <div class="flex flex-col gap-2">
-                        <div class="flex items-start justify-between gap-4">
-                            <span class="px-2.5 py-1 rounded-lg text-[10px] font-extrabold tracking-wide uppercase ${
-                                isRecent ? 'bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400' : 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400'
-                            }">${project.category}</span>
-                            
-                            ${isRecent ? `
-                                <button onclick="removeRecent(${project.id}, event)" class="p-1 rounded-md text-slate-400 hover:text-rose-500 hover:bg-slate-100 dark:hover:bg-slate-800 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-all duration-200" title="Geçmişten Kaldır">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-                            ` : ''}
-                        </div>
-                        <h4 class="text-sm font-bold text-slate-800 dark:text-white group-hover:text-emerald-500 dark:group-hover:text-emerald-400 transition-colors">${project.title}</h4>
-                        <p class="text-xs text-slate-400 dark:text-slate-500 line-clamp-2 leading-relaxed">${project.desc}</p>
-                    </div>
-                    <div class="flex items-center justify-between pt-2 border-t border-slate-50 dark:border-slate-800/50 text-[11px] font-bold text-slate-400 dark:text-slate-500 group-hover:text-emerald-500 transition-colors">
-                        <span>Uygulamaya Git</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 transform group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </div>
-                </div>
-            `;
+        // Ana Üst Rozet Sayaç Güncelleyici
+        function updateTotalAppsCount(count) {
+            const badge = document.getElementById('totalAppsBadge');
+            if (badge) {
+                badge.innerHTML = `<span>🚀 ${count} Eğitim Odaklı Ücretsiz Proje</span>`;
+            }
         }
 
-        // 5. Projeye Gitme ve Son Kullanılanlara Ekleme
-        function openProject(id, url) {
-            let recents = JSON.parse(localStorage.getItem('recents') || '[]');
-            recents = recents.filter(pId => pId !== id);
-            recents.unshift(id); // En başa ekle
-            if (recents.length > 3) recents.pop(); // Maksimum 3 tane tut
-            localStorage.setItem('recents', JSON.stringify(recents));
+        // 2. Proje Kartlarını Basma
+        function renderProjects(projects) {
+            const grid = document.getElementById('projectsGrid');
+            const noResults = document.getElementById('noResults');
+            grid.innerHTML = '';
+
+            if (projects.length === 0) {
+                noResults.classList.remove('hidden');
+                return;
+            } else {
+                noResults.classList.add('hidden');
+            }
+
+            // Tümü sekmesindeysek ve favorilerde eleman varsa, favorileri en üstte grupla
+            let sortedProjects = [...projects];
+            if (activeCategory === 'Tümü' && favorites.length > 0) {
+                sortedProjects.sort((a, b) => {
+                    const aFav = favorites.includes(a.adi) ? 1 : 0;
+                    const bFav = favorites.includes(b.adi) ? 1 : 0;
+                    return bFav - aFav; 
+                });
+            }
+
+            sortedProjects.forEach((project, index) => {
+                const isFav = favorites.includes(project.adi);
+                const card = document.createElement('div');
+                
+                card.className = 'project-card bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/70 dark:border-slate-800/70 p-6 shadow-sm dark:shadow-none transition-all duration-500 flex flex-col justify-between opacity-0 translate-y-4 relative z-10 touch-manipulation';
+                card.style.animation = `fadeInUp 0.4s ease forwards ${index * 0.05}s`;
+                
+                // Dinamik mikro durum etiketlerinin tespiti (Yeni, Güncellendi, Beta)
+                let badgeHTML = '';
+                if (project.durum) {
+                    let badgeColor = 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400 border-emerald-200/60';
+                    if (project.durum === 'Güncellendi') badgeColor = 'bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400 border-amber-200/60';
+                    if (project.durum === 'Beta') badgeColor = 'bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400 border-blue-200/60';
+                    
+                    badgeHTML = `<span class="text-[10px] font-extrabold px-2 py-0.5 rounded-md border ${badgeColor} tracking-wide uppercase mr-2">${project.durum}</span>`;
+                }
+
+                // Yıldızın animasyon sınıfını belirle (Aktifleşme mi, pasifleşme mi?)
+                let starAnimClass = '';
+                if (lastAnimatedStars[project.adi] === 'active') {
+                    starAnimClass = 'animate-star-active';
+                } else if (lastAnimatedStars[project.adi] === 'inactive') {
+                    starAnimClass = 'animate-star-inactive';
+                }
+                
+                // Temiz dinamik aria-label atamaları
+                const favButtonLabel = isFav ? `${project.adi} uygulamasını favorilerden çıkar` : `${project.adi} uygulamasını favorilere ekle`;
+                
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-5">
+                            <span class="project-icon text-3xl p-3 bg-slate-50 dark:bg-slate-950 rounded-2xl transition-colors select-none shadow-sm" aria-hidden="true">${project.ikon || '🚀'}</span>
+                            
+                            <div class="flex items-center justify-end gap-5 flex-grow pl-4">
+                                <div class="flex items-center select-none">
+                                    ${badgeHTML}
+                                    <span class="text-xs md:text-sm font-bold px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-xl tracking-wide uppercase">${project.kategori}</span>
+                                </div>
+                                
+                                <button onclick="toggleFavorite('${project.adi.replace(/'/g, "\\'")}', event)" class="p-3.5 rounded-xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-950 dark:hover:bg-slate-800 border border-slate-200/50 dark:border-slate-800/80 transition-all hover:scale-110 active:scale-90 z-30 touch-manipulation group" aria-label="${favButtonLabel}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ${starAnimClass} ${isFav ? 'text-amber-400 fill-amber-400' : 'text-slate-300 dark:text-slate-600 group-hover:text-amber-400/60 transition-colors'}" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <h3 class="text-lg md:text-xl font-bold text-slate-900 dark:text-white mb-3 transition-colors">
+                            ${project.adi}
+                        </h3>
+                        <p class="text-slate-600 dark:text-slate-400 text-sm md:text-base leading-relaxed mb-8 font-medium">
+                            ${project.aciklama}
+                        </p>
+                    </div>
+                    
+                    <a href="${project.url}" target="_blank" onclick="trackRecent('${project.adi.replace(/'/g, "\\'")}')" class="go-app-btn w-full inline-flex items-center justify-center px-5 py-4 bg-slate-50 hover:bg-blue-600 dark:bg-slate-950 dark:hover:bg-blue-600 text-slate-700 hover:text-white dark:text-slate-300 dark:hover:text-white font-bold text-sm md:text-base rounded-2xl border border-slate-200/80 dark:border-slate-800 hover:border-blue-600 dark:hover:border-blue-600 transition-all shadow-sm touch-manipulation" aria-label="${project.adi} uygulamasına git">
+                        <span>Uygulamaya Git</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                    </a>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // 3. Kategorileri Butonlaştırma ve İçerik Sayılarını Hesaplama
+        function generateCategoryButtons() {
+            const container = document.getElementById('categoryContainer');
+            const uniqueCategories = [...new Set(allProjects.map(p => p.kategori))];
+            const categories = ['Tümü', ...uniqueCategories];
+            container.innerHTML = '';
             
-            window.open(url, '_blank');
+            categories.forEach(cat => {
+                let count = 0;
+                if (cat === 'Tümü') {
+                    count = allProjects.length;
+                } else {
+                    count = allProjects.filter(p => p.kategori === cat).length;
+                }
+
+                const btn = document.createElement('button');
+                btn.textContent = `${cat} (${count})`;
+                btn.className = `cat-btn whitespace-nowrap px-5 py-2.5 rounded-xl text-sm md:text-base font-semibold transition-all touch-manipulation snap-center ${
+                    cat === activeCategory 
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' 
+                    : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
+                }`;
+                btn.setAttribute('aria-pressed', cat === activeCategory ? 'true' : 'false');
+                btn.onclick = () => filterCategory(cat);
+                container.appendChild(btn);
+            });
+        }
+
+        // 4. Filtreleme Fonksiyonları
+        function filterCategory(category) {
+            activeCategory = category;
+            generateCategoryButtons();
+            applyFilters();
+        }
+
+        // Filtreleme Uygulama
+        function applyFilters() {
+            const searchBar = document.getElementById('searchBar');
+            const clearBtn = document.getElementById('clearSearchBtn');
+            const helpText = document.getElementById('searchHelpContainer');
+            const originalSearchTerm = searchBar.value;
+            
+            if (originalSearchTerm.length > 0) {
+                if (clearBtn) {
+                    clearBtn.classList.remove('opacity-0', 'pointer-events-none', 'scale-75');
+                    clearBtn.classList.add('opacity-100', 'scale-100');
+                }
+                if (helpText) {
+                    helpText.classList.remove('opacity-0', 'h-0', 'overflow-hidden');
+                    helpText.classList.add('opacity-100', 'mt-2', 'h-auto');
+                }
+            } else {
+                if (clearBtn) {
+                    clearBtn.classList.remove('opacity-100', 'scale-100');
+                    clearBtn.classList.add('opacity-0', 'pointer-events-none', 'scale-75');
+                }
+                if (helpText) {
+                    helpText.classList.remove('opacity-100', 'mt-2', 'h-auto');
+                    helpText.classList.add('opacity-0', 'h-0', 'overflow-hidden');
+                }
+            }
+
+            const normalize = (text) => text.toLowerCase().replace(/[\s-]/g, '');
+            const normalizedSearch = normalize(originalSearchTerm);
+
+            const filtered = allProjects.filter(project => {
+                const matchesCategory = (activeCategory === 'Tümü' || project.kategori === activeCategory);
+                const matchesSearch = 
+                    project.adi.toLowerCase().includes(originalSearchTerm.toLowerCase()) || 
+                    project.aciklama.toLowerCase().includes(originalSearchTerm.toLowerCase()) ||
+                    normalize(project.adi).includes(normalizedSearch) || 
+                    normalize(project.aciklama).includes(normalizedSearch);
+                    
+                return matchesCategory && matchesSearch;
+            });
+            renderProjects(filtered);
+        }
+
+        // Arama Temizleme Fonksiyonu
+        function clearSearch() {
+            const searchBar = document.getElementById('searchBar');
+            searchBar.value = '';
+            searchBar.focus();
+            applyFilters();
+        }
+
+        // FAVORİ EKLEME/ÇIKARMA FONKSİYONU VE ANİMASYON TETİKLEYİCİSİ
+        function toggleFavorite(projectName, event) {
+            event.preventDefault();
+            event.stopPropagation();
+            
+            const index = favorites.indexOf(projectName);
+            if (index > -1) {
+                favorites.splice(index, 1);
+                lastAnimatedStars[projectName] = 'inactive';
+            } else {
+                favorites.push(projectName);
+                lastAnimatedStars[projectName] = 'active';
+            }
+            
+            localStorage.setItem('ak_favorites', JSON.stringify(favorites));
+            applyFilters();
+
+            setTimeout(() => {
+                delete lastAnimatedStars[projectName];
+            }, 450);
+        }
+
+        // EN SON KULLANILANLAR TAKİP SİSTEMİ
+        function trackRecent(projectName) {
+            recents = recents.filter(name => name !== projectName);
+            recents.unshift(projectName);
+            if (recents.length > 3) recents.pop(); 
+            localStorage.setItem('ak_recents', JSON.stringify(recents));
             renderRecents();
         }
 
-        // 6. Son Kullanılanları Listeleme
+        // Son kullanılan projeleri listele
         function renderRecents() {
             const section = document.getElementById('recentSection');
             const container = document.getElementById('recentContainer');
-            const recentsIds = JSON.parse(localStorage.getItem('recents') || '[]');
+            container.innerHTML = '';
 
-            const recentsData = recentsIds
-                .map(id => projectsData.find(p => p.id === id))
-                .filter(Boolean);
-
-            if(recentsData.length === 0) {
+            if (recents.length === 0 || allProjects.length === 0) {
                 section.classList.add('hidden');
-                container.innerHTML = "";
-            } else {
-                section.classList.remove('hidden');
-                container.innerHTML = recentsData.map(p => createCardHtml(p, true)).join('');
+                return;
             }
+
+            section.classList.remove('hidden');
+            recents.forEach(name => {
+                const foundProj = allProjects.find(p => p.adi === name);
+                if (foundProj) {
+                    const link = document.createElement('a');
+                    link.href = foundProj.url;
+                    link.target = '_blank';
+                    link.onclick = () => trackRecent(foundProj.adi);
+                    link.className = 'inline-flex items-center space-x-1 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-blue-50 dark:bg-slate-950 dark:hover:bg-blue-950/30 text-xs font-semibold border border-slate-200/60 dark:border-slate-800/80 transition-all active:scale-95';
+                    link.setAttribute('aria-label', `Son kullanılanlardan ${foundProj.adi} uygulamasını aç`);
+                    link.innerHTML = `<span aria-hidden="true">${foundProj.ikon || '🚀'}</span> <span>${foundProj.adi}</span>`;
+                    container.appendChild(link);
+                }
+            });
         }
 
-        // 7. Geçmişten Tek Bir Uygulama Kaldırma
-        function removeRecent(id, event) {
-            event.stopPropagation(); // Kartın tıklama olayını tetiklemesini önler
-            let recents = JSON.parse(localStorage.getItem('recents') || '[]');
-            recents = recents.filter(pId => pId !== id);
-            localStorage.setItem('recents', JSON.stringify(recents));
-            renderRecents();
-        }
-
-        // 8. Son Kullanılanların Tümünü Temizleme
-        function clearAllRecents() {
-            localStorage.removeItem('recents');
-            renderRecents();
-        }
-
-        // 9. Klavye Kısayolu Kontrolü (Arama Çubuğuna Odaklanma)
+        // TAM DONANIMLI KLAVYE KISAYOLLARI ENTEGRASYONU (Her Koşulda Ekranı Ortaya Getiren Garanti Sürüm)
         window.addEventListener('keydown', (e) => {
-            if ((e.key === 'k' && (e.metaKey || e.ctrlKey)) || e.key === '/') {
+            const searchBar = document.getElementById('searchBar');
+            if (!searchBar) return;
+
+            // --- TEMİZLEME KISAYOLLARI ---
+            if (searchBar.value.length > 0 && (e.key === 'Escape' || (e.altKey && e.key === 'Backspace'))) {
                 e.preventDefault();
-                document.getElementById('searchBar').focus();
+                clearSearch();
+                return;
+            }
+
+            // --- ODAKLANMA KISAYOLLARI ---
+            if (e.key === '/' || ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k')) {
+                e.preventDefault(); // Tarayıcının adres çubuğu vb. varsayılan çakışmalarını keser
+                
+                // GARANTİ YÖNTEM: Arama kutusu zaten aktif olsa bile sayfa aşağı kaydırılmışsa tam dikey konumuna sıçrar.
+                // Arama kutusunu ekran yüksekliğinin 1/3'ü kadar aşağıya hizalayarak başlıkların ve kutunun tam görünmesini sağlar.
+                const targetY = searchBar.getBoundingClientRect().top + window.scrollY - (window.innerHeight / 3);
+                window.scrollTo({ top: targetY, behavior: 'auto' });
+                
+                // Tarayıcı kaydırma işlemi yaparken girdi (input) odağının kilitlenmesini garanti altına alıyoruz
+                setTimeout(() => {
+                    requestAnimationFrame(() => {
+                        requestAnimationFrame(() => {
+                            searchBar.focus();
+                            searchBar.select();
+                        });
+                    });
+                }, 10);
             }
         });
 
-        // 10. Tema Değiştirme
+        // 5. Tema Değiştirme
         function toggleTheme() {
             const html = document.documentElement;
             if (html.classList.contains('dark')) {
@@ -313,7 +581,7 @@
             }
         }
 
-        // 11. Hakkında Modalı Kontrolü
+        // 6. Hakkında Modalı Kontrolü
         function toggleAboutModal(show) {
             const modal = document.getElementById('aboutModal');
             const btn = document.getElementById('aboutModalBtn');
