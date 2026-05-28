@@ -395,7 +395,7 @@
             });
         }
 
-        // 3. Kategorileri Butonlaştırma bir İçerik Sayılarını Hesaplama
+        // 3. Kategorileri Butonlaştırma ve İçerik Sayılarını Hesaplama
         function generateCategoryButtons() {
             const container = document.getElementById('categoryContainer');
             const uniqueCategories = [...new Set(allProjects.map(p => p.kategori))];
@@ -545,7 +545,7 @@
             });
         }
 
-        // TAM DONANIMLI KLAVYE KISAYOLLARI ENTEGRASYONU (Scroll & Asenkron Odaklama İyileştirmeli)
+        // TAM DONANIMLI KLAVYE KISAYOLLARI ENTEGRASYONU (Asenkron requestAnimationFrame ile Odaklanma Kesin Çözümü)
         window.addEventListener('keydown', (e) => {
             const searchBar = document.getElementById('searchBar');
             if (!searchBar) return;
@@ -561,16 +561,18 @@
             if (document.activeElement === searchBar) return;
 
             if (e.key === '/' || ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k')) {
-                e.preventDefault(); // Tarayıcı çakışmalarını önler
+                e.preventDefault(); // Tarayıcı varsayılan çakışmalarını önler
                 
-                // Aşağı kaydırılmışsa arama çubuğunu görünüm alanına pürüzsüzce taşır
-                searchBar.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // Aşağı kaydırılmış durumdayken animasyon çakışmalarını önlemek için anlık (instant) hizalama yapar
+                searchBar.scrollIntoView({ behavior: 'instant', block: 'center' });
                 
-                // Sayfa kaydırma işlemi tamamlanırken odağın kaybolmaması için asenkron gecikmeyle odaklanır
-                setTimeout(() => {
-                    searchBar.focus();
-                    searchBar.select();
-                }, 150);
+                // requestAnimationFrame kullanarak tarayıcının DOM'u kaydırdığı tam milisaniyede odağı kilitler
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        searchBar.focus();
+                        searchBar.select();
+                    });
+                });
             }
         });
 
