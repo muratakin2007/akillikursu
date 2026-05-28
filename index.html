@@ -72,7 +72,7 @@
             background-image: linear-gradient(to bottom right, #0f172a, rgba(30, 41, 59, 0.8));
         }
 
-        /* Akıllı Tahta ve Mobil için Haptik/Visual Geri Bildirim: Tıklanma anında iç gölge efekti */
+        /* Akıllı Tahta dahi Mobil için Haptik/Visual Geri Bildirim: Tıklanma anında iç gölge efekti */
         .project-card:active, .cat-btn:active, .go-app-btn:active, .share-btn:active {
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
             transform: scale(0.99) !important;
@@ -101,6 +101,28 @@
         .project-card:hover .go-app-btn svg,
         .project-card:active .go-app-btn svg {
             transform: translateX(4px) translateY(-4px);
+        }
+
+        /* Gelişmiş Paylaş Butonu Efektleri */
+        .share-btn {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .share-btn:hover {
+            transform: scale(1.01);
+            color: #2563eb; /* text-blue-600 */
+            border-color: #93c5fd; /* border-blue-300 */
+            background-color: #f0f7ff; /* bg-blue-50/50 */
+        }
+        .dark .share-btn:hover {
+            color: #60a5fa; /* text-blue-400 */
+            border-color: #2563eb; /* border-blue-600 */
+            background-color: rgba(30, 58, 138, 0.2); /* bg-blue-900/20 */
+        }
+        .share-btn:hover svg {
+            transform: rotate(-12deg) scale(1.08);
+        }
+        .share-btn svg {
+            transition: transform 0.2s ease;
         }
 
         /* Köşe Bandı (Ribbon) için CSS */
@@ -286,7 +308,7 @@
                     <span class="text-xs font-bold mt-1.5 text-slate-600 dark:text-slate-400">X / Twitter</span>
                 </a>
                 <a id="shareTG" target="_blank" class="flex flex-col items-center justify-center p-3 rounded-2xl bg-slate-50 hover:bg-sky-50 dark:bg-slate-950 dark:hover:bg-sky-950/30 border border-slate-200/60 dark:border-slate-800 transition-all group">
-                    <svg class="h-6 w-6 text-sky-500 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0C5.344 0 0 5.344 0 11.944c0 5.622 3.88 10.331 9.089 11.612.112.022.213-.034.247-.14l.851-3.17c.023-.084-.004-.175-.067-.233l-1.89-1.743c-.08-.073-.09-.196-.023-.282.87-1.118 1.344-2.484 1.344-3.89 0-3.483-2.833-6.317-6.317-6.317s-6.317 2.834-6.317 6.317c0 1.94.885 3.754 2.404 4.939.08.062.112.163.08.258l-.662 2.052c-.035.107.034.219.146.236.196.03.393.045.59.045 1.54 0 2.96-.54 4.09-1.44.062-.05.14-.067.213-.045l3.204.933c.107.03.213-.034.247-.14l.852-3.17c.022-.084-.005-.175-.068-.233L10.3 14.832c-.08-.073-.09-.196-.023-.282.87-1.118 1.344-2.484 1.344-3.89 0-3.483-2.833-6.316-6.316-6.316z M23.891 3.535c-.179-.438-.582-.739-1.054-.783l-19.5-1.83c-.562-.053-1.077.29-1.21.84-.132.55.158 1.11.68 1.31l18 6.75c.17.06.35.09.53.09.43 0 .83-.23 1.04-.61.27-.49.23-1.09-.09-1.54z"/></svg>
+                    <svg class="h-6 w-6 text-sky-500 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0C5.344 0 0 5.344 0 11.944c0 5.622 3.88 10.331 9.089 11.612.112.022.213-.034.247-.14l.851-3.17c.023-.084-.004-.175-.067-.233l-1.89-1.743c-.08-.073-.09-.196-.023-.282.87-1.118 1.344-2.484 1.344-3.89 0-3.483-2.833-6.317-6.317-6.317s-6.317 2.834-6.317 6.317c0 1.94.885 3.754 2.404 4.939.08.062.112.163.08.258l-.662 2.052c-.035.107.034.219.146.236.196.03.393.045.59.045 1.54 0 2.96-.54 4.09-1.44.062-.05.14-.067.213-.045l3.204.933c.107.03.213-.034.247-.14l.852-3.17c.022-.084-.005-.175-.068-.233L10.3 14.832c-.08-.073-.09-.196-.023-.282.87-1.118 1.344-2.484 1.344-3.89 0-3.483-2.833-6.316-6.316-6.316z M23.891 3.535c-.179-.438-.582-.739-1.054-.783l-1.83 19.5c-.053.562.29 1.077.84 1.21.55.132 1.11-.158 1.31-.68l6.75-18c.06-.17.09-.35.09-.53 0-.43-.23-.83-.61-1.04-.49-.27-1.09-.23-1.54.09z"/></svg>
                     <span class="text-xs font-bold mt-1.5 text-slate-600 dark:text-slate-400">Telegram</span>
                 </a>
             </div>
@@ -492,7 +514,7 @@
                     </div>
                     
                     <div class="flex flex-col gap-2 relative z-20">
-                        <button onclick="openShareMenu('${safeName}', '${safeDesc}', '${project.url}', '${safeIcon}')" class="share-btn w-full inline-flex items-center justify-center px-5 py-3 bg-slate-100 hover:bg-blue-50 dark:bg-slate-800/60 dark:hover:bg-blue-950/30 text-slate-700 dark:text-slate-300 font-bold text-sm md:text-base rounded-2xl border border-slate-200/50 dark:border-slate-800 transition-all shadow-sm touch-manipulation">
+                        <button onclick="openShareMenu('${safeName}', '${safeDesc}', '${project.url}', '${safeIcon}')" class="share-btn w-full inline-flex items-center justify-center px-5 py-3 bg-slate-100/80 dark:bg-slate-900/60 text-slate-700 dark:text-slate-300 font-bold text-sm md:text-base rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm touch-manipulation">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
                             </svg>
@@ -706,7 +728,7 @@
                 document.getElementById('sharePreviewDesc').textContent = desc;
                 document.getElementById('sharePreviewIcon').textContent = icon || '🚀';
                 
-                // Sosyal medya URL'lerini hazırlama (Sosyal Mühendislik Standart Entegrasyonları)
+                // Sosyal medya URL'lerini hazırlama
                 document.getElementById('shareWA').href = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + url)}`;
                 document.getElementById('shareX').href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(url)}`;
                 document.getElementById('shareTG').href = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(shareText)}`;
@@ -735,7 +757,7 @@
             if (!activeShareUrl) return;
             navigator.clipboard.writeText(activeShareUrl).then(() => {
                 closeShareModal();
-                showToast("Bağlantı panoya kopyalandı!");
+                showToast("Bağlantı panova kopyalandı!");
             }).catch(err => {
                 showToast("Kopyalama başarısız oldu.");
             });
@@ -750,7 +772,7 @@
             setTimeout(() => {
                 toast.classList.remove('opacity-100', 'scale-100');
                 toast.classList.add('opacity-0', 'scale-90', 'pointer-events-none');
-            }, 250);
+            }, 2000); // Kullanıcının rahatça okuması için süre 2 saniyeye optimize edildi
         }
 
         // TAM DONANIMLI KLAVYE KISAYOLLARI ENTEGRASYONU (Her Koşulda Ekranı Ortaya Getiren Garanti Sürüm)
