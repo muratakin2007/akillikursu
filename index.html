@@ -195,27 +195,27 @@
                         </svg>
                     </button>
                     
-                    <div id="mobileMenuDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl py-2 z-50 animate-fadeIn text-sm">
-                        <button onclick="toggleTheme(); toggleMobileMenu();" class="w-full flex items-center space-x-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800/60 text-slate-700 dark:text-slate-300 font-medium">
+                    <div id="mobileMenuDropdown" class="hidden absolute right-0 mt-2 w-56 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl py-3 z-50 animate-fadeIn text-base">
+                        <button onclick="toggleTheme(); toggleMobileMenu();" class="w-full flex items-center space-x-3 px-4 py-4 hover:bg-slate-50 dark:hover:bg-slate-800/60 text-slate-700 dark:text-slate-300 font-medium">
                             <span class="dark:hidden flex items-center space-x-3 w-full">
-                                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
                                 <span>Karanlık Mod</span>
                             </span>
                             <span class="hidden dark:flex items-center space-x-3 w-full">
-                                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.364l-.707.707M12 5a7 7 0 100 14 7 7 0 000-14z" /></svg>
+                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.364l-.707.707M12 5a7 7 0 100 14 7 7 0 000-14z" /></svg>
                                 <span>Aydınlık Mod</span>
                             </span>
                         </button>
-                        <hr class="border-slate-100 dark:border-slate-800 my-1">
-                        <div class="px-4 py-2 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Yazı Boyutu</div>
-                        <div class="flex items-center justify-between px-2.5 pb-1">
-                            <button onclick="changeFontSize(-1)" class="px-3 py-1.5 font-bold text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg flex-1 text-center mx-0.5">A-</button>
-                            <button onclick="changeFontSize(0)" class="px-3 py-1.5 font-extrabold text-blue-600 dark:text-blue-400 bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg flex-1 text-center mx-0.5">A</button>
-                            <button onclick="changeFontSize(1)" class="px-3 py-1.5 font-bold text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg flex-1 text-center mx-0.5">A+</button>
+                        <hr class="border-slate-100 dark:border-slate-800 my-2">
+                        <div class="px-4 py-3 text-sm font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Yazı Boyutu</div>
+                        <div class="flex items-center justify-between px-3 pb-2">
+                            <button onclick="changeFontSize(-1)" class="px-3 py-2.5 font-bold text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg flex-1 text-center mx-1">A-</button>
+                            <button onclick="changeFontSize(0)" class="px-3 py-2.5 font-extrabold text-blue-600 dark:text-blue-400 bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg flex-1 text-center mx-1">A</button>
+                            <button onclick="changeFontSize(1)" class="px-3 py-2.5 font-bold text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg flex-1 text-center mx-1">A+</button>
                         </div>
-                        <hr class="border-slate-100 dark:border-slate-800 my-1">
-                        <button onclick="toggleAboutModal(true); toggleMobileMenu();" class="w-full flex items-center space-x-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800/60 text-slate-700 dark:text-slate-300 font-medium">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <hr class="border-slate-100 dark:border-slate-800 my-2">
+                        <button onclick="toggleAboutModal(true); toggleMobileMenu();" class="w-full flex items-center space-x-3 px-4 py-4 hover:bg-slate-50 dark:hover:bg-slate-800/60 text-slate-700 dark:text-slate-300 font-medium">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                             <span>Hakkında</span>
                         </button>
                     </div>
@@ -424,7 +424,6 @@
         let lastAnimatedStars = {};
         let activeShareUrl = '';
 
-        // YENİ: URL parametreleri için metin normalize etme fonksiyonu
         function normalizeText(text) {
             if (!text) return '';
             return text.toLowerCase()
@@ -448,7 +447,6 @@
                 applyFilters(); 
                 renderRecents();
 
-                // YENİ: Projeler yüklendikten sonra URL'i kontrol et
                 checkUrlParameterAndHighlight();
             } catch (error) {
                 console.error('Veri çekilirken hata oluştu:', error);
@@ -459,7 +457,6 @@
             }
         }
 
-        // YENİ: URL'deki ?p= parametresini kontrol edip karta odaklanan fonksiyon
         function checkUrlParameterAndHighlight() {
             const urlParams = new URLSearchParams(window.location.search);
             const projectParam = urlParams.get('p');
@@ -470,19 +467,16 @@
             const targetCard = document.getElementById(targetId);
 
             if (targetCard) {
-                // Kategori 'Tümü' değilse 'Tümü' yap
                 if (activeCategory !== 'Tümü') {
                     filterCategory('Tümü');
                 }
 
-                // Arama kutusu doluysa temizle
                 const searchBar = document.getElementById('searchBar');
                 if(searchBar && searchBar.value) {
                     searchBar.value = '';
                     applyFilters();
                 }
 
-                // Karta kaydır ve vurgula
                 setTimeout(() => {
                     const headerOffset = 100;
                     const elementPosition = targetCard.getBoundingClientRect().top;
@@ -493,10 +487,8 @@
                         behavior: 'smooth'
                     });
 
-                    // Vurgu efekti ekle
                     targetCard.classList.add('ring-4', 'ring-blue-500', 'scale-[1.03]', 'shadow-2xl', 'z-30');
                     
-                    // 3.5 saniye sonra vurguyu kaldır
                     setTimeout(() => {
                         targetCard.classList.remove('ring-4', 'ring-blue-500', 'scale-[1.03]');
                     }, 3500);
@@ -537,7 +529,6 @@
                 const isFav = favorites.includes(project.adi);
                 const card = document.createElement('div');
                 
-                // YENİ: Karta ID ataması yapıldı
                 card.id = `project-${normalizeText(project.adi)}`;
                 card.className = 'project-card bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/70 dark:border-slate-800/70 p-6 shadow-sm dark:shadow-none transition-all duration-500 flex flex-col justify-between opacity-0 translate-y-4 relative z-10 touch-manipulation overflow-hidden min-h-[320px] h-full gap-4';
                 card.style.animation = `fadeInUp 0.4s ease forwards ${index * 0.05}s`;
@@ -798,15 +789,11 @@
                 currentSizeLevel = 0;
             } else {
                 currentSizeLevel += action;
-                if (currentSizeLevel < -1) currentSizeLevel = -1;
+                if (currentSizeLevel < -4) currentSizeLevel = -4; 
                 if (currentSizeLevel > 3) currentSizeLevel = 3;
             }
             
-            let newFontSize = "100%"; 
-            if (currentSizeLevel === -1) newFontSize = "90%";
-            if (currentSizeLevel === 1) newFontSize = "110%";
-            if (currentSizeLevel === 2) newFontSize = "120%";
-            if (currentSizeLevel === 3) newFontSize = "130%"; 
+            let newFontSize = (100 + (currentSizeLevel * 10)) + "%"; 
             
             document.documentElement.style.fontSize = newFontSize;
         }
@@ -834,7 +821,6 @@
             }
         });
 
-        // Paylaş menüsü orijinal haliyle korundu
         function openShareMenu(name, desc, url, icon) {
             activeShareUrl = url;
             const shareText = `Akıllı Kürsü - ${name}: ${desc}`;
