@@ -77,6 +77,14 @@
     "ikon": "𖣯",
     "aciklama": "Web sitesi linki, düz metin, iletişim bilgileri, Wi-Fi şifresi, konum, IBAN numarası ve sosyal medya profilleri gibi birçok farklı içerik için tamamen ücretsiz ve kalıcı karekodlar hazırlamanızı sağlayan pratik bir web aracıdır. Herhangi bir üyelik gerektirmeyen bu platformda, formu doldurduğunuz anda otomatik olarak eşzamanlı üretilen karekodların boyutunu, kenar boşluklarını ve renklerini kendi zevkinize veya kurumsal kimliğinize göre kolayca kişiselleştirebilirsiniz. Tasarladığınız karekodları yüksek kalitede PNG ya da vektörel SVG formatında cihazınıza indirerek veya doğrudan kopyalayarak broşür, afiş, menü ve kartvizit gibi dijital ya da basılı tüm materyallerinizde saniyeler içinde kullanmaya başlayabilirsiniz. Tüm işlemler sizin cihazınızda gerçekleşir."
   },
+   {
+    "id": "pardusofis",
+    "adi": "Pardus Ofis Görüntüleyici v1.2",
+    "url": "https://drive.google.com/drive/folders/1EiK9jeFw5-6SDI6bamlDGWmNwTMWaOOn?usp=sharing",
+    "kategori": "Akıllı Tahta",
+    "ikon": "🧾",
+    "aciklama": "Word, Excel ve PowerPoint dosyalarınızı akıllı tahtada bozulmadan açmanızı sağlayan bu pratik araç; USB flash bellek üzerindeki dosyaları OneDrive bağlantısı aracılığıyla Microsoft’un web sistemi üzerinden görüntüleyerek yazı kayması, font bozulması, sayfa düzeninin değişmesi, seslerin veya efektlerin çalışmaması gibi sorunları büyük ölçüde önler. Windows 10, Windows 11 ve Pardus ETAP 23 ile uyumlu olan program, ücretsiz olarak 5 GB depolama alanı sunan OneDrive hesabınıza bir kez giriş yaptıktan sonra tekrar şifre istemez ve bağlantıyı doğrudan flash bellek üzerindeki anahtar ile pratik bir şekilde kurar.Tüm işlemler sizin cihazınızda gerçekleşir."
+  },
  
   {
     "id": "portrenot",
