@@ -414,6 +414,7 @@
     </footer>
 
     <script>
+      <script>
         const jsonUrl = 'projeler.json'; 
         let allProjects = [];
         let activeCategory = 'Tümü';
@@ -423,6 +424,19 @@
 
         let lastAnimatedStars = {};
         let activeShareUrl = '';
+
+        // YENİ: URL parametreleri için metin normalize etme fonksiyonu
+        function normalizeText(text) {
+            if (!text) return '';
+            return text.toLowerCase()
+                .replace(/ı/g, 'i')
+                .replace(/ğ/g, 'g')
+                .replace(/ü/g, 'u')
+                .replace(/ş/g, 's')
+                .replace(/ö/g, 'o')
+                .replace(/ç/g, 'c')
+                .replace(/[^a-z0-9]/g, ''); 
+        }
 
         async function fetchProjects() {
             try {
@@ -434,12 +448,61 @@
                 generateCategoryButtons();
                 applyFilters(); 
                 renderRecents();
+
+                // YENİ: Projeler yüklendikten sonra URL'i kontrol et
+                checkUrlParameterAndHighlight();
             } catch (error) {
                 console.error('Veri çekilirken hata oluştu:', error);
                 document.getElementById('projectsGrid').innerHTML = `
                     <div class="col-span-full text-center py-20 text-red-500 font-medium text-base">
                         ❌ Uygulama listesi alınamadı. Lütfen daha sonra tekrar deneyin.
                     </div>`;
+            }
+        }
+
+        // YENİ: URL'deki ?p= parametresini kontrol edip karta odaklanan fonksiyon
+        function checkUrlParameterAndHighlight() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const projectParam = urlParams.get('p');
+
+            if (!projectParam) return;
+
+            const targetId = `project-${normalizeText(projectParam)}`;
+            const targetCard = document.getElementById(targetId);
+
+            if (targetCard) {
+                // Kategori 'Tümü' değilse 'Tümü' yap
+                if (activeCategory !== 'Tümü') {
+                    filterCategory('Tümü');
+                }
+
+                // Arama kutusu doluysa temizle
+                const searchBar = document.getElementById('searchBar');
+                if(searchBar && searchBar.value) {
+                    searchBar.value = '';
+                    applyFilters();
+                }
+
+                // Karta kaydır ve vurgula
+                setTimeout(() => {
+                    const headerOffset = 100;
+                    const elementPosition = targetCard.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+
+                    // Vurgu efekti ekle
+                    targetCard.classList.add('ring-4', 'ring-blue-500', 'scale-[1.03]', 'shadow-2xl', 'z-30');
+                    
+                    // 3.5 saniye sonra vurguyu kaldır
+                    setTimeout(() => {
+                        targetCard.classList.remove('ring-4', 'ring-blue-500', 'scale-[1.03]');
+                    }, 3500);
+
+                }, 300);
             }
         }
 
@@ -475,6 +538,8 @@
                 const isFav = favorites.includes(project.adi);
                 const card = document.createElement('div');
                 
+                // YENİ: Karta ID ataması yapıldı
+                card.id = `project-${normalizeText(project.adi)}`;
                 card.className = 'project-card bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/70 dark:border-slate-800/70 p-6 shadow-sm dark:shadow-none transition-all duration-500 flex flex-col justify-between opacity-0 translate-y-4 relative z-10 touch-manipulation overflow-hidden min-h-[320px] h-full gap-4';
                 card.style.animation = `fadeInUp 0.4s ease forwards ${index * 0.05}s`;
                 
@@ -747,7 +812,6 @@
             document.documentElement.style.fontSize = newFontSize;
         }
 
-        // --- MOBİL MENÜ KONTROLÜ ---
         function toggleMobileMenu() {
             const dropdown = document.getElementById('mobileMenuDropdown');
             const btn = document.getElementById('mobileMenuBtn');
@@ -762,7 +826,6 @@
             }
         }
 
-        // Menü dışına tıklandığında kapanma güvenliği
         window.addEventListener('click', function(e) {
             const dropdown = document.getElementById('mobileMenuDropdown');
             const btn = document.getElementById('mobileMenuBtn');
@@ -772,6 +835,7 @@
             }
         });
 
+        // Paylaş menüsü orijinal haliyle korundu
         function openShareMenu(name, desc, url, icon) {
             activeShareUrl = url;
             const shareText = `Akıllı Kürsü - ${name}: ${desc}`;
@@ -896,6 +960,7 @@
 
         document.getElementById('searchBar').addEventListener('input', applyFilters);
         window.addEventListener('DOMContentLoaded', fetchProjects);
+    </script>
     </script>
 </body>
 </html>
