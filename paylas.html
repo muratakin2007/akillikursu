@@ -855,12 +855,16 @@
 
         function openShareMenu(name, desc, url, icon) {
             activeShareUrl = url;
-            const shareText = `Akıllı Kürsü - ${name}: ${desc}`;
+            
+            // WhatsApp ve Telegram için kalın (bold) format: *Metin*
+            const waText = `*${name}*, ${desc}`;
+            // Diğer platformlar için normal format
+            const normalText = `${name}, ${desc}`;
             
             if (navigator.share) {
                 navigator.share({
                     title: `Akıllı Kürsü - ${name}`,
-                    text: desc,
+                    text: normalText,
                     url: url
                 }).catch((err) => console.log('Sistem paylaşımı iptal edildi veya hata oluştu'));
             } else {
@@ -868,9 +872,9 @@
                 document.getElementById('sharePreviewDesc').textContent = desc;
                 document.getElementById('sharePreviewIcon').textContent = icon || '🚀';
                 
-                document.getElementById('shareWA').href = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + url)}`;
-                document.getElementById('shareX').href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(url)}`;
-                document.getElementById('shareTG').href = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(shareText)}`;
+                document.getElementById('shareWA').href = `https://api.whatsapp.com/send?text=${encodeURIComponent(waText + ' ' + url)}`;
+                document.getElementById('shareX').href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(normalText)}&url=${encodeURIComponent(url)}`;
+                document.getElementById('shareTG').href = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(waText)}`;
                 document.getElementById('shareFB').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
                 document.getElementById('shareLN').href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
                 
