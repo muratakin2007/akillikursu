@@ -457,46 +457,57 @@
             }
         }
 
-        function checkUrlParameterAndHighlight() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const projectParam = urlParams.get('p');
+      function checkUrlParameterAndHighlight() {
+    // 1. Geriye dönük uyumluluk için eski ?p= parametresini kontrol et
+    const urlParams = new URLSearchParams(window.location.search);
+    let projectParam = urlParams.get('p');
 
-            if (!projectParam) return;
+    // 2. Eğer ?p= yoksa, yeni path yapısını (/Bolbasv1.3) kontrol et
+    if (!projectParam) {
+        const path = window.location.pathname;
+        // Eğer URL sadece '/' değilse ve index.html içermiyorsa
+        if (path && path.length > 1 && !path.includes('index.html')) {
+            // Başındaki '/' işaretini kaldır ve URL kodlamasını (boşluk, Türkçe karakter vb.) çöz
+            projectParam = decodeURIComponent(path.substring(1));
+        }
+    }
 
-            const targetId = `project-${normalizeText(projectParam)}`;
-            const targetCard = document.getElementById(targetId);
+    // Parametre veya path yoksa işlemi sonlandır
+    if (!projectParam) return;
 
-            if (targetCard) {
-                if (activeCategory !== 'Tümü') {
-                    filterCategory('Tümü');
-                }
+    const targetId = `project-${normalizeText(projectParam)}`;
+    const targetCard = document.getElementById(targetId);
 
-                const searchBar = document.getElementById('searchBar');
-                if(searchBar && searchBar.value) {
-                    searchBar.value = '';
-                    applyFilters();
-                }
-
-                setTimeout(() => {
-                    const headerOffset = 100;
-                    const elementPosition = targetCard.getBoundingClientRect().top;
-                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-                    window.scrollTo({
-                        top: offsetPosition,
-                        behavior: 'smooth'
-                    });
-
-                    targetCard.classList.add('ring-4', 'ring-blue-500', 'scale-[1.03]', 'shadow-2xl', 'z-30');
-                    
-                    setTimeout(() => {
-                        targetCard.classList.remove('ring-4', 'ring-blue-500', 'scale-[1.03]');
-                    }, 3500);
-
-                }, 300);
-            }
+    if (targetCard) {
+        if (activeCategory !== 'Tümü') {
+            filterCategory('Tümü');
         }
 
+        const searchBar = document.getElementById('searchBar');
+        if(searchBar && searchBar.value) {
+            searchBar.value = '';
+            applyFilters();
+        }
+
+        setTimeout(() => {
+            const headerOffset = 100;
+            const elementPosition = targetCard.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            });
+
+            targetCard.classList.add('ring-4', 'ring-blue-500', 'scale-[1.03]', 'shadow-2xl', 'z-30');
+            
+            setTimeout(() => {
+                targetCard.classList.remove('ring-4', 'ring-blue-500', 'scale-[1.03]');
+            }, 3500);
+
+        }, 300);
+    }
+}
         function updateTotalAppsCount(count) {
             const badge = document.getElementById('totalAppsBadge');
             if (badge) {
