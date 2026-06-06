@@ -171,7 +171,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <span>Hakkında</span>
+                    <span class="hidden sm:inline">Hakkında</span>
                 </button>
 
                 <div class="hidden md:inline-flex items-center p-1 bg-slate-100 dark:bg-slate-800 rounded-xl border border-slate-200/40 dark:border-slate-700/40 select-none">
@@ -179,14 +179,20 @@
                     <button onclick="changeFontSize(0)" class="size-btn px-2.5 py-1 text-xs font-extrabold text-blue-600 dark:text-blue-400 hover:bg-white dark:hover:bg-slate-900 rounded-lg transition-all touch-manipulation" title="Boyutu Sıfırla">A</button>
                     <button onclick="changeFontSize(1)" class="size-btn px-2.5 py-1 text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-900 rounded-lg transition-all touch-manipulation" title="Yazıları Büyüt">A+</button>
                 </div>
+
+                <div class="hidden md:inline-flex items-center p-1 bg-slate-100 dark:bg-slate-800 rounded-xl border border-slate-200/40 dark:border-slate-700/40 select-none">
+                    <span class="text-xs font-bold text-slate-500 px-2 hidden lg:block">Sütun</span>
+                    <button onclick="changeGridCols(-1)" class="size-btn px-2.5 py-1 text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-900 rounded-lg transition-all touch-manipulation" title="Sütun Sayısını Azalt">-</button>
+                    <span class="grid-col-count-disp px-1.5 py-1 text-xs font-extrabold text-blue-600 dark:text-blue-400">3</span>
+                    <button onclick="changeGridCols(1)" class="size-btn px-2.5 py-1 text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-900 rounded-lg transition-all touch-manipulation" title="Sütun Sayısını Arttır">+</button>
+                </div>
             </div>
 
            <div class="flex items-center space-x-3 select-none absolute left-1/2 -translate-x-1/2">
-   
-    <span class="text-lg md:text-2xl font-extrabold tracking-tight bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-400 dark:via-indigo-400 dark:to-purple-400 bg-clip-text text-transparent whitespace-nowrap">
-        Akıllı Kürsü
-    </span>
-</div>
+                <span class="text-lg md:text-2xl font-extrabold tracking-tight bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-400 dark:via-indigo-400 dark:to-purple-400 bg-clip-text text-transparent whitespace-nowrap">
+                    Akıllı Kürsü
+                </span>
+            </div>
 
             <div class="flex items-center space-x-2 flex-shrink-0">
                 <button onclick="toggleTheme()" id="themeBtn" class="hidden md:block p-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 transition-all active:scale-95 touch-manipulation" aria-label="Tema Değiştir">
@@ -201,7 +207,7 @@
                         </svg>
                     </button>
                     
-                    <div id="mobileMenuDropdown" class="hidden absolute right-0 mt-2 w-56 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl py-3 z-50 animate-fadeIn text-base">
+                    <div id="mobileMenuDropdown" class="hidden absolute right-0 mt-2 w-64 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl py-3 z-50 animate-fadeIn text-base">
                         <button onclick="toggleTheme(); toggleMobileMenu();" class="w-full flex items-center space-x-3 px-4 py-4 hover:bg-slate-50 dark:hover:bg-slate-800/60 text-slate-700 dark:text-slate-400 font-medium">
                             <span class="dark:hidden flex items-center space-x-3 w-full">
                                 <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
@@ -219,6 +225,15 @@
                             <button onclick="changeFontSize(0)" class="px-3 py-2.5 font-extrabold text-blue-600 dark:text-blue-400 bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg flex-1 text-center mx-1">A</button>
                             <button onclick="changeFontSize(1)" class="px-3 py-2.5 font-bold text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg flex-1 text-center mx-1">A+</button>
                         </div>
+
+                        <hr class="border-slate-100 dark:border-slate-800 my-2">
+                        <div class="px-4 py-3 text-sm font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Sütun Sayısı</div>
+                        <div class="flex items-center justify-between px-3 pb-2">
+                            <button onclick="changeGridCols(-1)" class="px-3 py-2.5 font-bold text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg flex-1 text-center mx-1">-</button>
+                            <span class="grid-col-count-disp px-3 py-2.5 font-extrabold text-blue-600 dark:text-blue-400 flex-1 text-center flex items-center justify-center">3</span>
+                            <button onclick="changeGridCols(1)" class="px-3 py-2.5 font-bold text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg flex-1 text-center mx-1">+</button>
+                        </div>
+
                         <hr class="border-slate-100 dark:border-slate-800 my-2">
                         <button onclick="toggleAboutModal(true); toggleMobileMenu();" class="w-full flex items-center space-x-3 px-4 py-4 hover:bg-slate-50 dark:hover:bg-slate-800/60 text-slate-700 dark:text-slate-400 font-medium">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -423,6 +438,7 @@
         const jsonUrl = 'projeler.json'; 
         let allProjects = [];
         let activeCategory = 'Tümü';
+        let gridCols = 3;
 
         let favorites = JSON.parse(localStorage.getItem('ak_favorites')) || [];
         let recents = JSON.parse(localStorage.getItem('ak_recents')) || [];
@@ -476,7 +492,6 @@
 
             if (!projectParam) return;
 
-            // --- BAŞLIK VE META GÜNCELLEME ALANI ---
             const targetProject = allProjects.find(p => normalizeText(p.adi) === normalizeText(projectParam));
             if (targetProject) {
                 document.title = `Akıllı Kürsü - ${targetProject.adi}`;
@@ -490,7 +505,6 @@
                 let ogDesc = document.querySelector('meta[property="og:description"]');
                 if (ogDesc) ogDesc.content = targetProject.aciklama;
             }
-            // ----------------------------------------
 
             const targetId = `project-${normalizeText(projectParam)}`;
             const targetCard = document.getElementById(targetId);
@@ -647,13 +661,21 @@
         function generateCategoryButtons() {
             const container = document.getElementById('categoryContainer');
             const uniqueCategories = [...new Set(allProjects.map(p => p.kategori))];
-            const categories = ['Tümü', ...uniqueCategories];
+            
+            const categories = ['Tümü'];
+            if (favorites.length > 0) {
+                categories.push('Favoriler');
+            }
+            categories.push(...uniqueCategories);
+
             container.innerHTML = '';
             
             categories.forEach(cat => {
                 let count = 0;
                 if (cat === 'Tümü') {
                     count = allProjects.length;
+                } else if (cat === 'Favoriler') {
+                    count = favorites.length;
                 } else {
                     count = allProjects.filter(p => p.kategori === cat).length;
                 }
@@ -707,7 +729,15 @@
             const normalizedSearch = normalize(originalSearchTerm);
 
             const filtered = allProjects.filter(project => {
-                const matchesCategory = (activeCategory === 'Tümü' || project.kategori === activeCategory);
+                let matchesCategory = false;
+                if (activeCategory === 'Tümü') {
+                    matchesCategory = true;
+                } else if (activeCategory === 'Favoriler') {
+                    matchesCategory = favorites.includes(project.adi);
+                } else {
+                    matchesCategory = project.kategori === activeCategory;
+                }
+
                 const matchesSearch = 
                     project.adi.toLowerCase().includes(originalSearchTerm.toLowerCase()) || 
                     project.aciklama.toLowerCase().includes(originalSearchTerm.toLowerCase()) ||
@@ -734,12 +764,17 @@
             if (index > -1) {
                 favorites.splice(index, 1);
                 lastAnimatedStars[projectName] = 'inactive';
+                
+                if (favorites.length === 0 && activeCategory === 'Favoriler') {
+                    activeCategory = 'Tümü';
+                }
             } else {
                 favorites.push(projectName);
                 lastAnimatedStars[projectName] = 'active';
             }
             
             localStorage.setItem('ak_favorites', JSON.stringify(favorites));
+            generateCategoryButtons();
             applyFilters();
 
             setTimeout(() => {
@@ -825,6 +860,21 @@
             let newFontSize = (100 + (currentSizeLevel * 10)) + "%"; 
             
             document.documentElement.style.fontSize = newFontSize;
+        }
+
+        function changeGridCols(action) {
+            gridCols += action;
+            if (gridCols < 2) gridCols = 2;
+            if (gridCols > 9) gridCols = 9;
+            applyGridCols();
+        }
+
+        function applyGridCols() {
+            document.querySelectorAll('.grid-col-count-disp').forEach(el => el.textContent = gridCols);
+            const grid = document.getElementById('projectsGrid');
+            if (grid) {
+                grid.style.gridTemplateColumns = `repeat(${gridCols}, minmax(0, 1fr))`;
+            }
         }
 
         function toggleMobileMenu() {
@@ -973,7 +1023,12 @@
         }
 
         document.getElementById('searchBar').addEventListener('input', applyFilters);
-        window.addEventListener('DOMContentLoaded', fetchProjects);
+        
+        window.addEventListener('DOMContentLoaded', () => {
+            fetchProjects();
+            gridCols = window.innerWidth < 768 ? 2 : 3;
+            applyGridCols();
+        });
     </script>
 </body>
 </html>
