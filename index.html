@@ -866,6 +866,7 @@
             gridCols += action;
             if (gridCols < 1) gridCols = 1;
             if (gridCols > 10) gridCols = 10;
+            localStorage.setItem('ak_grid_cols', gridCols);
             applyGridCols();
         }
 
@@ -1022,13 +1023,20 @@
             }
         }
 
-        document.getElementById('searchBar').addEventListener('input', applyFilters);
-        
-        window.addEventListener('DOMContentLoaded', () => {
-            fetchProjects();
-            gridCols = window.innerWidth < 768 ? 1 : 3;
-            applyGridCols();
-        });
+      window.addEventListener('DOMContentLoaded', () => {
+    fetchProjects();
+    
+    // YENİ: Önce hafızada kayıtlı bir sütun sayısı var mı diye bakıyoruz
+    const savedCols = localStorage.getItem('ak_grid_cols');
+    if (savedCols) {
+        gridCols = parseInt(savedCols, 10);
+    } else {
+        // Eğer hafızada yoksa cihaz genişliğine göre varsayılanı ata
+        gridCols = window.innerWidth < 768 ? 1 : 3;
+    }
+    
+    applyGridCols();
+});  
     </script>
 </body>
 </html>
