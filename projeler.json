@@ -1,44 +1,52 @@
 [
   {
     "id": "topludegistirr",
+    "grupId": "topludegistirr",
+    "surumTipi": "Onerilen",
     "adi": "Toplu Değiştir v1.1",
     "url": "https://topludegistir.netlify.app/",
     "kategori": "Ofis",
     "ikon": "🗂️",
-    "duyur":"YENİ",
-     "durum": "Beta",
+    "duyur": "YENİ",
+    "durum": "Beta",
     "aciklama": "Birden fazla Microsoft Office (Word, Excel, PowerPoint) belgesi üzerinde aynı anda metinlerde 'bul ve değiştir' işlemi yapmanızı sağlayan pratik bir web aracıdır. Tüm işlemler sizin cihazınızda gerçekleşir."
   },
   {
     "id": "topluisimdegistir",
+    "grupId": "topluisimdegistir",
+    "surumTipi": "Onerilen",
     "adi": "Toplu İsim Değiştir v1.2",
     "url": "https://topluisimdegistir.netlify.app/",
     "kategori": "Masaüstü",
     "ikon": "✍️",
-    "duyur":"YENİ",
+    "duyur": "YENİ",
     "durum": "Beta",
     "aciklama": "Bilgisayarınızdaki çok sayıdaki dosyanın ismini tek tek değiştirmek yerine, belirlediğiniz kurallara göre tek tıkla ve topluca değiştirmenizi sağlayan ücretsiz ve pratik bir web aracıdır. Tüm işlemler sizin cihazınızda gerçekleşir."
   },
- {
+  {
     "id": "pratikpdf",
+    "grupId": "pratikpdf",
+    "surumTipi": "Onerilen",
     "adi": "Paratikpdf v1.0",
     "url": "https://pratikpdf.netlify.app/",
     "kategori": "Ofis",
     "ikon": "📄",
     "aciklama": "herhangi bir kurulum gerektirmeden doğrudan tarayıcınız üzerinden PDF dosyalarınızı kolayca yönetebileceğiniz pratik bir web aracıdır. Bu araç sayesinde PDF'lerinizdeki sayfaların sırasını sürükle-bırak ile değiştirebilir veya silebilir, birden fazla dosyayı tek bir PDF'te birleştirebilir, dosya boyutunu sıkıştırarak küçültebilir ve PDF sayfalarınızı hızlıca resim (JPG/PNG) formatına dönüştürebilirsiniz. Tüm işlemler sizin cihazınızda gerçekleşir."
   },
- {
+  {
     "id": "bolbass",
+    "grupId": "bolbass",
+    "surumTipi": "Onerilen",
     "adi": "Bölbas v1.3",
     "url": "https://bolbas.netlify.app/",
     "kategori": "Ofis",
     "ikon": "📜",
     "aciklama": "Büyük boyutlu görsel veya PDF dosyalarını A4 veya A3 gibi standart kağıt boyutlarına bölerek, ev veya ofis yazıcılarından büyük poster çıktısı almanızı ve bunları birleştirmenizi sağlayan pratik bir web uygulamasıdır. Tüm işlemler sizin cihazınızda gerçekleşir."
   },
-
- 
   {
     "id": "listeleyici",
+    "grupId": "listeleyici",
+    "surumTipi": "Onerilen",
     "adi": "E-okul PDF Sınıf Listesini Excel, Word ve TXT'ye Dönüştürme Aracı v2.5",
     "url": "https://listeleyici.netlify.app/",
     "kategori": "E-Okul",
@@ -46,52 +54,63 @@
     "aciklama": "E-okul'dan alınan PDF sınıf listelerini; içeriği bozulmadan, gelişmiş filtreleme ve sayfa düzeni seçenekleriyle Excel (.xlsx), Word (.docx), TXT (.txt) formatlarına dönüştürmek veya doğrudan Yazdırmak için tasarlanmıştır. Sınıf Listeleri, kulüp ve gezi listelerini vb. kısa sürede oluşturabilirsiniz. Tüm bilgiler sizin cihazınızda tutulur."
   },
   {
+    "id": "portrenot",
+    "grupId": "portrenot",
+    "surumTipi": "Onerilen",
+    "adi": "Portre Not v1.3",
+    "url": "https://portrenot.netlify.app/",
+    "kategori": "E-Okul",
+    "ikon": "📋",
+    "aciklama": "E-Okul'dan aldığınız fotoğraflı öğrenci listelerini saniyeler içinde fotoğraflı, düzenli ve not alabileceğiniz şık çizelgelere dönüştürün. Böylece öğrenciler hakkındaki kişisel notlarınızı kolayca alabileceğiniz bir not deftererine sahip olursunuz. Tüm bilgiler sizin cihazınızda tutulur."
+  },
+  {
     "id": "portrenot20",
+    "grupId": "portrenot",
+    "surumTipi": "Beta",
     "adi": "Portre Not v2.0 Beta",
     "url": "https://portrenot.netlify.app/20/",
     "kategori": "E-Okul",
     "ikon": "📋",
     "aciklama": "E-Okul'dan aldığınız fotoğraflı öğrenci listelerini saniyeler içinde fotoğraflı, düzenli ve not alabileceğiniz şık çizelgelere dönüştürün. Böylece öğrenciler hakkındaki kişisel notlarınızı kolayca alabileceğiniz bir not deftererine sahip olursunuz. Tüm bilgiler sizin cihazınızda tutulur."
   },
-   {
+  {
     "id": "gezin",
+    "grupId": "gezin",
+    "surumTipi": "Onerilen",
     "adi": "Gezin v1.0",
     "url": "https://gezin.netlify.app/",
     "kategori": "Seyahat",
     "ikon": "🗺️",
     "aciklama": "Bulunduğunuz veya ziyaret etmek istediğiniz bir bölgedeki tarihi yerleri, müzeleri, dini yapıları ve doğal güzellikleri kolayca keşfetmenizi sağlayan pratik ve kullanıcı dostu bir dijital gezi rehberidir. Konumunuzu kullanarak belirli bir kilometre yarıçapındaki gezilecek yerleri anında listeleyebilir; mekanları puanlarına, o an açık olma durumlarına veya ücretsiz olup olmadıklarına göre detaylıca filtreleyebilirsiniz. İlginizi çeken noktaları favorilerinize ekleyerek kendinize özel bir gezi listesi oluşturmanıza ve bu yerler arasında çok duraklı rotalar planlamanıza imkan tanıyan site, seyahatlerinizi hızlıca organize etmenizi sağlayan bir keşif aracıdır. Tüm işlemler sizin cihazınızda gerçekleşir."
   },
-    {
+  {
     "id": "seslikitap",
+    "grupId": "seslikitap",
+    "surumTipi": "Onerilen",
     "adi": "Sesli Kitap v1.0",
     "url": "https://portrenot.netlify.app/20/",
     "kategori": "Kitap",
     "ikon": "▶️",
     "aciklama": "Sesli Kitap Uygulaması, kendi sesli kitap arşivinizi oluşturmanıza, dinlemenize ve dinlediğiniz bölümleri işaretleyip not almanıza olanak tanıyan tamamen tarayıcı tabanlı, çevrimdışı çalışan bir uygulamadır. Tüm işlemler sizin cihazınızda gerçekleşir"
   },
-   {
+  {
     "id": "karekod",
+    "grupId": "karekod",
+    "surumTipi": "Onerilen",
     "adi": "QR Kod Oluşturucu v1.0",
     "url": "https://karekod-olusturucu.netlify.app/",
     "kategori": "Ofis",
     "ikon": "𖣯",
     "aciklama": "Web sitesi linki, düz metin, iletişim bilgileri, Wi-Fi şifresi, konum, IBAN numarası ve sosyal medya profilleri gibi birçok farklı içerik için tamamen ücretsiz ve kalıcı karekodlar hazırlamanızı sağlayan pratik bir web aracıdır. Herhangi bir üyelik gerektirmeyen bu platformda, formu doldurduğunuz anda otomatik olarak eşzamanlı üretilen karekodların boyutunu, kenar boşluklarını ve renklerini kendi zevkinize veya kurumsal kimliğinize göre kolayca kişiselleştirebilirsiniz. Tasarladığınız karekodları yüksek kalitede PNG ya da vektörel SVG formatında cihazınıza indirerek veya doğrudan kopyalayarak broşür, afiş, menü ve kartvizit gibi dijital ya da basılı tüm materyallerinizde saniyeler içinde kullanmaya başlayabilirsiniz. Tüm işlemler sizin cihazınızda gerçekleşir."
   },
-   {
+  {
     "id": "pardusofis",
+    "grupId": "pardusofis",
+    "surumTipi": "Onerilen",
     "adi": "Pardus Ofis Görüntüleyici v1.2",
     "url": "https://drive.google.com/drive/folders/1EiK9jeFw5-6SDI6bamlDGWmNwTMWaOOn?usp=sharing",
     "kategori": "Akıllı Tahta",
     "ikon": "🧾",
     "aciklama": "Word, Excel ve PowerPoint dosyalarınızı akıllı tahtada bozulmadan açmanızı sağlayan bu pratik araç; USB flash bellek üzerindeki dosyaları OneDrive bağlantısı aracılığıyla Microsoft’un web sistemi üzerinden görüntüleyerek yazı kayması, font bozulması, sayfa düzeninin değişmesi, seslerin veya efektlerin çalışmaması gibi sorunları büyük ölçüde önler. Windows 10, Windows 11 ve Pardus ETAP 23 ile uyumlu olan program, ücretsiz olarak 5 GB depolama alanı sunan OneDrive hesabınıza bir kez giriş yaptıktan sonra tekrar şifre istemez ve bağlantıyı doğrudan flash bellek üzerindeki anahtar ile pratik bir şekilde kurar.Tüm işlemler sizin cihazınızda gerçekleşir."
-  },
- 
-  {
-    "id": "portrenot",
-    "adi": "Portre Not v1.3",
-    "url": "https://portrenot.netlify.app/",
-    "kategori": "E-Okul",
-    "ikon": "📋",
-    "aciklama": "E-Okul'dan aldığınız fotoğraflı öğrenci listelerini saniyeler içinde fotoğraflı, düzenli ve not alabileceğiniz şık çizelgelere dönüştürün. Böylece öğrenciler hakkındaki kişisel notlarınızı kolayca alabileceğiniz bir not deftererine sahip olursunuz. Tüm bilgiler sizin cihazınızda tutulur."
   }
 ]
