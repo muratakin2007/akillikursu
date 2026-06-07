@@ -349,7 +349,12 @@
                     </div>
                 </div>
             </div>
-            
+
+            <div class="bg-slate-100 dark:bg-slate-800/60 p-1.5 rounded-xl mb-2 flex items-center gap-1 select-none">
+                <button id="btnShareDirect" onclick="updateShareLinks('direct')" class="flex-1 py-2 text-xs font-bold bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 rounded-lg shadow-sm transition-all focus:outline-none">Doğrudan Link</button>
+                <button id="btnSharePortal" onclick="updateShareLinks('portal')" class="flex-1 py-2 text-xs font-bold text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300 transition-all focus:outline-none">Akıllı Kürsü Linki</button>
+            </div>
+            <div class="text-[11px] text-center text-slate-400 dark:text-slate-500 mb-5 truncate px-2" id="currentShareUrlDisplay">https://...</div>
             <div class="grid grid-cols-3 gap-3 mb-5">
                 <a id="shareWA" target="_blank" class="flex flex-col items-center justify-center p-3 rounded-2xl bg-slate-50 hover:bg-emerald-50 dark:bg-slate-950 dark:hover:bg-emerald-950/30 border border-slate-200/60 dark:border-slate-800 transition-all group">
                     <svg class="h-6 w-6 text-emerald-500 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397 0 11.948 0c3.179.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.907-11.892 11.907-2.001-.001-3.97-.51-5.733-1.482L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.747 1.451 5.436 0 9.86-4.42 9.864-9.864.002-2.637-1.03-5.114-2.904-6.989-1.873-1.876-4.354-2.907-6.992-2.908-5.441 0-9.866 4.425-9.87 9.867-.002 1.637.454 3.237 1.32 4.633l-.995 3.633 3.734-.979zm11.233-6.273c-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.668.149-.198.297-.766.967-.94 1.164-.173.199-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347z"/></svg>
@@ -457,6 +462,12 @@
         let recents = JSON.parse(localStorage.getItem('ak_recents')) || [];
 
         let lastAnimatedStars = {};
+        
+        // Paylaşım için yeni global değişkenler
+        let activeShareName = '';
+        let activeShareDesc = '';
+        let activeDirectUrl = '';
+        let activePortalUrl = '';
         let activeShareUrl = '';
 
         function normalizeText(text) {
@@ -507,109 +518,98 @@
         }
 
         function checkUrlParameterAndHighlight() {
-    const urlParams = new URLSearchParams(window.location.search);
-    let projectParam = urlParams.get('p');
+            const urlParams = new URLSearchParams(window.location.search);
+            let projectParam = urlParams.get('p');
 
-    // Eğer parametre yoksa URL path'inden (örn: /portrenotv20beta) almaya çalış
-    if (!projectParam) {
-        const path = window.location.pathname;
-        if (path && path.length > 1 && !path.includes('index.html')) {
-            projectParam = decodeURIComponent(path.substring(1));
-        }
-    }
-
-    if (!projectParam) return;
-
-    const normalizedSearchParam = normalizeText(projectParam);
-
-    // 1. Hem ana projelerde hem de alt sürümlerde arama yap
-    let targetMainProject = null;
-    let targetSpecificVersion = null;
-
-    for (const mainApp of allProjects) {
-        // Önce ana uygulamanın adını veya id'sini kontrol et
-        if (normalizeText(mainApp.adi) === normalizedSearchParam || normalizeText(mainApp.id) === normalizedSearchParam) {
-            targetMainProject = mainApp;
-            targetSpecificVersion = mainApp;
-            break;
-        }
-        
-        // Ana uygulamada eşleşmediyse, alt sürümlerinin (tumSurumler) içinde ara
-        if (mainApp.tumSurumler && mainApp.tumSurumler.length > 0) {
-            const subMatch = mainApp.tumSurumler.find(v => 
-                normalizeText(v.adi) === normalizedSearchParam || normalizeText(v.id) === normalizedSearchParam
-            );
-            if (subMatch) {
-                targetMainProject = mainApp; // Kartı bulmak ve scroll olmak için ana projeyi tutuyoruz
-                targetSpecificVersion = subMatch; // Meta etiketleri ve tespit için spesifik versiyonu tutuyoruz
-                break;
+            // Eğer parametre yoksa URL path'inden (örn: /portrenotv20beta) almaya çalış
+            if (!projectParam) {
+                const path = window.location.pathname;
+                if (path && path.length > 1 && !path.includes('index.html')) {
+                    projectParam = decodeURIComponent(path.substring(1));
+                }
             }
-        }
-    }
 
-    // Eşleşme bulunamadıysa işlemi sonlandır
-    if (!targetMainProject) return; 
+            if (!projectParam) return;
 
-    // 2. Meta etiketlerini spesifik (alt) versiyona göre güncelle
-    document.title = `Akıllı Kürsü - ${targetSpecificVersion.adi}`;
-    
-    let metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) metaDesc.content = targetSpecificVersion.aciklama;
-    
-    let ogTitle = document.querySelector('meta[property="og:title"]');
-    if (ogTitle) ogTitle.content = `Akıllı Kürsü - ${targetSpecificVersion.adi}`;
-    
-    let ogDesc = document.querySelector('meta[property="og:description"]');
-    if (ogDesc) ogDesc.content = targetSpecificVersion.aciklama;
+            const normalizedSearchParam = normalizeText(projectParam);
 
-    // 3. Ekranda her zaman "Ana Uygulama"nın kartı render edildiği için ID'yi ana uygulamadan alıyoruz
-    const targetId = `project-${normalizeText(targetMainProject.adi)}`;
-    const targetCard = document.getElementById(targetId);
+            // Hem ana projelerde hem de alt sürümlerde arama yap
+            let targetMainProject = null;
+            let targetSpecificVersion = null;
 
-    if (targetCard) {
-        // Kategori "Tümü" değilse sıfırla
-        if (activeCategory !== 'Tümü') {
-            filterCategory('Tümü');
-        }
+            for (const mainApp of allProjects) {
+                if (normalizeText(mainApp.adi) === normalizedSearchParam || normalizeText(mainApp.id) === normalizedSearchParam) {
+                    targetMainProject = mainApp;
+                    targetSpecificVersion = mainApp;
+                    break;
+                }
+                
+                if (mainApp.tumSurumler && mainApp.tumSurumler.length > 0) {
+                    const subMatch = mainApp.tumSurumler.find(v => 
+                        normalizeText(v.adi) === normalizedSearchParam || normalizeText(v.id) === normalizedSearchParam
+                    );
+                    if (subMatch) {
+                        targetMainProject = mainApp; 
+                        targetSpecificVersion = subMatch; 
+                        break;
+                    }
+                }
+            }
 
-        // Arama çubuğu doluysa temizle
-        const searchBar = document.getElementById('searchBar');
-        if(searchBar && searchBar.value) {
-            searchBar.value = '';
-            applyFilters();
-        }
+            if (!targetMainProject) return; 
 
-        setTimeout(() => {
-            const headerOffset = 100;
-            const elementPosition = targetCard.getBoundingClientRect().top;
-            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-            // Ana karta pürüzsüz kaydır
-            window.scrollTo({
-                top: offsetPosition,
-                behavior: 'smooth'
-            });
-
-            // Ana kartı görsel olarak vurgula
-            targetCard.classList.add('ring-4', 'ring-blue-500', 'scale-[1.03]', 'shadow-2xl', 'z-30');
+            // Meta etiketlerini spesifik (alt) versiyona göre güncelle
+            document.title = `Akıllı Kürsü - ${targetSpecificVersion.adi}`;
             
-            // 4. EĞER ARANAN LİNK BİR ALT SÜRÜMSE MODALI OTOMATİK AÇ
-            const isSubVersion = (targetMainProject.id !== targetSpecificVersion.id || targetMainProject.adi !== targetSpecificVersion.adi);
-            if (isSubVersion) {
+            let metaDesc = document.querySelector('meta[name="description"]');
+            if (metaDesc) metaDesc.content = targetSpecificVersion.aciklama;
+            
+            let ogTitle = document.querySelector('meta[property="og:title"]');
+            if (ogTitle) ogTitle.content = `Akıllı Kürsü - ${targetSpecificVersion.adi}`;
+            
+            let ogDesc = document.querySelector('meta[property="og:description"]');
+            if (ogDesc) ogDesc.content = targetSpecificVersion.aciklama;
+
+            const targetId = `project-${normalizeText(targetMainProject.adi)}`;
+            const targetCard = document.getElementById(targetId);
+
+            if (targetCard) {
+                if (activeCategory !== 'Tümü') {
+                    filterCategory('Tümü');
+                }
+
+                const searchBar = document.getElementById('searchBar');
+                if(searchBar && searchBar.value) {
+                    searchBar.value = '';
+                    applyFilters();
+                }
+
                 setTimeout(() => {
-                    // Kaydırma işleminden kısa süre sonra Sürüm Geçmişi modalını aç
-                    openVersionModal(targetMainProject.grupId || targetMainProject.id, targetMainProject.ikon);
-                }, 600); 
+                    const headerOffset = 100;
+                    const elementPosition = targetCard.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+
+                    targetCard.classList.add('ring-4', 'ring-blue-500', 'scale-[1.03]', 'shadow-2xl', 'z-30');
+                    
+                    const isSubVersion = (targetMainProject.id !== targetSpecificVersion.id || targetMainProject.adi !== targetSpecificVersion.adi);
+                    if (isSubVersion) {
+                        setTimeout(() => {
+                            openVersionModal(targetMainProject.grupId || targetMainProject.id, targetMainProject.ikon);
+                        }, 600); 
+                    }
+
+                    setTimeout(() => {
+                        targetCard.classList.remove('ring-4', 'ring-blue-500', 'scale-[1.03]');
+                    }, 3500);
+
+                }, 300);
             }
-
-            // Vurgu efektini kaldır
-            setTimeout(() => {
-                targetCard.classList.remove('ring-4', 'ring-blue-500', 'scale-[1.03]');
-            }, 3500);
-
-        }, 300);
-    }
-}
+        }
 
         function updateTotalAppsCount(count) {
             const badge = document.getElementById('totalAppsBadge');
@@ -984,33 +984,55 @@
             }
         });
 
+        // PAYLAŞIM FONKSİYONLARI BAŞLANGICI
         function openShareMenu(name, desc, url, icon) {
-            activeShareUrl = url;
-            const shareText = `Akıllı Kürsü - ${name}: ${desc}`;
+            activeShareName = name;
+            activeShareDesc = desc;
+            activeDirectUrl = url;
             
-            if (navigator.share) {
-                navigator.share({
-                    title: `Akıllı Kürsü - ${name}`,
-                    text: desc,
-                    url: url
-                }).catch((err) => console.log('Sistem paylaşımı iptal edildi veya hata oluştu'));
+            // Akıllı Kürsü linkini normalize edilmiş ad ile oluştur
+            activePortalUrl = `https://akillikursu.netlify.app/${normalizeText(name)}`;
+            
+            document.getElementById('sharePreviewTitle').textContent = name;
+            document.getElementById('sharePreviewDesc').textContent = desc;
+            document.getElementById('sharePreviewIcon').textContent = icon || '🚀';
+            
+            // Native paylaşım yerine her zaman özel pencereyi açıyoruz
+            const modal = document.getElementById('shareModal');
+            const inner = modal.querySelector('div');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            inner.classList.remove('scale-95');
+            inner.classList.add('scale-100');
+            
+            // Pencere açılırken varsayılan olarak "Doğrudan Link" sekmesini aktif et
+            updateShareLinks('direct');
+        }
+
+        function updateShareLinks(type) {
+            const targetUrl = type === 'direct' ? activeDirectUrl : activePortalUrl;
+            activeShareUrl = targetUrl; 
+            
+            const btnDirect = document.getElementById('btnShareDirect');
+            const btnPortal = document.getElementById('btnSharePortal');
+            const urlDisplay = document.getElementById('currentShareUrlDisplay');
+            
+            urlDisplay.textContent = targetUrl;
+            
+            if (type === 'direct') {
+                btnDirect.className = "flex-1 py-2 text-xs font-bold bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 rounded-lg shadow-sm transition-all focus:outline-none";
+                btnPortal.className = "flex-1 py-2 text-xs font-bold text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300 transition-all focus:outline-none";
             } else {
-                document.getElementById('sharePreviewTitle').textContent = name;
-                document.getElementById('sharePreviewDesc').textContent = desc;
-                document.getElementById('sharePreviewIcon').textContent = icon || '🚀';
-                
-                document.getElementById('shareWA').href = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + url)}`;
-                document.getElementById('shareX').href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(url)}`;
-                document.getElementById('shareTG').href = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(shareText)}`;
-                document.getElementById('shareFB').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
-                document.getElementById('shareLN').href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
-                
-                const modal = document.getElementById('shareModal');
-                const inner = modal.querySelector('div');
-                modal.classList.remove('opacity-0', 'pointer-events-none');
-                inner.classList.remove('scale-95');
-                inner.classList.add('scale-100');
+                btnPortal.className = "flex-1 py-2 text-xs font-bold bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 rounded-lg shadow-sm transition-all focus:outline-none";
+                btnDirect.className = "flex-1 py-2 text-xs font-bold text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300 transition-all focus:outline-none";
             }
+
+            const shareText = `Akıllı Kürsü - ${activeShareName}: ${activeShareDesc}`;
+            
+            document.getElementById('shareWA').href = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + targetUrl)}`;
+            document.getElementById('shareX').href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(targetUrl)}`;
+            document.getElementById('shareTG').href = `https://t.me/share/url?url=${encodeURIComponent(targetUrl)}&text=${encodeURIComponent(shareText)}`;
+            document.getElementById('shareFB').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(targetUrl)}`;
+            document.getElementById('shareLN').href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(targetUrl)}`;
         }
 
         function closeShareModal() {
@@ -1030,6 +1052,7 @@
                 showToast("Kopyalama başarısız oldu.");
             });
         }
+        // PAYLAŞIM FONKSİYONLARI BİTİŞİ
 
         function showToast(message) {
             const toast = document.getElementById('toastAlert');
