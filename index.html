@@ -494,6 +494,11 @@
         let activePortalUrl = '';
         let activeShareUrl = '';
 
+        // Sürüm penceresinden paylaşıma geçişi hatırlamak için eklendi
+        let wasVersionModalOpen = false;
+        let lastVersionGrupId = '';
+        let lastVersionIcon = '';
+
         function normalizeText(text) {
             if (!text) return '';
             return text.toLowerCase()
@@ -1003,16 +1008,23 @@
             }
         });
 
-        // GELİŞMİŞ PAYLAŞIM FONKSİYONLARI BAŞLANGICI
+        // ================= GELİŞMİŞ PAYLAŞIM VE MODAL FONKSİYONLARI =================
         function openShareMenu(name, desc, url, icon) {
             activeShareName = name;
             activeShareDesc = desc;
             activeDirectUrl = url;
             activePortalUrl = `https://akillikursu.netlify.app/${normalizeText(name)}`;
             
+            // Eğer "Tüm Sürümler" modali açıksa, geldiğimiz yeri kaydet ve onu gizle
+            const versionModal = document.getElementById('versionModal');
+            wasVersionModalOpen = !versionModal.classList.contains('opacity-0');
+
+            if (wasVersionModalOpen) {
+                closeVersionModal();
+            }
+
             if (navigator.share) {
-                // Eğer cihazın sistem paylaşımı (navigator.share) destekleniyorsa
-                // sadece özel seçim penceresini açarız.
+                // Mobil Cihazlar: Özel link seçici penceresini aç
                 document.getElementById('linkChoiceIcon').textContent = icon || '🚀';
                 document.getElementById('linkChoiceDirectUrl').textContent = activeDirectUrl;
                 document.getElementById('linkChoicePortalUrl').textContent = activePortalUrl;
@@ -1023,7 +1035,7 @@
                 inner.classList.remove('scale-95');
                 inner.classList.add('scale-100');
             } else {
-                // Tarayıcı desteklemiyorsa (Masaüstü vs.) detaylı sosyal medya butonlarının olduğu modali açarız
+                // Masaüstü Cihazlar: Detaylı sosyal paylaşım penceresini aç
                 document.getElementById('sharePreviewTitle').textContent = name;
                 document.getElementById('sharePreviewDesc').textContent = desc;
                 document.getElementById('sharePreviewIcon').textContent = icon || '🚀';
@@ -1034,7 +1046,6 @@
                 inner.classList.remove('scale-95');
                 inner.classList.add('scale-100');
                 
-                // Pencere açılırken varsayılan sekme
                 updateShareLinks('direct');
             }
         }
@@ -1043,7 +1054,6 @@
             const targetUrl = type === 'direct' ? activeDirectUrl : activePortalUrl;
             const shareText = `Akıllı Kürsü - ${activeShareName}: ${activeShareDesc}`;
             
-            // Kullanıcı seçim yaptıktan hemen sonra yerel paylaşımı çağır
             navigator.share({
                 title: `Akıllı Kürsü - ${activeShareName}`,
                 text: activeShareDesc,
@@ -1057,7 +1067,6 @@
         }
 
         function updateShareLinks(type) {
-            // Sadece masaüstü modalındaki sekmeler için çalışır
             const targetUrl = type === 'direct' ? activeDirectUrl : activePortalUrl;
             activeShareUrl = targetUrl; 
             
@@ -1090,6 +1099,14 @@
             modal.classList.add('opacity-0', 'pointer-events-none');
             inner.classList.remove('scale-100');
             inner.classList.add('scale-95');
+
+            // Eğer "Tüm Sürümler"den geldiysek onu geri aç
+            if (wasVersionModalOpen) {
+                setTimeout(() => {
+                    openVersionModal(lastVersionGrupId, lastVersionIcon);
+                    wasVersionModalOpen = false;
+                }, 300); // animasyon süresi kadar bekle
+            }
         }
 
         function closeLinkChoiceModal() {
@@ -1098,6 +1115,14 @@
             modal.classList.add('opacity-0', 'pointer-events-none');
             inner.classList.remove('scale-100');
             inner.classList.add('scale-95');
+
+            // Eğer "Tüm Sürümler"den geldiysek onu geri aç
+            if (wasVersionModalOpen) {
+                setTimeout(() => {
+                    openVersionModal(lastVersionGrupId, lastVersionIcon);
+                    wasVersionModalOpen = false;
+                }, 300); // animasyon süresi kadar bekle
+            }
         }
 
         function copyShareLink() {
@@ -1109,7 +1134,6 @@
                 showToast("Kopyalama başarısız oldu.");
             });
         }
-        // PAYLAŞIM FONKSİYONLARI BİTİŞİ
 
         function showToast(message) {
             const toast = document.getElementById('toastAlert');
@@ -1124,6 +1148,10 @@
         }
 
         function openVersionModal(grupId, icon) {
+            // Sonrasında geri çağırabilmek için bilgileri sakla
+            lastVersionGrupId = grupId;
+            lastVersionIcon = icon;
+
             const projectGroup = allProjects.find(p => (p.grupId || p.id) === grupId);
             if(!projectGroup) return;
 
@@ -1189,23 +1217,40 @@
 
         window.addEventListener('keydown', (e) => {
             const searchBar = document.getElementById('searchBar');
-            if (!searchBar) return;
-
-            if (searchBar.value.length > 0 && (e.key === 'Escape' || (e.altKey && e.key === 'Backspace'))) {
+            
+            // Eğer arama çubuğu aktifse ve Esc/Alt+Backspace basıldıysa sadece onu temizle
+            if (searchBar && searchBar.value.length > 0 && (e.key === 'Escape' || (e.altKey && e.key === 'Backspace'))) {
                 e.preventDefault();
                 clearSearch();
                 return;
             }
 
+            // ESC tuşuna basıldığında ÇAKIŞMALARI ENGELLEMEK için sadece en üstteki görünür modalı kapatır
             if (e.key === 'Escape') {
-                closeShareModal();
-                closeLinkChoiceModal();
-                toggleAboutModal(false);
-                closeVersionModal();
-                document.getElementById('mobileMenuDropdown').classList.add('hidden');
+                const shareModal = document.getElementById('shareModal');
+                const linkChoiceModal = document.getElementById('linkChoiceModal');
+                const versionModal = document.getElementById('versionModal');
+                const aboutModal = document.getElementById('aboutModal');
+                const dropdown = document.getElementById('mobileMenuDropdown');
+
+                if (!shareModal.classList.contains('opacity-0')) {
+                    closeShareModal();
+                } else if (!linkChoiceModal.classList.contains('opacity-0')) {
+                    closeLinkChoiceModal();
+                } else if (!versionModal.classList.contains('opacity-0')) {
+                    closeVersionModal();
+                } else if (!aboutModal.classList.contains('opacity-0')) {
+                    toggleAboutModal(false);
+                }
+                
+                if (!dropdown.classList.contains('hidden')) {
+                    dropdown.classList.add('hidden');
+                }
             }
 
+            // Ctrl+K veya / ile aramaya odaklan
             if (e.key === '/' || ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k')) {
+                if (!searchBar) return;
                 e.preventDefault(); 
                 
                 const targetY = searchBar.getBoundingClientRect().top + window.scrollY - (window.innerHeight / 3);
