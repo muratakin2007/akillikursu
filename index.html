@@ -1052,7 +1052,7 @@
 
         function executeNativeShare(type) {
             const targetUrl = type === 'direct' ? activeDirectUrl : activePortalUrl;
-            const shareText = `Akıllı Kürsü - ${activeShareName}: ${activeShareDesc}`;
+            const shareText =`Akıllı Kürsü - ${activeShareName}, ${activeShareDesc}`;
             
             navigator.share({
                 title: `Akıllı Kürsü - ${activeShareName}`,
@@ -1084,7 +1084,7 @@
                 btnDirect.className = "flex-1 py-2 text-xs font-bold text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300 transition-all focus:outline-none";
             }
 
-            const shareText = `Akıllı Kürsü - ${activeShareName}: ${activeShareDesc}`;
+            const shareText = `Akıllı Kürsü - ${activeShareName}, ${activeShareDesc}`;
             
             document.getElementById('shareWA').href = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + targetUrl)}`;
             document.getElementById('shareX').href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(targetUrl)}`;
