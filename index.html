@@ -385,6 +385,25 @@
         </div>
     </div>
 
+    <div id="versionModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300" role="dialog" aria-modal="true" aria-labelledby="versionModalTitle">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 w-full max-w-md rounded-3xl p-6 shadow-2xl scale-95 transition-transform duration-300 relative max-h-[85vh] flex flex-col">
+            
+            <button onclick="closeVersionModal()" class="absolute top-5 right-5 p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors z-10">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            
+            <div class="text-center mb-5 flex-shrink-0">
+                <span id="versionModalIcon" class="inline-flex items-center justify-center w-14 h-14 text-3xl bg-slate-50 dark:bg-slate-950 rounded-2xl shadow-sm border border-slate-200/40 dark:border-slate-800/60 mb-3">🚀</span>
+                <h3 id="versionModalTitle" class="text-xl font-bold text-slate-900 dark:text-slate-400">Sürüm Geçmişi</h3>
+                <p class="text-xs text-slate-500 mt-1">Bu uygulamanın tüm yayınlanmış sürümleri</p>
+            </div>
+            
+            <div id="versionListContainer" class="flex-grow overflow-y-auto no-scrollbar space-y-3 pb-2">
+                </div>
+            
+        </div>
+    </div>
+
     <div id="toastAlert" class="fixed top-24 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-white dark:bg-white dark:text-slate-900 px-4 py-2.5 rounded-full shadow-xl text-xs md:text-sm font-bold opacity-0 scale-90 pointer-events-none transition-all duration-300 flex items-center gap-2">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
         <span id="toastMessage">Bağlantı başarıyla kopyalandı!</span>
@@ -430,6 +449,7 @@
     <script>
         const jsonUrl = 'projeler.json'; 
         let allProjects = [];
+        let groupedProjects = [];
         let activeCategory = 'Tümü';
         let gridCols = 3;
 
@@ -454,14 +474,28 @@
         async function fetchProjects() {
             try {
                 const response = await fetch(jsonUrl);
-                allProjects = await response.json();
+                const rawData = await response.json();
+                
+                // Sürümleri grupId'ye (veya yoksa id'ye) göre kümele
+                const groups = {};
+                rawData.forEach(app => {
+                    const gid = app.grupId || app.id;
+                    if(!groups[gid]) groups[gid] = [];
+                    groups[gid].push(app);
+                });
+
+                // Kümelenmiş verilerden ana projeleri oluştur
+                groupedProjects = Object.values(groups).map(versions => {
+                    const mainApp = versions.find(v => v.surumTipi === 'Onerilen') || versions[0];
+                    return { ...mainApp, tumSurumler: versions };
+                });
+
+                allProjects = groupedProjects; 
                 
                 updateTotalAppsCount(allProjects.length);
-                
                 generateCategoryButtons();
                 applyFilters(); 
                 renderRecents();
-
                 checkUrlParameterAndHighlight();
             } catch (error) {
                 console.error('Veri çekilirken hata oluştu:', error);
@@ -600,6 +634,17 @@
                 const safeDesc = project.aciklama.replace(/'/g, "\\'").replace(/"/g, '&quot;');
                 const safeIcon = (project.ikon || '🚀').replace(/'/g, "\\'");
 
+                let versionLinkHTML = '';
+                if (project.tumSurumler && project.tumSurumler.length > 1) {
+                    const olderCount = project.tumSurumler.length;
+                    versionLinkHTML = `
+                        <button onclick="openVersionModal('${project.grupId || project.id}', '${safeIcon}')" class="mb-3 w-full inline-flex items-center justify-center gap-1.5 py-1.5 text-xs font-bold text-slate-500 hover:text-blue-600 dark:text-slate-500 dark:hover:text-blue-400 bg-slate-50 hover:bg-blue-50 dark:bg-slate-900/50 dark:hover:bg-slate-800 rounded-xl transition-all border border-transparent hover:border-blue-200 dark:hover:border-slate-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            Tüm Sürümler (${olderCount})
+                        </button>
+                    `;
+                }
+
                 card.innerHTML = `
                     ${ribbonHTML}
                     <div class="flex flex-col gap-3 flex-grow">
@@ -632,6 +677,7 @@
                     </div>
                     
                     <div class="flex flex-col gap-2 relative z-20 pt-2 border-t border-slate-100 dark:border-slate-800/60 mt-auto">
+                        ${versionLinkHTML}
                         <button onclick="openShareMenu('${safeName}', '${safeDesc}', '${project.url}', '${safeIcon}')" class="share-btn w-full inline-flex items-center justify-center px-5 py-3 bg-slate-100/80 dark:bg-slate-900/60 text-slate-700 dark:text-slate-400 font-bold text-sm md:text-base rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm touch-manipulation">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
@@ -953,6 +999,70 @@
             }, 2000);
         }
 
+        function openVersionModal(grupId, icon) {
+            const projectGroup = allProjects.find(p => (p.grupId || p.id) === grupId);
+            if(!projectGroup) return;
+
+            const modal = document.getElementById('versionModal');
+            const container = document.getElementById('versionListContainer');
+            
+            const baseName = projectGroup.adi.split(' v')[0];
+            document.getElementById('versionModalTitle').textContent = baseName;
+            document.getElementById('versionModalIcon').textContent = icon || '🚀';
+
+            container.innerHTML = projectGroup.tumSurumler.map(v => {
+                let badgeConfig = { class: 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400', label: '⚪ Diğer' };
+                
+                switch(v.surumTipi) {
+                    case 'Onerilen': badgeConfig = { class: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400', label: '🟢 Önerilen' }; break;
+                    case 'LTS': badgeConfig = { class: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-400', label: '🔵 LTS' }; break;
+                    case 'Klasik': badgeConfig = { class: 'bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-300', label: '⚪ Klasik' }; break;
+                    case 'Beta': badgeConfig = { class: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400', label: '🟡 Beta' }; break;
+                    case 'Arsiv': badgeConfig = { class: 'bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-400', label: '🔴 Arşiv' }; break;
+                }
+
+                const safeName = v.adi.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                const safeDesc = v.aciklama ? v.aciklama.replace(/'/g, "\\'").replace(/"/g, '&quot;') : '';
+                const safeIcon = (v.ikon || icon || '🚀').replace(/'/g, "\\'");
+
+                return `
+                    <div class="flex items-center justify-between p-4 rounded-2xl border border-slate-200/60 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 hover:border-blue-300 dark:hover:border-slate-600 transition-colors group gap-3">
+                        <div class="flex flex-col gap-1.5 min-w-0">
+                            <span class="font-bold text-sm text-slate-800 dark:text-slate-300 truncate">${v.adi}</span>
+                            <div class="flex items-center">
+                                <span class="px-2 py-0.5 rounded-lg text-[10px] font-black tracking-wide uppercase ${badgeConfig.class}">
+                                    ${badgeConfig.label}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 flex-shrink-0">
+                            <button onclick="openShareMenu('${safeName}', '${safeDesc}', '${v.url}', '${safeIcon}')" class="flex-shrink-0 p-2.5 bg-white border border-slate-200 hover:bg-slate-100 dark:bg-slate-800 dark:border-slate-700 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 rounded-xl transition-all shadow-sm active:scale-95" aria-label="Paylaş" title="Paylaş">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                                </svg>
+                            </button>
+                            <a href="${v.url}" target="_blank" onclick="trackRecent('${v.adi.replace(/'/g, "\\'")}')" class="flex-shrink-0 px-4 py-2.5 bg-white hover:bg-blue-600 border border-slate-200 dark:border-slate-700 text-slate-700 hover:text-white dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-blue-600 dark:hover:text-white rounded-xl text-sm font-bold transition-all shadow-sm active:scale-95">
+                                Aç
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            const inner = modal.querySelector('div');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            inner.classList.remove('scale-95');
+            inner.classList.add('scale-100');
+        }
+
+        function closeVersionModal() {
+            const modal = document.getElementById('versionModal');
+            const inner = modal.querySelector('div');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            inner.classList.remove('scale-100');
+            inner.classList.add('scale-95');
+        }
+
         window.addEventListener('keydown', (e) => {
             const searchBar = document.getElementById('searchBar');
             if (!searchBar) return;
@@ -966,6 +1076,7 @@
             if (e.key === 'Escape') {
                 closeShareModal();
                 toggleAboutModal(false);
+                closeVersionModal();
                 document.getElementById('mobileMenuDropdown').classList.add('hidden');
             }
 
@@ -1016,18 +1127,15 @@
             }
         }
 
-        // Arama kutusuna yazı yazıldığında (gerçek zamanlı) filtrelemeyi tetikleyen olay dinleyicisi (index18'den eklendi)
         document.getElementById('searchBar').addEventListener('input', applyFilters);
 
         window.addEventListener('DOMContentLoaded', () => {
             fetchProjects();
             
-            // Önce hafızada kayıtlı bir sütun sayısı var mı diye bakıyoruz
             const savedCols = localStorage.getItem('ak_grid_cols');
             if (savedCols) {
                 gridCols = parseInt(savedCols, 10);
             } else {
-                // Eğer hafızada yoksa cihaz genişliğine göre varsayılanı ata
                 gridCols = window.innerWidth < 768 ? 1 : 3;
             }
             
