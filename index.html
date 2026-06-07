@@ -958,20 +958,28 @@
             });
         }
 
-        let currentSizeLevel = 0; 
-        function changeFontSize(action) {
-            if (action === 0) {
-                currentSizeLevel = 0;
-            } else {
-                currentSizeLevel += action;
-                if (currentSizeLevel < -4) currentSizeLevel = -4; 
-                if (currentSizeLevel > 3) currentSizeLevel = 3;
-            }
-            
-            let newFontSize = (100 + (currentSizeLevel * 10)) + "%"; 
-            
-            document.documentElement.style.fontSize = newFontSize;
-        }
+        let currentSizeLevel = parseInt(localStorage.getItem('ak_font_size_level')) || 0;
+
+function applyFontSize() {
+    if (currentSizeLevel < -4) currentSizeLevel = -4;
+    if (currentSizeLevel > 3) currentSizeLevel = 3;
+
+    const newFontSize = (100 + (currentSizeLevel * 10)) + "%";
+    document.documentElement.style.fontSize = newFontSize;
+}
+
+function changeFontSize(action) {
+    if (action === 0) {
+        currentSizeLevel = 0;
+    } else {
+        currentSizeLevel += action;
+        if (currentSizeLevel < -4) currentSizeLevel = -4;
+        if (currentSizeLevel > 3) currentSizeLevel = 3;
+    }
+
+    localStorage.setItem('ak_font_size_level', currentSizeLevel);
+    applyFontSize();
+}
 
         function changeGridCols(action) {
             gridCols += action;
@@ -1307,6 +1315,7 @@
         document.getElementById('searchBar').addEventListener('input', applyFilters);
 
         window.addEventListener('DOMContentLoaded', () => {
+		    applyFontSize();
             fetchProjects();
             
             const savedCols = localStorage.getItem('ak_grid_cols');
