@@ -74,56 +74,6 @@
     "aciklama": "E-Okul'dan aldığınız fotoğraflı öğrenci listelerini saniyeler içinde fotoğraflı, düzenli ve not alabileceğiniz şık çizelgelere dönüştürün. Böylece öğrenciler hakkındaki kişisel notlarınızı kolayca alabileceğiniz bir not deftererine sahip olursunuz. Tüm bilgiler sizin cihazınızda tutulur."
   },
   {
-    "id": "portrenot30",
-    "grupId": "portrenot",
-    "surumTipi": "Beta",
-    "adi": "Portre Not v2.0 Beta",
-    "url": "https://portrenot.netlify.app/20/",
-    "kategori": "E-Okul",
-    "ikon": "📋",
-    "aciklama": "E-Okul'dan aldığınız fotoğraflı öğrenci listelerini saniyeler içinde fotoğraflı, düzenli ve not alabileceğiniz şık çizelgelere dönüştürün. Böylece öğrenciler hakkındaki kişisel notlarınızı kolayca alabileceğiniz bir not deftererine sahip olursunuz. Tüm bilgiler sizin cihazınızda tutulur."
-  },
-  {
-    "id": "portrenot40",
-    "grupId": "portrenot",
-    "surumTipi": "Beta",
-    "adi": "Portre Not v2.0 Beta",
-    "url": "https://portrenot.netlify.app/20/",
-    "kategori": "E-Okul",
-    "ikon": "📋",
-    "aciklama": "E-Okul'dan aldığınız fotoğraflı öğrenci listelerini saniyeler içinde fotoğraflı, düzenli ve not alabileceğiniz şık çizelgelere dönüştürün. Böylece öğrenciler hakkındaki kişisel notlarınızı kolayca alabileceğiniz bir not deftererine sahip olursunuz. Tüm bilgiler sizin cihazınızda tutulur."
-  },
-  {
-    "id": "portrenot50",
-    "grupId": "portrenot",
-    "surumTipi": "Beta",
-    "adi": "Portre Not v2.0 Beta",
-    "url": "https://portrenot.netlify.app/20/",
-    "kategori": "E-Okul",
-    "ikon": "📋",
-    "aciklama": "E-Okul'dan aldığınız fotoğraflı öğrenci listelerini saniyeler içinde fotoğraflı, düzenli ve not alabileceğiniz şık çizelgelere dönüştürün. Böylece öğrenciler hakkındaki kişisel notlarınızı kolayca alabileceğiniz bir not deftererine sahip olursunuz. Tüm bilgiler sizin cihazınızda tutulur."
-  },
-  {
-    "id": "portrenot60",
-    "grupId": "portrenot",
-    "surumTipi": "Beta",
-    "adi": "Portre Not v2.0 Beta",
-    "url": "https://portrenot.netlify.app/20/",
-    "kategori": "E-Okul",
-    "ikon": "📋",
-    "aciklama": "E-Okul'dan aldığınız fotoğraflı öğrenci listelerini saniyeler içinde fotoğraflı, düzenli ve not alabileceğiniz şık çizelgelere dönüştürün. Böylece öğrenciler hakkındaki kişisel notlarınızı kolayca alabileceğiniz bir not deftererine sahip olursunuz. Tüm bilgiler sizin cihazınızda tutulur."
-  },
-  {
-    "id": "portrenot700",
-    "grupId": "portrenot",
-    "surumTipi": "Beta",
-    "adi": "Portre Not v2.0 Beta",
-    "url": "https://portrenot.netlify.app/20/",
-    "kategori": "E-Okul",
-    "ikon": "📋",
-    "aciklama": "E-Okul'dan aldığınız fotoğraflı öğrenci listelerini saniyeler içinde fotoğraflı, düzenli ve not alabileceğiniz şık çizelgelere dönüştürün. Böylece öğrenciler hakkındaki kişisel notlarınızı kolayca alabileceğiniz bir not deftererine sahip olursunuz. Tüm bilgiler sizin cihazınızda tutulur."
-  },
-  {
     "id": "gezin",
     "grupId": "gezin",
     "surumTipi": "Onerilen",
