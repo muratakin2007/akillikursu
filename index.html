@@ -1299,6 +1299,7 @@ function changeFontSize(action) {
                 const linkChoiceModal = document.getElementById('linkChoiceModal');
                 const versionModal = document.getElementById('versionModal');
                 const aboutModal = document.getElementById('aboutModal');
+				const privacyModal = document.getElementById('privacyModal');
                 const dropdown = document.getElementById('mobileMenuDropdown');
 
                 if (!shareModal.classList.contains('opacity-0')) {
@@ -1309,6 +1310,8 @@ function changeFontSize(action) {
                     closeVersionModal();
                 } else if (!aboutModal.classList.contains('opacity-0')) {
                     toggleAboutModal(false);
+                } else if (!privacyModal.classList.contains('opacity-0')) { // Yeni eklenen
+                    togglePrivacyModal(false);
                 }
                 
                 if (!dropdown.classList.contains('hidden')) {
@@ -1379,7 +1382,21 @@ function changeFontSize(action) {
             }
             
             applyGridCols();
-        });  
+        }); 
+		function togglePrivacyModal(show) {
+    const modal = document.getElementById('privacyModal');
+    const inner = modal.querySelector('div');
+    if (show) {
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+        inner.classList.remove('scale-95');
+        inner.classList.add('scale-100');
+        setTimeout(() => modal.querySelector('button').focus(), 100);
+    } else {
+        modal.classList.add('opacity-0', 'pointer-events-none');
+        inner.classList.remove('scale-100');
+        inner.classList.add('scale-95');
+    }
+}
     </script>
 </body>
 </html>
