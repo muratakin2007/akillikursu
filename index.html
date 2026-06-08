@@ -437,6 +437,56 @@
         <span id="toastMessage">Bağlantı başarıyla kopyalandı!</span>
     </div>
 
+    <!-- Gizlilik Politikası & KVKK Modalı -->
+<div id="privacyModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300" role="dialog" aria-modal="true" aria-labelledby="privacyModalTitle">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 w-full max-w-2xl rounded-3xl p-6 md:p-8 shadow-2xl scale-95 transition-transform duration-300 relative max-h-[85vh] flex flex-col">
+        
+        <!-- Kapatma Butonu -->
+        <button onclick="togglePrivacyModal(false)" class="absolute top-5 right-5 p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors z-10" aria-label="Kapat">
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+        
+        <!-- Başlık Bölümü -->
+        <div class="text-center mb-5 flex-shrink-0">
+            <span class="inline-flex items-center justify-center w-12 h-12 text-2xl bg-slate-50 dark:bg-slate-950 rounded-2xl shadow-sm border border-slate-200/40 dark:border-slate-800/60 mb-2 select-none">🛡️</span>
+            <h3 id="privacyModalTitle" class="text-lg md:text-xl font-bold text-slate-900 dark:text-slate-400 uppercase tracking-wide px-6">AKILLI KÜRSÜ GİZLİLİK POLİTİKASI VE KVKK AYDINLATMA METNİ</h3>
+        </div>
+        
+        <!-- Kaydırılabilir İçerik Alanı (no-scrollbar sınıfınla uyumlu) -->
+        <div class="flex-grow overflow-y-auto no-scrollbar space-y-4 text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed pr-1 text-left font-medium">
+            
+            <div>
+                <h4 class="font-bold text-slate-900 dark:text-slate-300 mb-1">1. Veri Sorumlusu</h4>
+                <p>Bu gizlilik politikası, akillikursu.netlify.app alan adlı web portalı (Akıllı Kürsü) üzerinden sunulan eğitimsel ve idari dijital araçların kullanımına ilişkin veri işleme ilkelerini belirlemektedir.</p>
+            </div>
+            
+            <div>
+                <h4 class="font-bold text-slate-900 dark:text-slate-300 mb-1">2. Veri İşleme İlkeleri ve Mutlak Gizlilik</h4>
+                <p class="mb-2">Akıllı Kürsü, öğretmenlerin ve eğitimcilerin iş süreçlerini kolaylaştırmak amacıyla tamamen sunucu bağımsız (client-side) mimariyle tasarlanmıştır.</p>
+                <p class="mb-2">Sitede yer alan hiçbir dijital araç (belge düzenleyiciler, liste yönetim araçları vb.) işlediğiniz verileri, yüklediğiniz dokümanları veya oluşturduğunuz listeleri harici bir sunucuya (server) göndermez.</p>
+                <p>Tüm veri işleme, dönüştürme ve hesaplama işlemleri doğrudan kullanıcının kendi cihazında (tarayıcı üzerinde) gerçekleşir. Akıllı Kürsü bünyesinde kullanıcı verilerinin toplandığı, işlendiği veya saklandığı herhangi bir veri tabanı bulunmamaktadır.</p>
+            </div>
+            
+            <div>
+                <h4 class="font-bold text-slate-900 dark:text-slate-300 mb-1">3. Üçüncü Taraf Entegrasyonları ve Bulut İşlemleri</h4>
+                <p>Uzak sunucu bağlantısı veya depolama gerektiren istisnai araçlarda, işlemler yalnızca kullanıcının kendi rızasıyla yetkilendireceği, kendisine ait kişisel bulut hesapları (Google Drive vb.) üzerinden yürütülür. Bu süreçte bulut hesabınıza ait erişim yetkileri veya token bilgileri hiçbir şekilde Akıllı Kürsü tarafından kaydedilmez ve üçüncü taraflarla paylaşılmaz.</p>
+            </div>
+            
+            <div>
+                <h4 class="font-bold text-slate-900 dark:text-slate-300 mb-1">4. Çerezler (Cookies)</h4>
+                <p>Akıllı Kürsü, platformun temel işlevselliğini (örneğin favorilere ekleme veya kullanıcı tercihlerini hatırlama) optimize etmek amacıyla yalnızca tarayıcınızın yerel depolama birimlerini (Local Storage) kullanabilir. Reklam veya pazarlama amaçlı takip çerezleri kullanılmamaktadır.</p>
+            </div>
+            
+            <div>
+                <h4 class="font-bold text-slate-900 dark:text-slate-300 mb-1">5. İptal, İade ve Destek Politikası</h4>
+                <p>Akıllı Kürsü platformunda sunulan tüm araçlar ve hizmetler tamamen ücretsizdir. Platform üzerinde yer alan "Destek Ol" veya "Bir Kahve Ismarla" benzeri alanlar üzerinden yapılan tüm ödemeler, kullanıcıların tamamen kendi rızalarıyla harcanan emeği takdir etmek amacıyla yaptıkları gönüllü bağış/teberru niteliğindedir. Ticari bir ürün veya hizmet satışı söz konusu olmadığından, yapılan gönüllü desteklerin iptali veya iadesi mümkün değildir.</p>
+            </div>
+            
+        </div>
+        
+    </div>
+</div>
+	
     <div id="aboutModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
         <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 w-full max-w-lg rounded-3xl p-8 shadow-2xl scale-95 transition-transform duration-300 relative max-h-[90vh] overflow-y-auto">
             <button onclick="toggleAboutModal(false)" class="absolute top-5 right-5 p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors" aria-label="Kapat">
@@ -471,7 +521,11 @@
     </div>
 
     <footer class="bg-white dark:bg-slate-900 border-t border-slate-200/80 dark:border-slate-800/80 py-8 text-center text-sm text-slate-400 dark:text-slate-500 transition-colors duration-300">
-        <p>&copy; 2026 Akıllı Kürsü. Tüm hakları saklıdır.</p>
+    <p>&copy; 2026 Akıllı Kürsü. Tüm hakları saklıdır.</p>
+    <!-- Gizlilik Politikası Linki -->
+    <button onclick="togglePrivacyModal(true)" class="mt-2 text-xs font-semibold text-slate-400 hover:text-blue-500 dark:text-slate-500 dark:hover:text-blue-400 transition-colors focus:outline-none touch-manipulation">
+        Gizlilik Politikası & KVKK Aydınlatma Metni
+    </button>
     </footer>
 
     <script>
