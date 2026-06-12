@@ -679,10 +679,11 @@
                     
                     const isSubVersion = (targetMainProject.id !== targetSpecificVersion.id || targetMainProject.adi !== targetSpecificVersion.adi);
                     if (isSubVersion) {
-                        setTimeout(() => {
-                            openVersionModal(targetMainProject.grupId || targetMainProject.id, targetMainProject.ikon);
-                        }, 600); 
-                    }
+                     setTimeout(() => {
+                     // targetSpecificVersion.adi parametresini vurgulama için fonksiyona gönderiyoruz
+                    openVersionModal(targetMainProject.grupId || targetMainProject.id, targetMainProject.ikon, targetSpecificVersion.adi);
+                      }, 600); 
+                      }
 
                     setTimeout(() => {
                         targetCard.classList.remove('ring-4', 'ring-blue-500', 'scale-[1.03]');
@@ -1215,66 +1216,90 @@ function changeFontSize(action) {
             }, 2000);
         }
 
-        function openVersionModal(grupId, icon) {
-            // Sonrasında geri çağırabilmek için bilgileri sakla
-            lastVersionGrupId = grupId;
-            lastVersionIcon = icon;
+        function openVersionModal(grupId, icon, highlightVersionName = null) {
+    // Sonrasında geri çağırabilmek için bilgileri sakla
+    lastVersionGrupId = grupId;
+    lastVersionIcon = icon;
 
-            const projectGroup = allProjects.find(p => (p.grupId || p.id) === grupId);
-            if(!projectGroup) return;
+    const projectGroup = allProjects.find(p => (p.grupId || p.id) === grupId);
+    if(!projectGroup) return;
 
-            const modal = document.getElementById('versionModal');
-            const container = document.getElementById('versionListContainer');
-            
-            const baseName = projectGroup.adi.split(' v')[0];
-            document.getElementById('versionModalTitle').textContent = baseName;
-            document.getElementById('versionModalIcon').textContent = icon || '🚀';
+    const modal = document.getElementById('versionModal');
+    const container = document.getElementById('versionListContainer');
+    
+    const baseName = projectGroup.adi.split(' v')[0];
+    document.getElementById('versionModalTitle').textContent = baseName;
+    document.getElementById('versionModalIcon').textContent = icon || '🚀';
 
-            container.innerHTML = projectGroup.tumSurumler.map(v => {
-                let badgeConfig = { class: 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400', label: '⚪ Diğer' };
-                
-                switch(v.surumTipi) {
-                    case 'Onerilen': badgeConfig = { class: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400', label: '🟢 Önerilen' }; break;
-                    case 'LTS': badgeConfig = { class: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-400', label: '🔵 LTS' }; break;
-                    case 'Klasik': badgeConfig = { class: 'bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-300', label: '⚪ Klasik' }; break;
-                    case 'Beta': badgeConfig = { class: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400', label: '🟡 Beta' }; break;
-                    case 'Arsiv': badgeConfig = { class: 'bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-400', label: '🔴 Arşiv' }; break;
-                }
-
-                const safeName = v.adi.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-                const safeDesc = v.aciklama ? v.aciklama.replace(/'/g, "\\'").replace(/"/g, '&quot;') : '';
-                const safeIcon = (v.ikon || icon || '🚀').replace(/'/g, "\\'");
-
-                return `
-                    <div class="flex items-center justify-between p-4 rounded-2xl border border-slate-200/60 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 hover:border-blue-300 dark:hover:border-slate-600 transition-colors group gap-3">
-                        <div class="flex flex-col gap-1.5 min-w-0">
-                            <span class="font-bold text-sm text-slate-800 dark:text-slate-300 truncate">${v.adi}</span>
-                            <div class="flex items-center">
-                                <span class="px-2 py-0.5 rounded-lg text-[10px] font-black tracking-wide uppercase ${badgeConfig.class}">
-                                    ${badgeConfig.label}
-                                </span>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-2 flex-shrink-0">
-                            <button onclick="openShareMenu('${safeName}', '${safeDesc}', '${v.url}', '${safeIcon}')" class="flex-shrink-0 p-2.5 bg-white border border-slate-200 hover:bg-slate-100 dark:bg-slate-800 dark:border-slate-700 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 rounded-xl transition-all shadow-sm active:scale-95" aria-label="Paylaş" title="Paylaş">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
-                                </svg>
-                            </button>
-                            <a href="${v.url}" target="_blank" onclick="trackRecent('${v.adi.replace(/'/g, "\\'")}')" class="flex-shrink-0 px-4 py-2.5 bg-white hover:bg-blue-600 border border-slate-200 dark:border-slate-700 text-slate-700 hover:text-white dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-blue-600 dark:hover:text-white rounded-xl text-sm font-bold transition-all shadow-sm active:scale-95">
-                                Aç
-                            </a>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-
-            const inner = modal.querySelector('div');
-            modal.classList.remove('opacity-0', 'pointer-events-none');
-            inner.classList.remove('scale-95');
-            inner.classList.add('scale-100');
+    container.innerHTML = projectGroup.tumSurumler.map(v => {
+        let badgeConfig = { class: 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400', label: '⚪ Diğer' };
+        
+        switch(v.surumTipi) {
+            case 'Onerilen': badgeConfig = { class: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400', label: '🟢 Önerilen' }; break;
+            case 'LTS': badgeConfig = { class: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-400', label: '🔵 LTS' }; break;
+            case 'Klasik': badgeConfig = { class: 'bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-300', label: '⚪ Klasik' }; break;
+            case 'Beta': badgeConfig = { class: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400', label: '🟡 Beta' }; break;
+            case 'Arsiv': badgeConfig = { class: 'bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-400', label: '🔴 Arşiv' }; break;
         }
 
+        const safeName = v.adi.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+        const safeDesc = v.aciklama ? v.aciklama.replace(/'/g, "\\'").replace(/"/g, '&quot;') : '';
+        const safeIcon = (v.ikon || icon || '🚀').replace(/'/g, "\\'");
+
+        // Vurgu mantığı
+        const isHighlighted = highlightVersionName && (normalizeText(v.adi) === normalizeText(highlightVersionName));
+        const baseClasses = "flex items-center justify-between p-4 rounded-2xl transition-all duration-500 group gap-3";
+        const normalClasses = "border border-slate-200/60 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 hover:border-blue-300 dark:hover:border-slate-600";
+        const highlightClasses = "ring-2 ring-blue-500 bg-blue-50 dark:bg-blue-900/30 scale-[1.02] shadow-md z-10 relative";
+        
+        const applyClass = isHighlighted ? `${baseClasses} ${highlightClasses}` : `${baseClasses} ${normalClasses}`;
+
+        return `
+            <div id="version-row-${normalizeText(v.adi)}" class="${applyClass}">
+                <div class="flex flex-col gap-1.5 min-w-0">
+                    <span class="font-bold text-sm text-slate-800 dark:text-slate-300 truncate">${v.adi}</span>
+                    <div class="flex items-center">
+                        <span class="px-2 py-0.5 rounded-lg text-[10px] font-black tracking-wide uppercase ${badgeConfig.class}">
+                            ${badgeConfig.label}
+                        </span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 flex-shrink-0">
+                    <button onclick="openShareMenu('${safeName}', '${safeDesc}', '${v.url}', '${safeIcon}')" class="flex-shrink-0 p-2.5 bg-white border border-slate-200 hover:bg-slate-100 dark:bg-slate-800 dark:border-slate-700 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 rounded-xl transition-all shadow-sm active:scale-95" aria-label="Paylaş" title="Paylaş">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                        </svg>
+                    </button>
+                    <a href="${v.url}" target="_blank" onclick="trackRecent('${v.adi.replace(/'/g, "\\'")}')" class="flex-shrink-0 px-4 py-2.5 bg-white hover:bg-blue-600 border border-slate-200 dark:border-slate-700 text-slate-700 hover:text-white dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-blue-600 dark:hover:text-white rounded-xl text-sm font-bold transition-all shadow-sm active:scale-95">
+                        Aç
+                    </a>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    const inner = modal.querySelector('div');
+    modal.classList.remove('opacity-0', 'pointer-events-none');
+    inner.classList.remove('scale-95');
+    inner.classList.add('scale-100');
+
+    // Vurgulanan bir satır varsa modal açıldıktan sonra efekti yönet
+    if (highlightVersionName) {
+        setTimeout(() => {
+            const targetRow = document.getElementById(`version-row-${normalizeText(highlightVersionName)}`);
+            if (targetRow) {
+                // Görüş alanında değilse kaydır
+                targetRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
+                // 3.5 saniye sonra vurgu class'larını kaldırıp, normal class'ları geri yükle
+                setTimeout(() => {
+                    targetRow.classList.remove('ring-2', 'ring-blue-500', 'bg-blue-50', 'dark:bg-blue-900/30', 'scale-[1.02]', 'shadow-md', 'z-10', 'relative');
+                    targetRow.classList.add('border', 'border-slate-200/60', 'dark:border-slate-800', 'bg-slate-50', 'dark:bg-slate-900/50', 'hover:border-blue-300', 'dark:hover:border-slate-600');
+                }, 3500); 
+            }
+        }, 300); // Modal açılma animasyonunun (300ms) bitmesini bekle
+    }
+}
         function closeVersionModal() {
             const modal = document.getElementById('versionModal');
             const inner = modal.querySelector('div');
