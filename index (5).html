@@ -1,0 +1,1552 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Akıllı Kürsü - Dijital Ücretsiz Eğitim Araçları Merkezi</title>
+    
+    <meta name="description" content="Öğretmenlerin günlük işlerini otomatikleştiren, sınıf yönetimini pratikleştiren ücretsiz yeni nesil web uygulamaları.">
+    <meta property="og:title" content="Akıllı Kürsü - Sınıflar İçin Akıllı Çözümler">
+    <meta property="og:description" content="Öğretmenlerin günlük işlerini otomatikleştiren ücretsiz eğitim araçları platformu.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://akillikursu.netlify.app/">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        // Madde 1: Tema ayarı kontrolü düzeltildi (Düz metin saklama/okuma mantığı).
+        try {
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        } catch(e) {
+            console.error("Tema ayarı okunamadı", e);
+        }
+    </script>
+
+    <style>
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes starPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.35) rotate(12deg); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes starUnpop {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.8) rotate(-8deg); }
+            100% { transform: scale(1); }
+        }
+
+        .animate-star-active {
+            animation: starPop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .animate-star-inactive {
+            animation: starUnpop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .project-card:hover,
+        .project-card:active {
+            z-index: 20;
+            transform: scale(1.02);
+            border-color: #60a5fa;
+            box-shadow: 0 0 40px -10px rgba(59, 130, 246, 0.3);
+            background-image: linear-gradient(to bottom right, #ffffff, rgba(239, 246, 255, 0.5));
+        }
+        
+        .dark .project-card:hover,
+        .dark .project-card:active {
+            border-color: #3b82f6;
+            box-shadow: 0 0 40px -10px rgba(59, 130, 246, 0.2);
+            background-image: linear-gradient(to bottom right, #0f172a, rgba(30, 41, 59, 0.8));
+        }
+
+        .project-card:active, .cat-btn:active, .go-app-btn:active, .share-btn:active, .size-btn:active {
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+            transform: scale(0.99) !important;
+        }
+
+        .project-card:hover h3,
+        .project-card:active h3 {
+            color: #3b82f6;
+        }
+
+        .dark .project-card:hover h3,
+        .dark .project-card:active h3 {
+            color: #60a5fa;
+        }
+
+        .project-card:hover .project-icon,
+        .project-card:active .project-icon {
+            background-color: #eff6ff;
+        }
+
+        .dark .project-card:hover .project-icon,
+        .dark .project-card:active .project-icon {
+            background-color: rgba(30, 58, 138, 0.5);
+        }
+
+        .project-card:hover .go-app-btn svg,
+        .project-card:active .go-app-btn svg {
+            transform: translateX(4px) translateY(-4px);
+        }
+
+        .share-btn {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .share-btn:hover {
+            transform: scale(1.01);
+            color: #2563eb;
+            border-color: #93c5fd;
+            background-color: #f0f7ff;
+        }
+        .dark .share-btn:hover {
+            color: #60a5fa;
+            border-color: #2563eb;
+            background-color: rgba(30, 58, 138, 0.2);
+        }
+        .share-btn:hover svg {
+            transform: rotate(-12deg) scale(1.08);
+        }
+        .share-btn svg {
+            transition: transform 0.2s ease;
+        }
+
+        .ribbon-wrapper {
+            width: 95px;
+            height: 95px;
+            overflow: hidden;
+            position: absolute;
+            top: -1px;
+            right: -1px;
+            z-index: 10;
+        }
+        .ribbon {
+            font-weight: 800;
+            font-size: 10px;
+            text-align: center;
+            letter-spacing: 0.5px;
+            transform: rotate(45deg);
+            position: relative;
+            padding: 5px 0;
+            left: -5px;
+            top: 17px;
+            width: 140px;
+            background-color: #10b981;
+            color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        html {
+            transition: font-size 0.2s ease;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-400 min-h-screen flex flex-col antialiased transition-colors duration-300">
+
+    <div class="absolute top-0 left-0 w-full h-[600px] pointer-events-none overflow-hidden z-0 opacity-70 dark:opacity-40" aria-hidden="true">
+        <div class="absolute -top-[200px] left-1/4 w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-blue-400/20 dark:bg-blue-600/10 rounded-full filter blur-[100px]"></div>
+        <div class="absolute -top-[160px] right-1/4 w-[350px] md:w-[500px] h-[350px] md:h-[500px] bg-indigo-400/20 dark:bg-indigo-600/10 rounded-full filter blur-[100px]"></div>
+    </div>
+
+    <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 transition-colors duration-300">
+        <div class="w-full px-4 sm:px-8 lg:px-12 2xl:px-24 mx-auto h-20 flex items-center justify-between gap-4 relative">
+            
+            <div class="flex items-center space-x-2 flex-shrink-0">
+                <button id="aboutModalBtn" class="inline-flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-sm md:text-base font-medium transition-all text-slate-600 dark:text-slate-400 active:scale-95 touch-manipulation" aria-haspopup="dialog" aria-expanded="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span class="hidden sm:inline">Hakkında</span>
+                </button>
+
+                <div class="hidden md:inline-flex items-center p-1 bg-slate-100 dark:bg-slate-800 rounded-xl border border-slate-200/40 dark:border-slate-700/40 select-none">
+                    <button data-action="font-size" data-val="-1" class="size-btn px-2.5 py-1 text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-900 rounded-lg transition-all touch-manipulation" title="Yazıları Küçült">A-</button>
+                    <button data-action="font-size" data-val="0" class="size-btn px-2.5 py-1 text-xs font-extrabold text-blue-600 dark:text-blue-400 hover:bg-white dark:hover:bg-slate-900 rounded-lg transition-all touch-manipulation" title="Boyutu Sıfırla">A</button>
+                    <button data-action="font-size" data-val="1" class="size-btn px-2.5 py-1 text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-900 rounded-lg transition-all touch-manipulation" title="Yazıları Büyüt">A+</button>
+                </div>
+            </div>
+
+           <div class="flex items-center space-x-3 select-none absolute left-1/2 -translate-x-1/2">
+                <span class="text-lg md:text-2xl font-extrabold tracking-tight bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-400 dark:via-indigo-400 dark:to-purple-400 bg-clip-text text-transparent whitespace-nowrap">
+                    Akıllı Kürsü
+                </span>
+            </div>
+               
+            <div class="flex items-center space-x-2 flex-shrink-0">
+                <button id="themeBtn" class="hidden md:block p-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 transition-all active:scale-95 touch-manipulation" aria-label="Tema Değiştir">
+                    <svg class="h-5 w-5 hidden dark:block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.364l-.707.707M12 5a7 7 0 100 14 7 7 0 000-14z" /></svg>
+                    <svg class="h-5 w-5 block dark:hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+                </button>
+
+                <div class="relative">
+                    <button id="mobileMenuBtn" class="p-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 transition-all active:scale-95 touch-manipulation" aria-label="Menüyü Aç" aria-expanded="false" aria-haspopup="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                    
+                    <div id="mobileMenuDropdown" class="hidden absolute right-0 mt-2 w-64 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl py-3 z-50 animate-fadeIn text-base">
+                        <button id="mobileThemeBtn" class="w-full flex items-center space-x-3 px-4 py-4 hover:bg-slate-50 dark:hover:bg-slate-800/60 text-slate-700 dark:text-slate-400 font-medium">
+                            <span class="dark:hidden flex items-center space-x-3 w-full">
+                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+                                <span>Karanlık Mod</span>
+                            </span>
+                            <span class="hidden dark:flex items-center space-x-3 w-full">
+                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.364l-.707.707M12 5a7 7 0 100 14 7 7 0 000-14z" /></svg>
+                                <span>Aydınlık Mod</span>
+                            </span>
+                        </button>
+                        <hr class="border-slate-100 dark:border-slate-800 my-2">
+                        <div class="px-4 py-3 text-sm font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Yazı Boyutu</div>
+                        <div class="flex items-center justify-between px-3 pb-2">
+                            <button data-action="font-size" data-val="-1" class="px-3 py-2.5 font-bold text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg flex-1 text-center mx-1">A-</button>
+                            <button data-action="font-size" data-val="0" class="px-3 py-2.5 font-extrabold text-blue-600 dark:text-blue-400 bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg flex-1 text-center mx-1">A</button>
+                            <button data-action="font-size" data-val="1" class="px-3 py-2.5 font-bold text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg flex-1 text-center mx-1">A+</button>
+                        </div>
+
+                        <hr class="border-slate-100 dark:border-slate-800 my-2">
+                        <div class="px-4 py-3 text-sm font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Sütun Sayısı</div>
+                        <div class="flex items-center justify-between px-3 pb-2">
+                            <button data-action="grid-cols" data-val="-1" class="px-3 py-2.5 font-bold text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg flex-1 text-center mx-1">-</button>
+                            <span class="grid-col-count-disp px-3 py-2.5 font-extrabold text-blue-600 dark:text-blue-400 flex-1 text-center flex items-center justify-center">3</span>
+                            <button data-action="grid-cols" data-val="1" class="px-3 py-2.5 font-bold text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg flex-1 text-center mx-1">+</button>
+                        </div>
+
+                        <hr class="border-slate-100 dark:border-slate-800 my-2">
+                        <button id="mobileAboutBtn" class="w-full flex items-center space-x-3 px-4 py-4 hover:bg-slate-50 dark:hover:bg-slate-800/60 text-slate-700 dark:text-slate-400 font-medium">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            <span>Hakkında</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </header>
+
+    <main class="w-full px-4 sm:px-8 lg:px-12 2xl:px-24 mx-auto py-12 md:py-20 flex-grow z-10">
+        
+        <div class="text-center mb-12 md:mb-16">
+            <span id="totalAppsBadge" class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 text-sm font-semibold mb-5 border border-blue-200/50 dark:border-blue-800/30">
+                <span>🚀 Uygulamalar yükleniyor...</span>
+            </span>
+            <h2 class="text-4xl md:text-6xl font-black text-slate-900 dark:text-slate-400 tracking-tight mb-5 max-w-4xl mx-auto leading-tight">
+                Sınıflar İçin <br class="hidden sm:inline"><span class="bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 bg-clip-text text-transparent">Akıllı Çözümler</span>
+            </h2>
+            <p class="text-base md:text-xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto px-2 font-medium">
+                Öğretmenlerin günlük işlerini kolaylaştıran, sınıf yönetimini pratikleştiren ve okul bilişim süreçlerini hızlandıran %100 güvenli, ücretsiz web araçları. Tüm işlemler doğrudan kendi cihazınızda gerçekleşir ve hiçbir veriniz toplanmaz. Sunucu tabanlı işlemler ise yalnızca sizin belirleyeceğiniz, kendinize ait kişisel bulut hesabınız üzerinden yürütülür.
+            </p>
+        </div>
+
+        <div class="bg-white/80 dark:bg-slate-900/60 backdrop-blur-md p-5 md:p-8 rounded-3xl shadow-xl shadow-slate-200/40 dark:shadow-none border border-slate-200/60 dark:border-slate-800/60 mb-10 md:mb-16 space-y-5 md:space-y-6 max-w-5xl mx-auto">
+            
+            <div class="relative max-w-2xl mx-auto w-full group">
+                <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+                <input 
+                    type="text" 
+                    id="searchBar" 
+                    inputmode="search"
+                    placeholder="Aramak için yazın... (Kısayol: / veya Ctrl+K)" 
+                    class="w-full pl-14 pr-14 py-4 bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-slate-950 transition-all text-base md:text-lg placeholder-slate-400 dark:placeholder-slate-500 dark:text-slate-400"
+                    aria-label="Uygulamalarda ara"
+                >
+                <button 
+                    id="clearSearchBtn"
+                    class="absolute inset-y-0 right-0 pr-5 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-all opacity-0 pointer-events-none scale-75 z-10"
+                    aria-label="Aramayı Temizle"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 p-0.5 bg-slate-200/60 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 rounded-full" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <div id="searchHelpContainer" class="text-center text-xs text-slate-400 dark:text-slate-500 font-medium transition-all duration-300 opacity-0 -mt-2 h-0 overflow-hidden">
+                Kutuyu temizlemek için <kbd class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 font-sans text-[11px] shadow-sm">Esc</kbd> veya <kbd class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 font-sans text-[11px] shadow-sm">Alt + Backspace</kbd> tuşlarını kullanabilirsiniz.
+            </div>
+
+            <div class="w-full overflow-x-auto no-scrollbar -mx-4 px-4 md:mx-0 md:px-0 snap-x snap-mandatory">
+                <div class="flex flex-nowrap md:flex-wrap md:justify-center gap-3 pb-2" id="categoryContainer">
+                    </div>
+            </div>
+
+            <div id="recentSection" class="hidden border-t border-slate-100 dark:border-slate-800/80 pt-4 max-w-2xl mx-auto w-full">
+                <div class="flex items-center space-x-3 mb-3">
+                    <div class="flex items-center space-x-2 text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>Son Kullanılanlar</span>
+                    </div>
+                    <button id="btnClearRecents" class="text-[11px] font-bold text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 transition-colors flex items-center px-2 py-1 rounded-lg bg-red-50 hover:bg-red-100 dark:bg-red-950/20 dark:hover:bg-red-950/40 border border-red-200/40 dark:border-red-900/40 touch-manipulation">
+                        Tümünü Temizle
+                    </button>
+                </div>
+                <div id="recentContainer" class="flex flex-wrap gap-2.5"></div>
+            </div>
+
+        </div>
+
+        <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8 items-start" aria-live="polite">
+            <div class="col-span-full text-center py-20 text-slate-400 dark:text-slate-600">
+                <svg class="animate-spin h-12 w-12 mx-auto mb-5 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span id="loadingMessage" class="text-base font-medium">Uygulama havuzu yükleniyor...</span>
+            </div>
+        </div>
+
+        <div id="noResults" class="hidden text-center py-20 px-4" aria-live="assertive">
+            <div class="w-20 h-20 bg-slate-100 dark:bg-slate-900 rounded-3xl flex items-center justify-center mx-auto mb-5 text-3xl shadow-inner" aria-hidden="true">🔍</div>
+            <h3 class="text-lg md:text-xl font-bold text-slate-800 dark:text-slate-400">Sonuç Bulunamadı</h3>
+            <p class="text-slate-500 dark:text-slate-400 mt-2 max-w-sm mx-auto text-sm md:text-base mb-5">Farklı anahtar kelimeler aramayı veya kategoriyi değiştirmeyi deneyebilirsiniz.</p>
+            <button id="btnEmptyClearSearch" class="inline-flex items-center space-x-2 px-5 py-2.5 bg-blue-50 hover:bg-blue-100 dark:bg-blue-950/40 dark:hover:bg-blue-900/40 text-blue-600 dark:text-blue-400 border border-blue-200/50 dark:border-blue-800/40 rounded-xl text-sm font-semibold transition-all active:scale-95 touch-manipulation">
+                <span>Aramayı Temizle</span>
+            </button>
+        </div>
+
+    </main>
+
+    <div id="shareModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300" role="dialog" aria-modal="true" aria-labelledby="shareModalTitle">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 w-full max-w-md rounded-3xl p-6 shadow-2xl scale-95 transition-transform duration-300 relative">
+            <button id="btnCloseShareModal" class="absolute top-5 right-5 p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            <div class="text-center mb-6">
+                <h3 id="shareModalTitle" class="text-xl font-bold text-slate-900 dark:text-slate-400 flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+                    Uygulamayı Paylaş
+                </h3>
+                <div id="sharePreview" class="mt-4 p-3 bg-slate-50 dark:bg-slate-950 rounded-2xl border border-slate-200/60 dark:border-slate-800 flex items-center gap-3 text-left">
+                    <span id="sharePreviewIcon" class="text-3xl p-2 bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200/40 dark:border-slate-800/60">🚀</span>
+                    <div>
+                        <h4 id="sharePreviewTitle" class="font-bold text-sm text-slate-900 dark:text-slate-400 truncate max-w-[240px]">Uygulama Adı</h4>
+                        <p id="sharePreviewDesc" class="text-xs text-slate-500 dark:text-slate-400 line-clamp-1 mt-0.5">Uygulama açıklaması buraya gelecek.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-100 dark:bg-slate-800/60 p-1.5 rounded-xl mb-2 flex items-center gap-1 select-none">
+                <button id="btnShareDirect" data-type="direct" class="flex-1 py-2 text-xs font-bold bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 rounded-lg shadow-sm transition-all focus:outline-none">Uygulama Linki</button>
+                <button id="btnSharePortal" data-type="portal" class="flex-1 py-2 text-xs font-bold text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300 transition-all focus:outline-none">Akıllı Kürsü Linki</button>
+            </div>
+            <div class="text-[11px] text-center text-slate-400 dark:text-slate-500 mb-5 truncate px-2" id="currentShareUrlDisplay">https://...</div>
+            
+            <div class="grid grid-cols-3 gap-3 mb-5">
+                <a id="shareWA" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center justify-center p-3 rounded-2xl bg-slate-50 hover:bg-emerald-50 dark:bg-slate-950 dark:hover:bg-emerald-950/30 border border-slate-200/60 dark:border-slate-800 transition-all group">
+                    <svg class="h-6 w-6 text-emerald-500 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397 0 11.948 0c3.179.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.907-11.892 11.907-2.001-.001-3.97-.51-5.733-1.482L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.747 1.451 5.436 0 9.86-4.42 9.864-9.864.002-2.637-1.03-5.114-2.904-6.989-1.873-1.876-4.354-2.907-6.992-2.908-5.441 0-9.866 4.425-9.87 9.867-.002 1.637.454 3.237 1.32 4.633l-.995 3.633 3.734-.979zm11.233-6.273c-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.668.149-.198.297-.766.967-.94 1.164-.173.199-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347z"/></svg>
+                    <span class="text-xs font-bold mt-1.5 text-slate-600 dark:text-slate-400">WhatsApp</span>
+                </a>
+                <a id="shareX" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center justify-center p-3 rounded-2xl bg-slate-50 hover:bg-slate-200 dark:bg-slate-950 dark:hover:bg-slate-800 border border-slate-200/60 dark:border-slate-800 transition-all group">
+                    <svg class="h-6 w-6 text-slate-900 dark:text-slate-400 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    <span class="text-xs font-bold mt-1.5 text-slate-600 dark:text-slate-400">X / Twitter</span>
+                </a>
+                <a id="shareTG" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center justify-center p-3 rounded-2xl bg-slate-50 hover:bg-sky-50 dark:bg-slate-950 dark:hover:bg-sky-950/30 border border-slate-200/60 dark:border-slate-800 transition-all group">
+                    <svg class="h-6 w-6 text-sky-500 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0C5.344 0 0 5.344 0 11.944c0 5.622 3.88 10.331 9.089 11.612.112.022.213-.034.247-.14l.851-3.17c.023-.084-.004-.175-.067-.233l-1.89-1.743c-.08-.073-.09-.196-.023-.282.87-1.118 1.344-2.484 1.344-3.89 0-3.483-2.833-6.317-6.317-6.317s-6.317 2.834-6.317 6.317c0 1.94.885 3.754 2.404 4.939.08.062.112.163.08.258l-.662 2.052c-.035.107.034.219.146.236.196.03.393.045.59.045 1.54 0 2.96-.54 4.09-1.44.062-.05.14-.067.213-.045l3.204.933c.107.03.213-.034.247-.14l.852-3.17c.022-.084-.005-.175-.068-.233L10.3 14.832c-.08-.073-.09-.196-.023-.282.87-1.118 1.344-2.484 1.344-3.89 0-3.483-2.833-6.316-6.316-6.316z M23.891 3.535c-.179-.438-.582-.739-1.054-.783l-1.83 19.5c-.053.562.29 1.077.84 1.21.55.132 1.11-.158 1.31-.68l6.75-18c.06-.17.09-.35.09-.53 0-.43-.23-.83-.61-1.04-.49-.27-1.09-.23-1.54.09z"/></svg>
+                    <span class="text-xs font-bold mt-1.5 text-slate-600 dark:text-slate-400">Telegram</span>
+                </a>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 mb-2">
+                <a id="shareFB" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-slate-50 hover:bg-blue-100 dark:bg-slate-950 dark:hover:bg-blue-900/30 border border-slate-200/60 dark:border-slate-800 transition-colors text-xs font-bold text-slate-700 dark:text-slate-400">
+                    <svg class="h-4 w-4 text-blue-600" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                    Facebook
+                </a>
+                <a id="shareLN" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-slate-50 hover:bg-indigo-100 dark:bg-slate-950 dark:hover:bg-indigo-900/30 border border-slate-200/60 dark:border-slate-800 transition-colors text-xs font-bold text-slate-700 dark:text-slate-400">
+                    <svg class="h-4 w-4 text-indigo-600" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                    LinkedIn
+                </a>
+            </div>
+
+            <div class="border-t border-slate-100 dark:border-slate-800 pt-4 mt-4">
+                <button id="btnCopyShare" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-2xl transition-all shadow-md shadow-blue-500/10 touch-manipulation">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+                    <span>Bağlantıyı Kopyala</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="linkChoiceModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300" role="dialog" aria-modal="true" aria-labelledby="linkChoiceModalTitle">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 w-full max-w-sm rounded-3xl p-6 shadow-2xl scale-95 transition-transform duration-300 relative">
+            <button id="btnCloseLinkChoiceModal" class="absolute top-5 right-5 p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            <div class="text-center mb-6">
+                <span id="linkChoiceIcon" class="inline-flex items-center justify-center w-14 h-14 text-3xl bg-slate-50 dark:bg-slate-950 rounded-2xl shadow-sm border border-slate-200/40 dark:border-slate-800/60 mb-3">🚀</span>
+                <h3 id="linkChoiceModalTitle" class="text-xl font-bold text-slate-900 dark:text-slate-400">Paylaşım Bağlantısı</h3>
+                <p class="text-xs text-slate-500 mt-1">Hangi adresi paylaşmak istersiniz?</p>
+            </div>
+            <div class="flex flex-col gap-3">
+                <button data-action="execute-share" data-type="direct" class="w-full flex flex-col items-center justify-center p-4 bg-slate-50 hover:bg-blue-50 dark:bg-slate-950 dark:hover:bg-slate-800 border border-slate-200/60 dark:border-slate-800 hover:border-blue-300 dark:hover:border-slate-600 transition-all rounded-2xl group touch-manipulation">
+                    <span class="font-bold text-slate-800 dark:text-slate-300 group-hover:text-blue-600 dark:group-hover:text-blue-400">Uygulama Linki</span>
+                    <span id="linkChoiceDirectUrl" class="text-[10px] text-slate-500 mt-1 truncate max-w-[250px] w-full px-2 text-center">...</span>
+                </button>
+                <button data-action="execute-share" data-type="portal" class="w-full flex flex-col items-center justify-center p-4 bg-slate-50 hover:bg-indigo-50 dark:bg-slate-950 dark:hover:bg-slate-800 border border-slate-200/60 dark:border-slate-800 hover:border-indigo-300 dark:hover:border-slate-600 transition-all rounded-2xl group touch-manipulation">
+                    <span class="font-bold text-slate-800 dark:text-slate-300 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">Akıllı Kürsü Linki</span>
+                    <span id="linkChoicePortalUrl" class="text-[10px] text-slate-500 mt-1 truncate max-w-[250px] w-full px-2 text-center">...</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="versionModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300" role="dialog" aria-modal="true" aria-labelledby="versionModalTitle">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 w-full max-w-md rounded-3xl p-6 shadow-2xl scale-95 transition-transform duration-300 relative max-h-[85vh] flex flex-col">
+            
+            <button id="btnCloseVersionModal" class="absolute top-5 right-5 p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors z-10">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            
+            <div class="text-center mb-5 flex-shrink-0">
+                <span id="versionModalIcon" class="inline-flex items-center justify-center w-14 h-14 text-3xl bg-slate-50 dark:bg-slate-950 rounded-2xl shadow-sm border border-slate-200/40 dark:border-slate-800/60 mb-3">🚀</span>
+                <h3 id="versionModalTitle" class="text-xl font-bold text-slate-900 dark:text-slate-400">Sürüm Geçmişi</h3>
+                <p class="text-xs text-slate-500 mt-1">Bu uygulamanın tüm yayınlanmış sürümleri</p>
+            </div>
+            
+            <div id="versionListContainer" class="flex-grow overflow-y-auto no-scrollbar space-y-3 pb-2 px-2 -mx-2 pt-2 -mt-2">
+            </div>
+            
+        </div>
+    </div>
+
+    <div id="toastAlert" class="fixed top-24 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-white dark:bg-white dark:text-slate-900 px-4 py-2.5 rounded-full shadow-xl text-xs md:text-sm font-bold opacity-0 scale-90 pointer-events-none transition-all duration-300 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+        <span id="toastMessage">Bağlantı başarıyla kopyalandı!</span>
+    </div>
+
+    <div id="privacyModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300" role="dialog" aria-modal="true" aria-labelledby="privacyModalTitle">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 w-full max-w-2xl rounded-3xl p-6 md:p-8 shadow-2xl scale-95 transition-transform duration-300 relative max-h-[85vh] flex flex-col">
+            
+            <button id="btnClosePrivacyModal" class="absolute top-5 right-5 p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors z-10" aria-label="Kapat">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            
+            <div class="text-center mb-5 flex-shrink-0">
+                <span class="inline-flex items-center justify-center w-12 h-12 text-2xl bg-slate-50 dark:bg-slate-950 rounded-2xl shadow-sm border border-slate-200/40 dark:border-slate-800/60 mb-2 select-none">🛡️</span>
+                <h3 id="privacyModalTitle" class="text-lg md:text-xl font-bold text-slate-900 dark:text-slate-400 uppercase tracking-wide px-6">AKILLI KÜRSÜ GİZLİLİK POLİTİKASI VE KVKK AYDINLATMA METNİ</h3>
+            </div>
+            
+            <div class="flex-grow overflow-y-auto no-scrollbar space-y-4 text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed pr-1 text-left font-medium">
+                
+                <div>
+                    <h4 class="font-bold text-slate-900 dark:text-slate-300 mb-1">1. Veri Sorumlusu</h4>
+                    <p>Bu gizlilik politikası, Akıllı Kürsü web portalı üzerinden sunulan eğitimsel ve idari dijital araçların kullanımına ilişkin veri işleme ilkelerini belirlemektedir.</p>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-slate-900 dark:text-slate-300 mb-1">2. Veri İşleme İlkeleri ve Mutlak Gizlilik</h4>
+                    <p class="mb-2">Akıllı Kürsü, öğretmenlerin ve eğitimcilerin iş süreçlerini kolaylaştırmak amacıyla tamamen sunucu bağımsız (client-side) mimariyle tasarlanmıştır.</p>
+                    <p class="mb-2">Sitede yer alan hiçbir dijital araç (belge düzenleyiciler, liste yönetim araçları vb.) işlediğiniz verileri, yüklediğiniz dokümanları veya oluşturduğunuz listeleri harici bir sunucuya (server) göndermez.</p>
+                    <p>Tüm veri işleme, dönüştürme ve hesaplama işlemleri doğrudan kullanıcının kendi cihazında (tarayıcı üzerinde) gerçekleşir. Akıllı Kürsü bünyesinde kullanıcı verilerinin toplandığı, işlendiği veya saklandığı herhangi bir veri tabanı bulunmamaktadır.</p>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-slate-900 dark:text-slate-300 mb-1">3. Üçüncü Taraf Entegrasyonları ve Bulut İşlemleri</h4>
+                    <p>Uzak sunucu bağlantısı veya depolama gerektiren istisnai araçlarda, işlemler yalnızca kullanıcının kendi rızasıyla yetkilendireceği, kendisine ait kişisel bulut hesapları (Google Drive vb.) üzerinden yürütülür. Bu süreçte bulut hesabınıza ait erişim yetkileri veya token bilgileri hiçbir şekilde Akıllı Kürsü tarafından kaydedilmez ve üçüncü taraflarla paylaşılmaz.</p>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-slate-900 dark:text-slate-300 mb-1">4. Çerezler (Cookies)</h4>
+                    <p>Akıllı Kürsü, platformun temel işlevselliğini (örneğin favorilere ekleme veya kullanıcı tercihlerini hatırlama) optimize etmek amacıyla yalnızca tarayıcınızın yerel depolama birimlerini (Local Storage) kullanabilir. Reklam veya pazarlama amaçlı takip çerezleri kullanılmamaktadır.</p>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-slate-900 dark:text-slate-300 mb-1">5. İptal, İade ve Destek Politikası</h4>
+                    <p>Akıllı Kürsü platformunda sunulan tüm araçlar ve hizmetler tamamen ücretsizdir. Platform üzerinde yer alan "Destek Ol" veya "Bir Kahve Ismarla" benzeri alanlar üzerinden yapılan tüm ödemeler, kullanıcıların tamamen kendi rızalarıyla harcanan emeği takdir etmek amacıyla yaptıkları gönüllü bağış/teberru niteliğindedir. Ticari bir ürün veya hizmet satışı söz konusu olmadığından, yapılan gönüllü desteklerin iptali veya iadesi mümkün değildir.</p>
+                </div>
+                
+            </div>
+            
+        </div>
+    </div>
+	
+    <div id="aboutModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 w-full max-w-lg rounded-3xl p-8 shadow-2xl scale-95 transition-transform duration-300 relative max-h-[90vh] overflow-y-auto">
+            <button id="btnCloseAboutModal" class="absolute top-5 right-5 p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors" aria-label="Kapat">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            
+            <div class="text-center mb-6">
+                <span class="inline-flex items-center justify-center w-24 h-24 text-5xl bg-slate-50 dark:bg-slate-950 rounded-3xl shadow-sm border border-slate-200/40 dark:border-slate-800/60 mb-4 select-none">🎓</span>
+                <h3 id="modalTitle" class="text-2xl font-bold text-slate-900 dark:text-slate-400">Akıllı Kürsü Hakkında</h3>
+            </div>
+            
+            <div class="space-y-5 text-base text-slate-600 dark:text-slate-400 leading-relaxed">
+                <p>
+                    <strong>Akıllı Kürsü</strong>, öğretmenlerin sınıf yönetimini pratikleştiren ve okul bilişim süreçlerini hızlandıran ücretsiz bir dijital araçlar platformudur. Belge düzenleme, liste yönetimi ve pratik sınıf içi çözümlerle öğretmenlere zaman kazandırır. Sadelik, hız ve mutlak gizlilik odaklı platformumuzda hiçbir veriniz toplanmaz. Tüm işlemler doğrudan kendi cihazınızda gerçekleşir.
+                </p>
+                
+               <div class="pt-2">
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center px-5 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-2xl shadow-md shadow-blue-500/10 transition-all text-sm md:text-base active:scale-95">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>Görüş Bildir</span>
+                    </a>
+                </div>
+                
+                <div class="pt-4 mt-4 border-t border-slate-100 dark:border-slate-800 flex flex-wrap justify-between items-center gap-2 text-sm text-slate-400">
+                    <span>Geliştirici: Murat AKIN</span>
+                    <span>Versiyon: 1.3</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200/80 dark:border-slate-800/80 py-8 text-center text-sm text-slate-400 dark:text-slate-500 transition-colors duration-300">
+        <p>&copy; 2026 Akıllı Kürsü. Tüm hakları saklıdır.</p>
+        <button id="btnOpenPrivacyModal" class="mt-2 text-xs font-semibold text-slate-400 hover:text-blue-500 dark:text-slate-500 dark:hover:text-blue-400 transition-colors focus:outline-none touch-manipulation">
+            Gizlilik Politikası & KVKK Aydınlatma Metni
+        </button>
+    </footer>
+
+    <template id="project-card-template">
+        <div class="project-card bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/70 dark:border-slate-800/70 p-6 shadow-sm dark:shadow-none transition-all duration-500 flex flex-col justify-between opacity-0 translate-y-4 relative z-10 touch-manipulation overflow-hidden min-h-[320px] h-full gap-4">
+            <div class="ribbon-wrapper hidden" data-element="ribbon-container">
+                <div class="ribbon" data-element="ribbon-text"></div>
+            </div>
+            
+            <div class="flex flex-col gap-3 flex-grow">
+                <div class="flex flex-nowrap items-center justify-between gap-2 md:gap-3 relative z-20">
+                    <span class="project-icon flex items-center justify-center w-14 h-14 flex-shrink-0 text-3xl bg-slate-50 dark:bg-slate-950 rounded-2xl transition-colors select-none shadow-sm" aria-hidden="true" data-element="icon"></span>
+                    
+                    <div class="flex flex-nowrap items-center justify-end gap-2 flex-grow pl-1 min-w-0" data-element="badge-container">
+                        <div class="flex flex-nowrap items-center gap-1.5 select-none overflow-hidden">
+                            <span data-element="status-badge" class="hidden text-[10px] font-extrabold px-2 py-0.5 rounded-md border tracking-wide uppercase"></span>
+                            <span data-element="category-badge" class="text-xs md:text-sm font-bold px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-xl tracking-wide uppercase whitespace-nowrap"></span>
+                        </div>
+                        
+                        <button data-action="toggle-favorite" class="flex-shrink-0 p-3.5 rounded-xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-950 dark:hover:bg-slate-800 border border-slate-200/50 dark:border-slate-800/80 transition-all hover:scale-110 active:scale-90 z-30 touch-manipulation group" data-element="fav-btn">
+                            <svg data-element="fav-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-300 dark:text-slate-600 group-hover:text-amber-400/60 transition-colors" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <h3 class="text-lg md:text-xl font-bold text-slate-900 dark:text-slate-400 transition-colors relative z-20" data-element="title"></h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm md:text-base leading-relaxed font-medium relative z-20 break-words" data-element="desc"></p>
+                </div>
+            </div>
+            
+            <div class="flex flex-col gap-2 relative z-20 pt-2 border-t border-slate-100 dark:border-slate-800/60 mt-auto">
+                <button data-action="open-version-modal" class="hidden mb-3 w-full inline-flex items-center justify-center gap-1.5 py-1.5 text-xs font-bold text-slate-500 hover:text-blue-600 dark:text-slate-500 dark:hover:text-blue-400 bg-slate-50 hover:bg-blue-50 dark:bg-slate-900/50 dark:hover:bg-slate-800 rounded-xl transition-all border border-transparent hover:border-blue-200 dark:hover:border-slate-700" data-element="version-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <span data-element="version-text">Tüm Sürümler</span>
+                </button>
+                <button data-action="open-share-menu" class="share-btn w-full inline-flex items-center justify-center px-5 py-3 bg-slate-100/80 dark:bg-slate-900/60 text-slate-700 dark:text-slate-400 font-bold text-sm md:text-base rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm touch-manipulation" data-element="share-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                    </svg>
+                    <span>Paylaş</span>
+                </button>
+                
+                <a target="_blank" rel="noopener noreferrer" data-action="track-recent" class="go-app-btn w-full inline-flex items-center justify-center px-5 py-4 bg-slate-50 hover:bg-blue-600 dark:bg-slate-950 dark:hover:bg-blue-600 text-slate-700 hover:text-white dark:text-slate-400 dark:hover:text-white font-bold text-sm md:text-base rounded-2xl border border-slate-200/80 dark:border-slate-800 hover:border-blue-600 dark:hover:border-blue-600 transition-all shadow-sm touch-manipulation" data-element="go-btn">
+                    <span>Uygulamaya Git</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </template>
+
+    <script>
+        // Madde 11: Array Tipi Doğrulaması
+        function safeGetLS(key, defaultValue, requireArray = false) {
+            try {
+                const item = localStorage.getItem(key);
+                if (!item) return defaultValue;
+                const parsed = JSON.parse(item);
+                if (requireArray && !Array.isArray(parsed)) return defaultValue;
+                return parsed;
+            } catch (error) {
+                console.error(`LocalStorage okuma hatası (${key}):`, error);
+                return defaultValue;
+            }
+        }
+
+        function safeSetLS(key, value) {
+            try {
+                // Madde 1: Tema için ayrıcalık
+                if (key === 'theme') {
+                    localStorage.setItem('theme', value);
+                } else {
+                    localStorage.setItem(key, JSON.stringify(value));
+                }
+            } catch (error) {
+                console.error(`LocalStorage yazma hatası (${key}):`, error);
+            }
+        }
+
+        // Madde 2, 3, 4: Gelişmiş, Kaçış Yapmayan (Non-Escaping) URL Güvenliği
+        function secureUrl(url) {
+            if (!url || typeof url !== 'string') return '#';
+            if (url.startsWith('http://')) return '#'; // Sadece HTTPS
+            if (url.startsWith('//')) return '#'; // Protokol atlama engeli
+            if (url.startsWith('https://') || url.startsWith('/')) {
+                return url; // DOM elemanlarına doğrudan atanacak ham geçerli URL
+            }
+            return '#';
+        }
+
+        const jsonUrl = 'projeler.json'; 
+        let allProjects = [];
+        let groupedProjects = [];
+        let activeCategory = 'Tümü';
+        let gridCols = 3;
+
+        let favorites = safeGetLS('ak_favorites', [], true);
+        let recents = safeGetLS('ak_recents', [], true);
+        let lastAnimatedStars = {};
+        
+        let activeShareName = '';
+        let activeShareDesc = '';
+        let activeDirectUrl = '';
+        let activePortalUrl = '';
+        let activeShareUrl = '';
+		
+		function buildShareText() {
+            return `Akıllı Kürsü - ${activeShareName}, ${activeShareDesc}`;
+        }
+
+        let wasVersionModalOpen = false;
+        let lastVersionGrupId = '';
+        let lastVersionIcon = '';
+
+        // Madde 6: Veri Dayanıklılığı
+        function normalizeText(text) {
+            if (!text) return '';
+            return String(text).toLowerCase()
+                .replace(/ı/g, 'i')
+                .replace(/ğ/g, 'g')
+                .replace(/ü/g, 'u')
+                .replace(/ş/g, 's')
+                .replace(/ö/g, 'o')
+                .replace(/ç/g, 'c')
+                .replace(/[^a-z0-9]/g, ''); 
+        }
+
+        async function fetchProjects() {
+            try {
+                const response = await fetch(jsonUrl);
+                
+                if (!response.ok) {
+                    throw new Error(`Ağ hatası (${response.status})`);
+                }
+                
+                const rawData = await response.json();
+                
+                if (!Array.isArray(rawData)) {
+                    throw new Error('Veri formatı dizisi (array) değil.');
+                }
+                
+                const groups = {};
+                rawData.forEach(app => {
+                    // Güvenlik: Ham veri objelerinin zorunlu alanlarını doğrula
+                    app.adi = String(app.adi || '');
+                    app.aciklama = String(app.aciklama || '');
+                    app.kategori = String(app.kategori || 'Genel');
+                    app.id = String(app.id || app.adi); // ID yedeği
+                    
+                    const gid = app.grupId || app.id;
+                    if(!groups[gid]) groups[gid] = [];
+                    groups[gid].push(app);
+                });
+
+                groupedProjects = Object.values(groups).map(versions => {
+                    const mainApp = versions.find(v => v.surumTipi === 'Onerilen') || versions[0];
+                    return { ...mainApp, tumSurumler: versions };
+                });
+
+                allProjects = groupedProjects; 
+                
+                updateTotalAppsCount(allProjects.length);
+                generateCategoryButtons();
+                applyFilters(); 
+                renderRecents();
+                checkUrlParameterAndHighlight();
+            } catch (error) {
+                console.error('Proje çekme hatası:', error);
+                // Madde 18: Gelişmiş Hata Mesajı Ayrımı
+                const isNetwork = error.message.includes('Ağ hatası');
+                const userMsg = isNetwork ? 'Sunucu bağlantısı kurulamadı.' : 'Uygulama listesi veri formatı geçersiz.';
+                document.getElementById('projectsGrid').innerHTML = `
+                    <div class="col-span-full text-center py-20 text-red-500 font-medium text-base">
+                        ❌ ${userMsg} Lütfen daha sonra tekrar deneyin veya sistem yöneticisine bildirin.
+                    </div>`;
+            }
+        }
+
+        function checkUrlParameterAndHighlight() {
+            const urlParams = new URLSearchParams(window.location.search);
+            let projectParam = urlParams.get('p');
+
+            if (!projectParam) {
+                const path = window.location.pathname;
+                if (path && path.length > 1 && !path.includes('index.html')) {
+                    // Madde 13: Güvenli Decode
+                    try {
+                        projectParam = decodeURIComponent(path.substring(1));
+                    } catch(e) {
+                        projectParam = null;
+                    }
+                }
+            }
+
+            if (!projectParam) return;
+
+            const normalizedSearchParam = normalizeText(projectParam);
+            let targetMainProject = null;
+            let targetSpecificVersion = null;
+
+            for (const mainApp of allProjects) {
+                if (normalizeText(mainApp.adi) === normalizedSearchParam || normalizeText(mainApp.id) === normalizedSearchParam) {
+                    targetMainProject = mainApp;
+                    targetSpecificVersion = mainApp;
+                    break;
+                }
+                
+                if (mainApp.tumSurumler && mainApp.tumSurumler.length > 0) {
+                    const subMatch = mainApp.tumSurumler.find(v => 
+                        normalizeText(v.adi) === normalizedSearchParam || normalizeText(v.id) === normalizedSearchParam
+                    );
+                    if (subMatch) {
+                        targetMainProject = mainApp; 
+                        targetSpecificVersion = subMatch; 
+                        break;
+                    }
+                }
+            }
+
+            if (!targetMainProject) return; 
+
+            // Madde 9: Meta ve Title alanlarında EscapeHTML kullanma, doğrudan ham string ata.
+            document.title = `Akıllı Kürsü - ${targetSpecificVersion.adi}`;
+            
+            let metaDesc = document.querySelector('meta[name="description"]');
+            if (metaDesc) metaDesc.content = targetSpecificVersion.aciklama;
+            
+            let ogTitle = document.querySelector('meta[property="og:title"]');
+            if (ogTitle) ogTitle.content = `Akıllı Kürsü - ${targetSpecificVersion.adi}`;
+            
+            let ogDesc = document.querySelector('meta[property="og:description"]');
+            if (ogDesc) ogDesc.content = targetSpecificVersion.aciklama;
+
+            const targetId = `project-${normalizeText(targetMainProject.adi)}`;
+            const targetCard = document.getElementById(targetId);
+
+            if (targetCard) {
+                if (activeCategory !== 'Tümü') {
+                    filterCategory('Tümü');
+                }
+
+                const searchBar = document.getElementById('searchBar');
+                if(searchBar && searchBar.value) {
+                    searchBar.value = '';
+                    applyFilters();
+                }
+
+                setTimeout(() => {
+                    const headerOffset = 100;
+                    const elementPosition = targetCard.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+
+                    targetCard.classList.add('ring-4', 'ring-blue-500', 'scale-[1.03]', 'shadow-2xl', 'z-30');
+                    
+                    const isSubVersion = (targetMainProject.id !== targetSpecificVersion.id || targetMainProject.adi !== targetSpecificVersion.adi);
+                    if (isSubVersion) {
+                     setTimeout(() => {
+                        openVersionModal(targetMainProject.grupId || targetMainProject.id, targetMainProject.ikon, targetSpecificVersion.adi);
+                      }, 600); 
+                    }
+
+                    setTimeout(() => {
+                        targetCard.classList.remove('ring-4', 'ring-blue-500', 'scale-[1.03]');
+                    }, 3500);
+
+                }, 300);
+            }
+        }
+
+        function updateTotalAppsCount(count) {
+            const badge = document.getElementById('totalAppsBadge');
+            if (badge) {
+                badge.querySelector('span').textContent = `🚀 ${count} Eğitim Odaklı Ücretsiz Proje`;
+            }
+        }
+
+        // Madde 10: Güvenli DOM Üretimi (innerHTML kaldırıldı, createElement ve textContent kullanıldı)
+        function renderProjects(projects) {
+            const grid = document.getElementById('projectsGrid');
+            const noResults = document.getElementById('noResults');
+            const template = document.getElementById('project-card-template');
+            
+            grid.innerHTML = '';
+
+            if (projects.length === 0) {
+                noResults.classList.remove('hidden');
+                return;
+            } else {
+                noResults.classList.add('hidden');
+            }
+
+            let sortedProjects = [...projects];
+            if (activeCategory === 'Tümü' && favorites.length > 0) {
+                sortedProjects.sort((a, b) => {
+                    const aFav = favorites.includes(a.id) ? 1 : 0;
+                    const bFav = favorites.includes(b.id) ? 1 : 0;
+                    return bFav - aFav; 
+                });
+            }
+
+            sortedProjects.forEach((project, index) => {
+                const isFav = favorites.includes(project.id); // Madde 7: Ham ID kontrolü
+                const safeUrl = secureUrl(project.url);
+                const clone = template.content.cloneNode(true);
+                
+                const card = clone.querySelector('.project-card');
+                card.id = `project-${normalizeText(project.adi)}`;
+                card.style.animation = `fadeInUp 0.4s ease forwards ${index * 0.05}s`;
+                
+                if (project.duyur && project.duyur.trim() !== "") {
+                    const ribbonContainer = clone.querySelector('[data-element="ribbon-container"]');
+                    const ribbonText = clone.querySelector('[data-element="ribbon-text"]');
+                    ribbonContainer.classList.remove('hidden');
+                    ribbonText.textContent = project.duyur.toUpperCase();
+                    clone.querySelector('[data-element="badge-container"]').classList.add('pr-14');
+                }
+
+                if (project.durum) {
+                    const badge = clone.querySelector('[data-element="status-badge"]');
+                    badge.classList.remove('hidden');
+                    badge.textContent = project.durum;
+                    
+                    let badgeColor = 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400 border-emerald-200/60';
+                    if (project.durum === 'Güncellendi') badgeColor = 'bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400 border-amber-200/60';
+                    if (project.durum === 'Beta') badgeColor = 'bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400 border-blue-200/60';
+                    
+                    badge.className = `text-[10px] font-extrabold px-2 py-0.5 rounded-md border ${badgeColor} tracking-wide uppercase`;
+                }
+
+                clone.querySelector('[data-element="category-badge"]').textContent = project.kategori;
+                clone.querySelector('[data-element="icon"]').textContent = project.ikon || '🚀';
+                clone.querySelector('[data-element="title"]').textContent = project.adi;
+                clone.querySelector('[data-element="desc"]').textContent = project.aciklama;
+
+                const favBtn = clone.querySelector('[data-element="fav-btn"]');
+                const favIcon = clone.querySelector('[data-element="fav-icon"]');
+                favBtn.setAttribute('aria-label', `${project.adi} uygulamasını favorilere ${isFav ? 'çıkar' : 'ekle'}`);
+                favBtn.dataset.project = project.id; // Ham ID ataması
+                
+                if (isFav) {
+                    favIcon.classList.remove('text-slate-300', 'dark:text-slate-600', 'group-hover:text-amber-400/60');
+                    favIcon.classList.add('text-amber-400', 'fill-amber-400');
+                }
+                
+                if (lastAnimatedStars[project.id] === 'active') {
+                    favIcon.classList.add('animate-star-active');
+                } else if (lastAnimatedStars[project.id] === 'inactive') {
+                    favIcon.classList.add('animate-star-inactive');
+                }
+
+                if (project.tumSurumler && project.tumSurumler.length > 1) {
+                    const vBtn = clone.querySelector('[data-element="version-btn"]');
+                    vBtn.classList.remove('hidden');
+                    vBtn.dataset.grupid = project.grupId || project.id;
+                    vBtn.dataset.icon = project.ikon || '🚀';
+                    clone.querySelector('[data-element="version-text"]').textContent = `Tüm Sürümler (${project.tumSurumler.length})`;
+                }
+
+                const sBtn = clone.querySelector('[data-element="share-btn"]');
+                sBtn.dataset.name = project.adi; // Data attribute'ler DOM'a atanırken XSS riski taşımaz.
+                sBtn.dataset.desc = project.aciklama;
+                sBtn.dataset.url = safeUrl;
+                sBtn.dataset.icon = project.ikon || '🚀';
+
+                const gBtn = clone.querySelector('[data-element="go-btn"]');
+                gBtn.href = safeUrl; // URL bozulma riski güvenli hale getirildi.
+                gBtn.setAttribute('aria-label', `${project.adi} uygulamasına git`);
+                gBtn.dataset.name = project.id;
+
+                grid.appendChild(clone);
+            });
+        }
+
+        // Madde 17: Kategorileri ham halleriyle tut (XSS koruması textContent'te zaten var)
+        function generateCategoryButtons() {
+            const container = document.getElementById('categoryContainer');
+            const uniqueCategories = [...new Set(allProjects.map(p => p.kategori))];
+            
+            const categories = ['Tümü'];
+            if (favorites.length > 0) categories.push('Favoriler');
+            categories.push(...uniqueCategories);
+
+            container.innerHTML = '';
+            
+            categories.forEach(cat => {
+                let count = 0;
+                if (cat === 'Tümü') count = allProjects.length;
+                else if (cat === 'Favoriler') count = favorites.length;
+                else count = allProjects.filter(p => p.kategori === cat).length;
+
+                const btn = document.createElement('button');
+                btn.textContent = `${cat} (${count})`;
+                btn.className = `cat-btn whitespace-nowrap px-5 py-2.5 rounded-xl text-sm md:text-base font-semibold transition-all touch-manipulation snap-center ${
+                    cat === activeCategory 
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' 
+                    : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
+                }`;
+                btn.setAttribute('aria-pressed', cat === activeCategory ? 'true' : 'false');
+                btn.addEventListener('click', () => filterCategory(cat));
+                container.appendChild(btn);
+            });
+        }
+
+        function filterCategory(category) {
+            activeCategory = category;
+            generateCategoryButtons();
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const searchBar = document.getElementById('searchBar');
+            const clearBtn = document.getElementById('clearSearchBtn');
+            const helpText = document.getElementById('searchHelpContainer');
+            const originalSearchTerm = String(searchBar.value || '');
+            
+            if (originalSearchTerm.length > 0) {
+                if (clearBtn) {
+                    clearBtn.classList.remove('opacity-0', 'pointer-events-none', 'scale-75');
+                    clearBtn.classList.add('opacity-100', 'scale-100');
+                }
+                if (helpText) {
+                    helpText.classList.remove('opacity-0', 'h-0', 'overflow-hidden');
+                    helpText.classList.add('opacity-100', 'mt-2', 'h-auto');
+                }
+            } else {
+                if (clearBtn) {
+                    clearBtn.classList.remove('opacity-100', 'scale-100');
+                    clearBtn.classList.add('opacity-0', 'pointer-events-none', 'scale-75');
+                }
+                if (helpText) {
+                    helpText.classList.remove('opacity-100', 'mt-2', 'h-auto');
+                    helpText.classList.add('opacity-0', 'h-0', 'overflow-hidden');
+                }
+            }
+
+            const normalize = (text) => String(text || '').toLowerCase().replace(/[\s-]/g, '');
+            const normalizedSearch = normalize(originalSearchTerm);
+
+            const filtered = allProjects.filter(project => {
+                let matchesCategory = false;
+                if (activeCategory === 'Tümü') matchesCategory = true;
+                else if (activeCategory === 'Favoriler') matchesCategory = favorites.includes(project.id);
+                else matchesCategory = project.kategori === activeCategory;
+
+                // Madde 5: Eksik alan dayanıklılığı eklendi.
+                const matchesSearch = 
+                    String(project.adi || '').toLowerCase().includes(originalSearchTerm.toLowerCase()) || 
+                    String(project.aciklama || '').toLowerCase().includes(originalSearchTerm.toLowerCase()) ||
+                    normalize(project.adi).includes(normalizedSearch) || 
+                    normalize(project.aciklama).includes(normalizedSearch);
+                    
+                return matchesCategory && matchesSearch;
+            });
+            renderProjects(filtered);
+        }
+
+        function clearSearch() {
+            const searchBar = document.getElementById('searchBar');
+            searchBar.value = '';
+            searchBar.focus();
+            applyFilters();
+        }
+
+        // Madde 7: Favori yönetimi temiz kimlik id ile.
+        function toggleFavorite(projectId, event) {
+            event.preventDefault();
+            event.stopPropagation();
+            
+            const index = favorites.indexOf(projectId);
+            if (index > -1) {
+                favorites.splice(index, 1);
+                lastAnimatedStars[projectId] = 'inactive';
+                if (favorites.length === 0 && activeCategory === 'Favoriler') activeCategory = 'Tümü';
+            } else {
+                favorites.push(projectId);
+                lastAnimatedStars[projectId] = 'active';
+            }
+            
+            safeSetLS('ak_favorites', favorites);
+            generateCategoryButtons();
+            applyFilters();
+
+            setTimeout(() => {
+                delete lastAnimatedStars[projectId];
+            }, 450);
+        }
+
+        function trackRecent(projectId) {
+            recents = recents.filter(id => id !== projectId);
+            recents.unshift(projectId);
+            if (recents.length > 3) recents.pop(); 
+            safeSetLS('ak_recents', recents);
+            renderRecents();
+        }
+
+        function removeRecentItem(projectId, event) {
+            event.preventDefault();
+            event.stopPropagation(); 
+            
+            recents = recents.filter(id => id !== projectId);
+            safeSetLS('ak_recents', recents);
+            renderRecents();
+        }
+
+        function clearAllRecents() {
+            recents = [];
+            localStorage.removeItem('ak_recents');
+            renderRecents();
+        }
+
+        // Madde 8: Son kullanılanlarda DOM createElement ile güvenlik
+        function renderRecents() {
+            const section = document.getElementById('recentSection');
+            const container = document.getElementById('recentContainer');
+            container.innerHTML = '';
+
+            if (recents.length === 0 || allProjects.length === 0) {
+                section.classList.add('hidden');
+                return;
+            }
+
+            section.classList.remove('hidden');
+            recents.forEach(id => {
+                const foundProj = allProjects.find(p => p.id === id);
+                if (foundProj) {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'inline-flex items-center divide-x divide-slate-200 dark:divide-slate-700 bg-slate-50 hover:bg-blue-50 dark:bg-slate-950 dark:hover:bg-blue-950/30 rounded-2xl border border-slate-200/60 dark:border-slate-800/80 transition-all shadow-sm';
+                    
+                    const link = document.createElement('a');
+                    link.href = secureUrl(foundProj.url);
+                    link.target = '_blank';
+                    link.rel = 'noopener noreferrer';
+                    link.addEventListener('click', () => trackRecent(foundProj.id));
+                    link.className = 'inline-flex items-center space-x-2 px-4 py-2.5 text-sm font-bold text-slate-700 dark:text-slate-400 transition-colors rounded-l-2xl active:scale-95';
+                    link.setAttribute('aria-label', `Son kullanılanlardan ${foundProj.adi} uygulamasını aç`);
+                    
+                    const spanIcon = document.createElement('span');
+                    spanIcon.setAttribute('aria-hidden', 'true');
+                    spanIcon.className = 'text-lg';
+                    spanIcon.textContent = foundProj.ikon || '🚀';
+                    
+                    const spanText = document.createElement('span');
+                    spanText.textContent = foundProj.adi;
+                    
+                    link.appendChild(spanIcon);
+                    link.appendChild(spanText);
+                    
+                    const removeBtn = document.createElement('button');
+                    removeBtn.addEventListener('click', (e) => removeRecentItem(foundProj.id, e));
+                    removeBtn.className = 'p-3 text-slate-400 hover:text-red-500 dark:text-slate-500 dark:hover:text-red-400 transition-colors rounded-r-2xl focus:outline-none';
+                    removeBtn.setAttribute('aria-label', `${foundProj.adi} uygulamasını sil`);
+                    removeBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" /></svg>`;
+                    
+                    wrapper.appendChild(link);
+                    wrapper.appendChild(removeBtn);
+                    container.appendChild(wrapper);
+                }
+            });
+        }
+
+        let currentSizeLevel = parseInt(safeGetLS('ak_font_size_level', 0)) || 0;
+
+        function applyFontSize() {
+            if (currentSizeLevel < -4) currentSizeLevel = -4;
+            if (currentSizeLevel > 3) currentSizeLevel = 3;
+
+            const newFontSize = (100 + (currentSizeLevel * 10)) + "%";
+            document.documentElement.style.fontSize = newFontSize;
+        }
+
+        function changeFontSize(action) {
+            if (action === 0) currentSizeLevel = 0;
+            else {
+                currentSizeLevel += action;
+                if (currentSizeLevel < -4) currentSizeLevel = -4;
+                if (currentSizeLevel > 3) currentSizeLevel = 3;
+            }
+            safeSetLS('ak_font_size_level', currentSizeLevel);
+            applyFontSize();
+        }
+
+        function changeGridCols(action) {
+            gridCols += action;
+            if (gridCols < 1) gridCols = 1;
+            if (gridCols > 10) gridCols = 10;
+            safeSetLS('ak_grid_cols', gridCols);
+            applyGridCols();
+        }
+
+        function applyGridCols() {
+            document.querySelectorAll('.grid-col-count-disp').forEach(el => el.textContent = gridCols);
+            const grid = document.getElementById('projectsGrid');
+            if (grid) grid.style.gridTemplateColumns = `repeat(${gridCols}, minmax(0, 1fr))`;
+        }
+
+        function toggleMobileMenu() {
+            const dropdown = document.getElementById('mobileMenuDropdown');
+            const btn = document.getElementById('mobileMenuBtn');
+            const isHidden = dropdown.classList.contains('hidden');
+            
+            if (isHidden) {
+                dropdown.classList.remove('hidden');
+                btn.setAttribute('aria-expanded', 'true');
+            } else {
+                dropdown.classList.add('hidden');
+                btn.setAttribute('aria-expanded', 'false');
+            }
+        }
+
+        function openShareMenu(name, desc, url, icon) {
+            activeShareName = name;
+            activeShareDesc = desc;
+            activeDirectUrl = secureUrl(url);
+            activePortalUrl = secureUrl(`https://akillikursu.netlify.app/${normalizeText(name)}`);
+            
+            const versionModal = document.getElementById('versionModal');
+            wasVersionModalOpen = !versionModal.classList.contains('opacity-0');
+
+            if (wasVersionModalOpen) closeVersionModal();
+
+            if (navigator.share) {
+                document.getElementById('linkChoiceIcon').textContent = icon || '🚀';
+                document.getElementById('linkChoiceDirectUrl').textContent = activeDirectUrl;
+                document.getElementById('linkChoicePortalUrl').textContent = activePortalUrl;
+                
+                const modal = document.getElementById('linkChoiceModal');
+                const inner = modal.querySelector('div');
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                inner.classList.remove('scale-95');
+                inner.classList.add('scale-100');
+            } else {
+                document.getElementById('sharePreviewTitle').textContent = name;
+                document.getElementById('sharePreviewDesc').textContent = desc;
+                document.getElementById('sharePreviewIcon').textContent = icon || '🚀';
+                
+                const modal = document.getElementById('shareModal');
+                const inner = modal.querySelector('div');
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                inner.classList.remove('scale-95');
+                inner.classList.add('scale-100');
+                
+                updateShareLinks('direct');
+            }
+        }
+
+        function executeNativeShare(type) {
+            const targetUrl = type === 'direct' ? activeDirectUrl : activePortalUrl;
+            // Madde 16: Anlamsız URL paylaşım engeli
+            if (!targetUrl || targetUrl === '#') {
+                showToast("Geçersiz veya güvensiz bağlantı!");
+                closeLinkChoiceModal();
+                return;
+            }
+
+            const shareText = buildShareText();
+
+            navigator.share({
+                title: `Akıllı Kürsü - ${activeShareName}`,
+                text: shareText,
+                url: targetUrl
+            }).then(() => {
+                closeLinkChoiceModal();
+            }).catch((err) => {
+                console.log('Sistem paylaşımı iptal edildi veya hata oluştu', err);
+                closeLinkChoiceModal();
+            });
+        }
+
+        function updateShareLinks(type) {
+            const targetUrl = type === 'direct' ? activeDirectUrl : activePortalUrl;
+            activeShareUrl = targetUrl; 
+            
+            const btnDirect = document.getElementById('btnShareDirect');
+            const btnPortal = document.getElementById('btnSharePortal');
+            const urlDisplay = document.getElementById('currentShareUrlDisplay');
+            
+            urlDisplay.textContent = targetUrl;
+            
+            if (type === 'direct') {
+                btnDirect.className = "flex-1 py-2 text-xs font-bold bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 rounded-lg shadow-sm transition-all focus:outline-none";
+                btnPortal.className = "flex-1 py-2 text-xs font-bold text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300 transition-all focus:outline-none";
+            } else {
+                btnPortal.className = "flex-1 py-2 text-xs font-bold bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 rounded-lg shadow-sm transition-all focus:outline-none";
+                btnDirect.className = "flex-1 py-2 text-xs font-bold text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300 transition-all focus:outline-none";
+            }
+
+            const shareText = buildShareText();
+            const validUrl = (targetUrl !== '#') ? targetUrl : '';
+            
+            document.getElementById('shareWA').href = validUrl ? secureUrl(`https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + validUrl)}`) : '#';
+            document.getElementById('shareX').href = validUrl ? secureUrl(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(validUrl)}`) : '#';
+            document.getElementById('shareTG').href = validUrl ? secureUrl(`https://t.me/share/url?url=${encodeURIComponent(validUrl)}&text=${encodeURIComponent(shareText)}`) : '#';
+            document.getElementById('shareFB').href = validUrl ? secureUrl(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(validUrl)}`) : '#';
+            document.getElementById('shareLN').href = validUrl ? secureUrl(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(validUrl)}`) : '#';
+        }
+
+        function closeShareModal() {
+            const modal = document.getElementById('shareModal');
+            const inner = modal.querySelector('div');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            inner.classList.remove('scale-100');
+            inner.classList.add('scale-95');
+
+            if (wasVersionModalOpen) {
+                setTimeout(() => {
+                    openVersionModal(lastVersionGrupId, lastVersionIcon);
+                    wasVersionModalOpen = false;
+                }, 300); 
+            }
+        }
+
+        function closeLinkChoiceModal() {
+            const modal = document.getElementById('linkChoiceModal');
+            const inner = modal.querySelector('div');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            inner.classList.remove('scale-100');
+            inner.classList.add('scale-95');
+
+            if (wasVersionModalOpen) {
+                setTimeout(() => {
+                    openVersionModal(lastVersionGrupId, lastVersionIcon);
+                    wasVersionModalOpen = false;
+                }, 300); 
+            }
+        }
+
+        function copyShareLink() {
+            if (!activeShareUrl || activeShareUrl === '#') {
+                showToast("Güvenli bağlantı oluşturulamadı.");
+                return;
+            }
+            const copyText = `${buildShareText()} ${activeShareUrl}`;
+
+            navigator.clipboard.writeText(copyText).then(() => {
+                closeShareModal();
+                showToast("Paylaşım metni panoya kopyalandı!");
+            }).catch(err => {
+                showToast("Kopyalama başarısız oldu.");
+            });
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toastAlert');
+            document.getElementById('toastMessage').textContent = message;
+            toast.classList.remove('opacity-0', 'scale-90', 'pointer-events-none');
+            toast.classList.add('opacity-100', 'scale-100');
+            
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'scale-100');
+                toast.classList.add('opacity-0', 'scale-90', 'pointer-events-none');
+            }, 2000);
+        }
+
+        function openVersionModal(grupId, icon, highlightVersionName = null) {
+            lastVersionGrupId = grupId;
+            lastVersionIcon = icon;
+
+            const projectGroup = allProjects.find(p => (p.grupId || p.id) === grupId);
+            if(!projectGroup) return;
+
+            const modal = document.getElementById('versionModal');
+            const container = document.getElementById('versionListContainer');
+            
+            const baseName = projectGroup.adi.split(' v')[0];
+            document.getElementById('versionModalTitle').textContent = baseName;
+            document.getElementById('versionModalIcon').textContent = icon || '🚀';
+
+            container.innerHTML = ''; // Liste her açılışta temizlenir.
+            
+            // XSS Koruma: DOM element oluşturarak listele.
+            projectGroup.tumSurumler.forEach(v => {
+                let badgeConfig = { class: 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400', label: '⚪ Diğer' };
+                switch(v.surumTipi) {
+                    case 'Onerilen': badgeConfig = { class: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400', label: '🟢 Önerilen' }; break;
+                    case 'LTS': badgeConfig = { class: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-400', label: '🔵 LTS' }; break;
+                    case 'Klasik': badgeConfig = { class: 'bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-300', label: '⚪ Klasik' }; break;
+                    case 'Beta': badgeConfig = { class: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400', label: '🟡 Beta' }; break;
+                    case 'Arsiv': badgeConfig = { class: 'bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-400', label: '🔴 Arşiv' }; break;
+                }
+
+                const safeUrl = secureUrl(v.url);
+                const isHighlighted = highlightVersionName && (normalizeText(v.adi) === normalizeText(highlightVersionName));
+                
+                const row = document.createElement('div');
+                row.id = `version-row-${normalizeText(v.adi)}`;
+                const baseClasses = "flex items-center justify-between p-4 rounded-2xl transition-all duration-500 group gap-3";
+                const normalClasses = "border border-slate-200/60 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 hover:border-blue-300 dark:hover:border-slate-600";
+                const highlightClasses = "ring-2 ring-blue-500 bg-blue-50 dark:bg-blue-900/30 scale-[1.02] shadow-md z-10 relative";
+                row.className = isHighlighted ? `${baseClasses} ${highlightClasses}` : `${baseClasses} ${normalClasses}`;
+                
+                // Statik şablonları innerHTML, dinamikleri textContent yapıyoruz
+                row.innerHTML = `
+                    <div class="flex flex-col gap-1.5 min-w-0">
+                        <span class="font-bold text-sm text-slate-800 dark:text-slate-300 truncate" data-element="v-name"></span>
+                        <div class="flex items-center">
+                            <span class="px-2 py-0.5 rounded-lg text-[10px] font-black tracking-wide uppercase ${badgeConfig.class}">
+                                ${badgeConfig.label}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 flex-shrink-0">
+                        <button data-action="open-share-menu" class="flex-shrink-0 p-2.5 bg-white border border-slate-200 hover:bg-slate-100 dark:bg-slate-800 dark:border-slate-700 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 rounded-xl transition-all shadow-sm active:scale-95" aria-label="Paylaş">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+                        </button>
+                        <a target="_blank" rel="noopener noreferrer" data-action="track-recent" class="flex-shrink-0 px-4 py-2.5 bg-white hover:bg-blue-600 border border-slate-200 dark:border-slate-700 text-slate-700 hover:text-white dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-blue-600 dark:hover:text-white rounded-xl text-sm font-bold transition-all shadow-sm active:scale-95">
+                            Aç
+                        </a>
+                    </div>
+                `;
+                
+                row.querySelector('[data-element="v-name"]').textContent = v.adi;
+                
+                const sBtn = row.querySelector('[data-action="open-share-menu"]');
+                sBtn.dataset.name = v.adi;
+                sBtn.dataset.desc = v.aciklama || '';
+                sBtn.dataset.url = safeUrl;
+                sBtn.dataset.icon = v.ikon || icon || '🚀';
+                
+                const goBtn = row.querySelector('[data-action="track-recent"]');
+                goBtn.href = safeUrl;
+                goBtn.dataset.name = v.id || v.adi;
+                
+                container.appendChild(row);
+            });
+
+            const inner = modal.querySelector('div');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            inner.classList.remove('scale-95');
+            inner.classList.add('scale-100');
+
+            if (highlightVersionName) {
+                setTimeout(() => {
+                    const targetRow = document.getElementById(`version-row-${normalizeText(highlightVersionName)}`);
+                    if (targetRow) {
+                        targetRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        setTimeout(() => {
+                            targetRow.classList.remove('ring-2', 'ring-blue-500', 'bg-blue-50', 'dark:bg-blue-900/30', 'scale-[1.02]', 'shadow-md', 'z-10', 'relative');
+                            targetRow.classList.add('border', 'border-slate-200/60', 'dark:border-slate-800', 'bg-slate-50', 'dark:bg-slate-900/50', 'hover:border-blue-300', 'dark:hover:border-slate-600');
+                        }, 3500); 
+                    }
+                }, 300);
+            }
+        }
+
+        function closeVersionModal() {
+            const modal = document.getElementById('versionModal');
+            const inner = modal.querySelector('div');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            inner.classList.remove('scale-100');
+            inner.classList.add('scale-95');
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                safeSetLS('theme', 'light');
+            } else {
+                html.classList.add('dark');
+                safeSetLS('theme', 'dark');
+            }
+        }
+
+        function toggleAboutModal(show) {
+            const modal = document.getElementById('aboutModal');
+            const btn = document.getElementById('aboutModalBtn');
+            const inner = modal.querySelector('div');
+            if (show) {
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                inner.classList.remove('scale-95');
+                inner.classList.add('scale-100');
+                btn.setAttribute('aria-expanded', 'true');
+                setTimeout(() => modal.querySelector('button').focus(), 100);
+            } else {
+                modal.classList.add('opacity-0', 'pointer-events-none');
+                inner.classList.remove('scale-100');
+                inner.classList.add('scale-95');
+                btn.setAttribute('aria-expanded', 'false');
+                btn.focus();
+            }
+        }
+
+        function togglePrivacyModal(show) {
+            const modal = document.getElementById('privacyModal');
+            const inner = modal.querySelector('div');
+            if (show) {
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                inner.classList.remove('scale-95');
+                inner.classList.add('scale-100');
+                setTimeout(() => modal.querySelector('button').focus(), 100);
+            } else {
+                modal.classList.add('opacity-0', 'pointer-events-none');
+                inner.classList.remove('scale-100');
+                inner.classList.add('scale-95');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+		    applyFontSize();
+            fetchProjects();
+            
+            // Madde 12: Grid sütunları için Number/Finite kontrolü.
+            let savedCols = parseInt(safeGetLS('ak_grid_cols', null));
+            if (Number.isFinite(savedCols) && savedCols > 0) {
+                gridCols = savedCols;
+            } else {
+                gridCols = window.innerWidth < 768 ? 1 : 3;
+            }
+            applyGridCols();
+
+            document.getElementById('searchBar').addEventListener('input', applyFilters);
+            document.getElementById('clearSearchBtn').addEventListener('click', clearSearch);
+            document.getElementById('btnEmptyClearSearch').addEventListener('click', clearSearch);
+            document.getElementById('themeBtn').addEventListener('click', toggleTheme);
+            document.getElementById('mobileMenuBtn').addEventListener('click', toggleMobileMenu);
+            document.getElementById('mobileThemeBtn').addEventListener('click', () => { toggleTheme(); toggleMobileMenu(); });
+            document.getElementById('aboutModalBtn').addEventListener('click', () => toggleAboutModal(true));
+            document.getElementById('mobileAboutBtn').addEventListener('click', () => { toggleAboutModal(true); toggleMobileMenu(); });
+            document.getElementById('btnCloseAboutModal').addEventListener('click', () => toggleAboutModal(false));
+            document.getElementById('btnOpenPrivacyModal').addEventListener('click', () => togglePrivacyModal(true));
+            document.getElementById('btnClosePrivacyModal').addEventListener('click', () => togglePrivacyModal(false));
+            document.getElementById('btnClearRecents').addEventListener('click', clearAllRecents);
+            document.getElementById('btnCloseShareModal').addEventListener('click', closeShareModal);
+            document.getElementById('btnCloseLinkChoiceModal').addEventListener('click', closeLinkChoiceModal);
+            document.getElementById('btnCloseVersionModal').addEventListener('click', closeVersionModal);
+            document.getElementById('btnCopyShare').addEventListener('click', copyShareLink);
+            
+            document.getElementById('btnShareDirect').addEventListener('click', (e) => updateShareLinks(e.target.dataset.type));
+            document.getElementById('btnSharePortal').addEventListener('click', (e) => updateShareLinks(e.target.dataset.type));
+            
+            document.addEventListener('click', function(e) {
+                
+                const dropdown = document.getElementById('mobileMenuDropdown');
+                const btn = document.getElementById('mobileMenuBtn');
+                if (!btn.contains(e.target) && !dropdown.contains(e.target)) {
+                    dropdown.classList.add('hidden');
+                    btn.setAttribute('aria-expanded', 'false');
+                }
+
+                const fontBtn = e.target.closest('[data-action="font-size"]');
+                if (fontBtn) changeFontSize(parseInt(fontBtn.dataset.val, 10));
+
+                const gridBtn = e.target.closest('[data-action="grid-cols"]');
+                if (gridBtn) changeGridCols(parseInt(gridBtn.dataset.val, 10));
+
+                const favBtn = e.target.closest('[data-action="toggle-favorite"]');
+                if (favBtn) toggleFavorite(favBtn.dataset.project, e);
+
+                const shareBtn = e.target.closest('[data-action="open-share-menu"]');
+                if (shareBtn) openShareMenu(shareBtn.dataset.name, shareBtn.dataset.desc, shareBtn.dataset.url, shareBtn.dataset.icon);
+
+                const verBtn = e.target.closest('[data-action="open-version-modal"]');
+                if (verBtn) openVersionModal(verBtn.dataset.grupid, verBtn.dataset.icon);
+
+                const execShareBtn = e.target.closest('[data-action="execute-share"]');
+                if (execShareBtn) executeNativeShare(execShareBtn.dataset.type);
+
+                const goAppBtn = e.target.closest('[data-action="track-recent"]');
+                if (goAppBtn) trackRecent(goAppBtn.dataset.name);
+
+            });
+        });
+
+        window.addEventListener('keydown', (e) => {
+            const searchBar = document.getElementById('searchBar');
+            
+            if (searchBar && searchBar.value.length > 0 && (e.key === 'Escape' || (e.altKey && e.key === 'Backspace'))) {
+                e.preventDefault();
+                clearSearch();
+                return;
+            }
+
+            if (e.key === 'Escape') {
+                const shareModal = document.getElementById('shareModal');
+                const linkChoiceModal = document.getElementById('linkChoiceModal');
+                const versionModal = document.getElementById('versionModal');
+                const aboutModal = document.getElementById('aboutModal');
+				const privacyModal = document.getElementById('privacyModal');
+                const dropdown = document.getElementById('mobileMenuDropdown');
+
+                if (!shareModal.classList.contains('opacity-0')) {
+                    closeShareModal();
+                } else if (!linkChoiceModal.classList.contains('opacity-0')) {
+                    closeLinkChoiceModal();
+                } else if (!versionModal.classList.contains('opacity-0')) {
+                    closeVersionModal();
+                } else if (!aboutModal.classList.contains('opacity-0')) {
+                    toggleAboutModal(false);
+                } else if (!privacyModal.classList.contains('opacity-0')) {
+                    togglePrivacyModal(false);
+                }
+                
+                if (!dropdown.classList.contains('hidden')) {
+                    dropdown.classList.add('hidden');
+                }
+            }
+
+            if (e.key === '/' || ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k')) {
+                if (!searchBar) return;
+                e.preventDefault(); 
+                
+                const targetY = searchBar.getBoundingClientRect().top + window.scrollY - (window.innerHeight / 3);
+                window.scrollTo({ top: targetY, behavior: 'auto' });
+                
+                setTimeout(() => {
+                    requestAnimationFrame(() => {
+                        requestAnimationFrame(() => {
+                            searchBar.focus();
+                            searchBar.select();
+                        });
+                    });
+                }, 10);
+            }
+        });
+    </script>
+</body>
+</html>
