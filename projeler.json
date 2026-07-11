@@ -1,4 +1,14 @@
-[
+pr[
+    "id": "pratikpdf-v15",
+    "grupId": "pratikpdf",
+    "surumTipi": "Onerilen",
+    "adi": "Pratikpdf v1.5",
+    "url": "https://pratikpdf.netlify.app/v15/",
+    "duyur": "YENİ",
+    "kategori": "Ofis",
+    "ikon": "📄",
+    "aciklama": "Kurulum gerektirmeden tarayıcınızda çalışan PratikPDF ile PDF ve görsellerinizi birleştirebilir, sayfaları sıralayıp silebilir, dosyaları sıkıştırabilir ve JPG/PNG’ye dönüştürebilirsiniz. Ayrıca PDF bölme, filigran ve sayfa numarası ekleme, OCR ile metin çıkarma, geri alma/yineleme ve yarım kalan çalışmayı geri yükleme özelliklerini kullanabilirsiniz. Tüm işlemler yalnızca cihazınızda gerçekleşir."
+  },
    {
     "id": "karekod12",
     "grupId": "karekod",
@@ -37,7 +47,7 @@
   {
     "id": "pratikpdf",
     "grupId": "pratikpdf",
-    "surumTipi": "Onerilen",
+    "surumTipi": "",
     "adi": "Pratikpdf v1.0",
     "url": "https://pratikpdf.netlify.app/",
     "kategori": "Ofis",
