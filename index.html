@@ -286,8 +286,9 @@
                 </button>
             </div>
 
-            <div id="searchHelpContainer" class="text-center text-xs text-slate-400 dark:text-slate-500 font-medium transition-all duration-300 opacity-0 -mt-2 h-0 overflow-hidden">
-                Kutuyu temizlemek için <kbd class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 font-sans text-[11px] shadow-sm">Esc</kbd> veya <kbd class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 font-sans text-[11px] shadow-sm">Alt + Backspace</kbd> tuşlarını kullanabilirsiniz.
+            <div id="searchHelpContainer" class="text-center text-xs text-slate-400 dark:text-slate-500 font-medium transition-all duration-300 opacity-0 -mt-2 h-0 overflow-hidden flex flex-col items-center gap-2">
+                <span id="searchResultsCount" class="hidden text-blue-600 dark:text-blue-400 font-bold text-sm bg-blue-50 dark:bg-blue-900/30 px-3 py-1 rounded-full border border-blue-200 dark:border-blue-800 shadow-sm transition-all"></span>
+                <span>Kutuyu temizlemek için <kbd class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 font-sans text-[11px] shadow-sm">Esc</kbd> veya <kbd class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 font-sans text-[11px] shadow-sm">Alt + Backspace</kbd> tuşlarını kullanabilirsiniz.</span>
             </div>
 
             <div class="w-full overflow-x-auto no-scrollbar -mx-4 px-4 md:mx-0 md:px-0 snap-x snap-mandatory">
@@ -551,6 +552,9 @@
                 </div>
 
                 <div class="space-y-2">
+                    <div data-element="parent-badge-container" class="hidden mb-1.5">
+                        <span data-element="parent-badge" class="inline-block text-[10px] font-bold px-2 py-0.5 bg-indigo-50 text-indigo-600 dark:bg-indigo-950/40 dark:text-indigo-400 rounded-md border border-indigo-200/60 tracking-wide uppercase"></span>
+                    </div>
                     <h3 class="text-lg md:text-xl font-bold text-slate-900 dark:text-slate-400 transition-colors relative z-20" data-element="title"></h3>
                     <p class="text-slate-600 dark:text-slate-400 text-sm md:text-base leading-relaxed font-medium relative z-20 break-words" data-element="desc"></p>
                 </div>
@@ -822,6 +826,103 @@
             }
         }
 
+        function applyFilters() {
+            const searchBar = document.getElementById('searchBar');
+            const clearBtn = document.getElementById('clearSearchBtn');
+            const helpText = document.getElementById('searchHelpContainer');
+            const countBadge = document.getElementById('searchResultsCount');
+            const originalSearchTerm = String(searchBar.value || '');
+            
+            if (originalSearchTerm.length > 0) {
+                if (clearBtn) {
+                    clearBtn.classList.remove('opacity-0', 'pointer-events-none', 'scale-75');
+                    clearBtn.classList.add('opacity-100', 'scale-100');
+                }
+                if (helpText) {
+                    helpText.classList.remove('opacity-0', 'h-0', 'overflow-hidden');
+                    helpText.classList.add('opacity-100', 'mt-2', 'h-auto');
+                }
+            } else {
+                if (clearBtn) {
+                    clearBtn.classList.remove('opacity-100', 'scale-100');
+                    clearBtn.classList.add('opacity-0', 'pointer-events-none', 'scale-75');
+                }
+                if (helpText) {
+                    helpText.classList.remove('opacity-100', 'mt-2', 'h-auto');
+                    helpText.classList.add('opacity-0', 'h-0', 'overflow-hidden');
+                }
+                if (countBadge) countBadge.classList.add('hidden');
+            }
+
+            const normalize = (text) => String(text || '').toLowerCase().replace(/[\s-]/g, '');
+            const normalizedSearch = normalize(originalSearchTerm);
+
+            let filtered = [];
+
+            allProjects.forEach(project => {
+                let matchesCategory = false;
+                if (activeCategory === 'Tümü') matchesCategory = true;
+                else if (activeCategory === 'Favoriler') matchesCategory = favorites.includes(project.id);
+                else matchesCategory = project.kategori === activeCategory;
+
+                if (!matchesCategory) return; 
+
+                const checkMatch = (item) => {
+                    const itemTags = Array.isArray(item.etiketler) ? item.etiketler.join(' ') : '';
+                    return String(item.adi || '').toLowerCase().includes(originalSearchTerm.toLowerCase()) || 
+                           String(item.aciklama || '').toLowerCase().includes(originalSearchTerm.toLowerCase()) ||
+                           itemTags.toLowerCase().includes(originalSearchTerm.toLowerCase()) ||
+                           normalize(item.adi).includes(normalizedSearch) || 
+                           normalize(item.aciklama).includes(normalizedSearch) ||
+                           normalize(itemTags).includes(normalizedSearch);
+                };
+
+                if (originalSearchTerm.length === 0) {
+                    filtered.push(project);
+                } else {
+                    if (checkMatch(project)) {
+                        filtered.push(project);
+                    }
+                    
+                    if (project.tumSurumler && project.tumSurumler.length > 1) {
+                        project.tumSurumler.forEach(subVersion => {
+                            if (subVersion.id !== project.id && checkMatch(subVersion)) {
+                                filtered.push({
+                                    ...subVersion,
+                                    ikon: subVersion.ikon || project.ikon,
+                                    kategori: subVersion.kategori || project.kategori,
+                                    parentName: project.adi
+                                });
+                            }
+                        });
+                    }
+                }
+            });
+
+            filtered = filtered.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
+
+            filtered.sort((a, b) => {
+                const indexA = recents.indexOf(a.id);
+                const indexB = recents.indexOf(b.id);
+                
+                const isRecentA = indexA !== -1;
+                const isRecentB = indexB !== -1;
+
+                if (isRecentA && isRecentB) return indexA - indexB; 
+                if (isRecentA) return -1; 
+                if (isRecentB) return 1;  
+                
+                return 0; 
+            });
+
+            if (originalSearchTerm.length > 0 && countBadge) {
+                countBadge.textContent = `${filtered.length} adet sonuç bulundu`;
+                countBadge.classList.remove('hidden');
+            }
+
+            renderProjects(filtered);
+        }
+
         function renderProjects(projects) {
             const grid = document.getElementById('projectsGrid');
             const noResults = document.getElementById('noResults');
@@ -837,7 +938,9 @@
             }
 
             let sortedProjects = [...projects];
-            if (activeCategory === 'Tümü' && favorites.length > 0) {
+            
+            const searchBar = document.getElementById('searchBar');
+            if (activeCategory === 'Tümü' && favorites.length > 0 && (!searchBar || searchBar.value.length === 0)) {
                 sortedProjects.sort((a, b) => {
                     const aFav = favorites.includes(a.id) ? 1 : 0;
                     const bFav = favorites.includes(b.id) ? 1 : 0;
@@ -874,6 +977,15 @@
                     badge.className = `text-[10px] font-extrabold px-2 py-0.5 rounded-md border ${badgeColor} tracking-wide uppercase`;
                 }
 
+                if (project.parentName) {
+                    const parentBadgeContainer = clone.querySelector('[data-element="parent-badge-container"]');
+                    const parentBadge = clone.querySelector('[data-element="parent-badge"]');
+                    if (parentBadgeContainer && parentBadge) {
+                        parentBadgeContainer.classList.remove('hidden');
+                        parentBadge.textContent = `Ana Uygulama: ${project.parentName}`;
+                    }
+                }
+
                 clone.querySelector('[data-element="category-badge"]').textContent = project.kategori;
                 clone.querySelector('[data-element="icon"]').textContent = project.ikon || '🚀';
                 clone.querySelector('[data-element="title"]').textContent = project.adi;
@@ -895,7 +1007,7 @@
                     favIcon.classList.add('animate-star-inactive');
                 }
 
-                if (project.tumSurumler && project.tumSurumler.length > 1) {
+                if (project.tumSurumler && project.tumSurumler.length > 1 && !project.parentName) {
                     const vBtn = clone.querySelector('[data-element="version-btn"]');
                     vBtn.classList.remove('hidden');
                     vBtn.dataset.grupid = project.grupId || project.id;
@@ -961,52 +1073,6 @@
             activeCategory = category;
             generateCategoryButtons();
             applyFilters();
-        }
-
-        function applyFilters() {
-            const searchBar = document.getElementById('searchBar');
-            const clearBtn = document.getElementById('clearSearchBtn');
-            const helpText = document.getElementById('searchHelpContainer');
-            const originalSearchTerm = String(searchBar.value || '');
-            
-            if (originalSearchTerm.length > 0) {
-                if (clearBtn) {
-                    clearBtn.classList.remove('opacity-0', 'pointer-events-none', 'scale-75');
-                    clearBtn.classList.add('opacity-100', 'scale-100');
-                }
-                if (helpText) {
-                    helpText.classList.remove('opacity-0', 'h-0', 'overflow-hidden');
-                    helpText.classList.add('opacity-100', 'mt-2', 'h-auto');
-                }
-            } else {
-                if (clearBtn) {
-                    clearBtn.classList.remove('opacity-100', 'scale-100');
-                    clearBtn.classList.add('opacity-0', 'pointer-events-none', 'scale-75');
-                }
-                if (helpText) {
-                    helpText.classList.remove('opacity-100', 'mt-2', 'h-auto');
-                    helpText.classList.add('opacity-0', 'h-0', 'overflow-hidden');
-                }
-            }
-
-            const normalize = (text) => String(text || '').toLowerCase().replace(/[\s-]/g, '');
-            const normalizedSearch = normalize(originalSearchTerm);
-
-            const filtered = allProjects.filter(project => {
-                let matchesCategory = false;
-                if (activeCategory === 'Tümü') matchesCategory = true;
-                else if (activeCategory === 'Favoriler') matchesCategory = favorites.includes(project.id);
-                else matchesCategory = project.kategori === activeCategory;
-
-                const matchesSearch = 
-                    String(project.adi || '').toLowerCase().includes(originalSearchTerm.toLowerCase()) || 
-                    String(project.aciklama || '').toLowerCase().includes(originalSearchTerm.toLowerCase()) ||
-                    normalize(project.adi).includes(normalizedSearch) || 
-                    normalize(project.aciklama).includes(normalizedSearch);
-                    
-                return matchesCategory && matchesSearch;
-            });
-            renderProjects(filtered);
         }
 
         function clearSearch() {
@@ -1403,33 +1469,24 @@
                 const actionsDiv = document.createElement('div');
                 actionsDiv.className = "flex items-center gap-2 flex-shrink-0";
 
-                // --- YENİ EKLENEN: AÇIKLAMA BİLGİ BUTONU VE AKORDEON İÇERİĞİ ---
-                
                 let infoBtn = null;
                 let accordionContent = null;
 
                 if (v.aciklama && v.aciklama.trim() !== '') {
-                    // Bilgi Butonu
                     infoBtn = document.createElement('button');
-                    // 'accordion-btn' class'ı eklendi (diğer butonları bulabilmek için)
                     infoBtn.className = "accordion-btn flex-shrink-0 p-2.5 bg-white border border-slate-200 hover:bg-slate-100 hover:text-blue-600 dark:bg-slate-800 dark:border-slate-700 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 rounded-xl transition-all shadow-sm active:scale-95";
                     infoBtn.setAttribute('aria-label', 'Açıklama Detayları');
                     infoBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
                     
-                    // Akordeon İçerik Div'i
                     accordionContent = document.createElement('div');
-                    // 'accordion-content' class'ı eklendi (diğer içerikleri bulabilmek için)
                     accordionContent.className = "accordion-content max-h-0 opacity-0 overflow-hidden transition-all duration-300 ease-in-out bg-slate-100/50 dark:bg-slate-800/40 border-t border-transparent";
                     accordionContent.innerHTML = `<div class="p-4 text-sm text-slate-600 dark:text-slate-400 font-medium leading-relaxed border-t border-slate-200/40 dark:border-slate-700/40 mx-2">${v.aciklama}</div>`;
 
-                    // Tıklama Olayı (Toggle)
                     infoBtn.addEventListener('click', (e) => {
                         e.stopPropagation();
                         
-                        // Tıklanan akordeon o anda açık mı? (Bunu kaydetmemiz lazım)
                         const isOpen = accordionContent.classList.contains('max-h-96');
                         
-                        // 1. Önce listedeki TÜM açık akordeonları ve aktif butonları bulup zorla kapat
                         const container = document.getElementById('versionListContainer');
                         const allContents = container.querySelectorAll('.accordion-content');
                         const allBtns = container.querySelectorAll('.accordion-btn');
@@ -1443,8 +1500,6 @@
                             btn.classList.remove('bg-blue-50', 'text-blue-600', 'border-blue-200', 'dark:bg-slate-700');
                         });
 
-                        // 2. Eğer tıkladığımız buton zaten AÇIK DEĞİLDİYSE, şimdi onu aç
-                        // (Eğer açıksa, yukarıdaki döngü onu da kapattığı için öylece kapalı kalacak)
                         if (!isOpen) {
                             accordionContent.classList.remove('max-h-0', 'opacity-0');
                             accordionContent.classList.add('max-h-96', 'opacity-100');
@@ -1453,7 +1508,6 @@
                     });
                 }
                 
-                // Paylaş Butonu (Eski)
                 const sBtn = document.createElement('button');
                 sBtn.dataset.action = "open-share-menu";
                 sBtn.dataset.name = v.adi;
@@ -1478,7 +1532,6 @@
                 shareSvg.appendChild(sharePath);
                 sBtn.appendChild(shareSvg);
                 
-                // Aç Butonu (Eski)
                 const goBtn = document.createElement('a');
                 if (safeUrl === '#') {
                     goBtn.href = "javascript:void(0);";
@@ -1494,7 +1547,6 @@
                     goBtn.textContent = "Aç";
                 }
                 
-                // Eğer buton oluştuysa, Paylaş'tan önce ekle
                 if (infoBtn) actionsDiv.appendChild(infoBtn);
                 actionsDiv.appendChild(sBtn);
                 actionsDiv.appendChild(goBtn);
@@ -1502,9 +1554,7 @@
                 mainRow.appendChild(infoDiv);
                 mainRow.appendChild(actionsDiv);
                 
-                // Ana satırı dış kaba ekle
                 rowWrapper.appendChild(mainRow);
-                // Akordeon içeriğini (varsa) hemen altına ekle
                 if (accordionContent) rowWrapper.appendChild(accordionContent);
                 
                 container.appendChild(rowWrapper);
@@ -1521,7 +1571,6 @@
                     if (targetRow) {
                         targetRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
                         setTimeout(() => {
-                            // DOM yapısı değiştiği için Highlight sıfırlama sınıflarını Wrapper'a uyarladık
                             targetRow.classList.remove('ring-2', 'ring-blue-500', 'bg-blue-50', 'dark:bg-blue-900/30', 'scale-[1.02]', 'shadow-md', 'z-10', 'relative', 'border-blue-300', 'dark:border-slate-600');
                             targetRow.classList.add('border-slate-200/60', 'dark:border-slate-800', 'bg-slate-50', 'dark:bg-slate-900/50', 'hover:border-blue-300', 'dark:hover:border-slate-600');
                         }, 3500); 
