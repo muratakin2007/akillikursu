@@ -1404,31 +1404,48 @@
                 actionsDiv.className = "flex items-center gap-2 flex-shrink-0";
 
                 // --- YENİ EKLENEN: AÇIKLAMA BİLGİ BUTONU VE AKORDEON İÇERİĞİ ---
+                
                 let infoBtn = null;
                 let accordionContent = null;
 
                 if (v.aciklama && v.aciklama.trim() !== '') {
                     // Bilgi Butonu
                     infoBtn = document.createElement('button');
-                    infoBtn.className = "flex-shrink-0 p-2.5 bg-white border border-slate-200 hover:bg-slate-100 hover:text-blue-600 dark:bg-slate-800 dark:border-slate-700 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 rounded-xl transition-all shadow-sm active:scale-95";
+                    // 'accordion-btn' class'ı eklendi (diğer butonları bulabilmek için)
+                    infoBtn.className = "accordion-btn flex-shrink-0 p-2.5 bg-white border border-slate-200 hover:bg-slate-100 hover:text-blue-600 dark:bg-slate-800 dark:border-slate-700 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 rounded-xl transition-all shadow-sm active:scale-95";
                     infoBtn.setAttribute('aria-label', 'Açıklama Detayları');
                     infoBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
                     
                     // Akordeon İçerik Div'i
                     accordionContent = document.createElement('div');
-                    // max-h-0 ile başlıyor. max-h-96 açılınca metni kurtaracak kadar yükseklik (yaklaşık 384px) sağlar.
-                    accordionContent.className = "max-h-0 opacity-0 overflow-hidden transition-all duration-300 ease-in-out bg-slate-100/50 dark:bg-slate-800/40 border-t border-transparent";
+                    // 'accordion-content' class'ı eklendi (diğer içerikleri bulabilmek için)
+                    accordionContent.className = "accordion-content max-h-0 opacity-0 overflow-hidden transition-all duration-300 ease-in-out bg-slate-100/50 dark:bg-slate-800/40 border-t border-transparent";
                     accordionContent.innerHTML = `<div class="p-4 text-sm text-slate-600 dark:text-slate-400 font-medium leading-relaxed border-t border-slate-200/40 dark:border-slate-700/40 mx-2">${v.aciklama}</div>`;
 
                     // Tıklama Olayı (Toggle)
                     infoBtn.addEventListener('click', (e) => {
                         e.stopPropagation();
+                        
+                        // Tıklanan akordeon o anda açık mı? (Bunu kaydetmemiz lazım)
                         const isOpen = accordionContent.classList.contains('max-h-96');
-                        if (isOpen) {
-                            accordionContent.classList.remove('max-h-96', 'opacity-100');
-                            accordionContent.classList.add('max-h-0', 'opacity-0');
-                            infoBtn.classList.remove('bg-blue-50', 'text-blue-600', 'border-blue-200', 'dark:bg-slate-700');
-                        } else {
+                        
+                        // 1. Önce listedeki TÜM açık akordeonları ve aktif butonları bulup zorla kapat
+                        const container = document.getElementById('versionListContainer');
+                        const allContents = container.querySelectorAll('.accordion-content');
+                        const allBtns = container.querySelectorAll('.accordion-btn');
+                        
+                        allContents.forEach(el => {
+                            el.classList.remove('max-h-96', 'opacity-100');
+                            el.classList.add('max-h-0', 'opacity-0');
+                        });
+                        
+                        allBtns.forEach(btn => {
+                            btn.classList.remove('bg-blue-50', 'text-blue-600', 'border-blue-200', 'dark:bg-slate-700');
+                        });
+
+                        // 2. Eğer tıkladığımız buton zaten AÇIK DEĞİLDİYSE, şimdi onu aç
+                        // (Eğer açıksa, yukarıdaki döngü onu da kapattığı için öylece kapalı kalacak)
+                        if (!isOpen) {
                             accordionContent.classList.remove('max-h-0', 'opacity-0');
                             accordionContent.classList.add('max-h-96', 'opacity-100');
                             infoBtn.classList.add('bg-blue-50', 'text-blue-600', 'border-blue-200', 'dark:bg-slate-700');
