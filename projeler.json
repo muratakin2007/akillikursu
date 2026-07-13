@@ -48,7 +48,7 @@
   {
     "id": "pratikpdf",
     "grupId": "pratikpdf",
-    "surumTipi": "",
+    "surumTipi": "Klasik",
     "adi": "Pratikpdf v1.0",
     "url": "https://pratikpdf.netlify.app/",
     "kategori": "Ofis",
@@ -118,7 +118,7 @@
   {
     "id": "karekod",
     "grupId": "karekod",
-    "surumTipi": "",
+    "surumTipi": "Klasik",
     "adi": "QR Kod Oluşturucu v1.0",
     "url": "https://karekod-olusturucu.netlify.app/",
     "kategori": "Ofis",
