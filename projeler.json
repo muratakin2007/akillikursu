@@ -10,6 +10,7 @@
     "ikon": "⇄",
     "aciklama": "JPG, PNG, WebP, AVIF, SVG, GIF ve PDF dosya uzantılarını birbirine dönüştürmenizi sağlayan ücretsiz ve kullanımı kolay bir web uygulamasıdır. Birden fazla dosyayı aynı anda dönüştürebilir; görüntü kalitesini, boyutunu ve PDF sayfa ayarlarını düzenleyebilirsiniz. Dönüştürülen dosyalar tek tek veya ZIP olarak indirilebilir. Tüm işlemler cihazınızda gerçekleşir ve dosyalarınız sunucuya gönderilmez."
   },
+     {
     "id": "pratikpdf-v15",
     "grupId": "pratikpdf",
     "surumTipi": "Onerilen",
