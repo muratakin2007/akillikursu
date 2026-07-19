@@ -1,0 +1,3469 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Akıllı Kürsü - Dijital Ücretsiz Eğitim Araçları Merkezi</title>
+    
+    <meta name="description" content="Öğretmenlerin günlük işlerini otomatikleştiren, sınıf yönetimini pratikleştiren ücretsiz yeni nesil web uygulamaları.">
+    <meta property="og:title" content="Akıllı Kürsü - Sınıflar İçin Akıllı Çözümler">
+    <meta property="og:description" content="Öğretmenlerin günlük işlerini otomatikleştiren ücretsiz eğitim araçları platformu.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://akillikursu.netlify.app/">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        try {
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        } catch(e) {
+            console.error("Tema ayarı okunamadı", e);
+        }
+    </script>
+
+    <script>
+        (function () {
+            var ua = navigator.userAgent || navigator.vendor || window.opera || '';
+            var isInstagram = /Instagram/i.test(ua);
+            var isFacebook = /FBAN|FBAV/i.test(ua);
+            var isOtherInApp = /TikTok|Line\/|Twitter|Snapchat|Pinterest|GSA\/|; wv\)|\bwv\b/i.test(ua);
+            var isAndroidWebView = /; wv\)/i.test(ua) || (/Version\/4\.0/i.test(ua) && /Chrome\//i.test(ua) && /Mobile Safari/i.test(ua));
+            var isInApp = isInstagram || isFacebook || isOtherInApp || isAndroidWebView;
+            var cssApi = window.CSS;
+            var supportsBackdrop = !!(cssApi && cssApi.supports && (
+                cssApi.supports('backdrop-filter', 'blur(1px)') ||
+                cssApi.supports('-webkit-backdrop-filter', 'blur(1px)')
+            ));
+            var supportsDvh = !!(cssApi && cssApi.supports && cssApi.supports('height', '100dvh'));
+            var root = document.documentElement;
+
+            if (isInApp) root.classList.add('compat-browser');
+            if (!supportsBackdrop) root.classList.add('no-backdrop');
+            if (!supportsDvh) root.classList.add('no-dvh');
+
+            window.__AK_COMPAT__ = {
+                isInApp: isInApp,
+                isInstagram: isInstagram,
+                isAndroidWebView: isAndroidWebView,
+                supportsBackdrop: supportsBackdrop,
+                supportsDvh: supportsDvh,
+                canNativeShare: !!navigator.share && !isInApp
+            };
+        })();
+    </script>
+
+    <style>
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes starPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.35) rotate(12deg); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes starUnpop {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.8) rotate(-8deg); }
+            100% { transform: scale(1); }
+        }
+
+        .animate-star-active {
+            animation: starPop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .animate-star-inactive {
+            animation: starUnpop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .project-card:hover,
+        .project-card:active {
+            z-index: 20;
+            transform: scale(1.02);
+            border-color: #60a5fa;
+            box-shadow: 0 0 40px -10px rgba(59, 130, 246, 0.3);
+            background-image: linear-gradient(to bottom right, #ffffff, rgba(239, 246, 255, 0.5));
+        }
+        
+        .dark .project-card:hover,
+        .dark .project-card:active {
+            border-color: #3b82f6;
+            box-shadow: 0 0 40px -10px rgba(59, 130, 246, 0.2);
+            background-image: linear-gradient(to bottom right, #0f172a, rgba(30, 41, 59, 0.8));
+        }
+
+        .project-card:active, .cat-btn:active, .go-app-btn:active, .share-btn:active, .size-btn:active {
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+            transform: scale(0.99) !important;
+        }
+
+        .project-card:hover h3,
+        .project-card:active h3 {
+            color: #3b82f6;
+        }
+
+        .dark .project-card:hover h3,
+        .dark .project-card:active h3 {
+            color: #60a5fa;
+        }
+
+        .project-card:hover .project-icon,
+        .project-card:active .project-icon {
+            background-color: #eff6ff;
+        }
+
+        .dark .project-card:hover .project-icon,
+        .dark .project-card:active .project-icon {
+            background-color: rgba(30, 58, 138, 0.5);
+        }
+
+        .project-card:hover .go-app-btn svg,
+        .project-card:active .go-app-btn svg {
+            transform: translateX(4px) translateY(-4px);
+        }
+
+        .share-btn {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .share-btn:hover {
+            transform: scale(1.01);
+            color: #2563eb;
+            border-color: #93c5fd;
+            background-color: #f0f7ff;
+        }
+        .dark .share-btn:hover {
+            color: #60a5fa;
+            border-color: #2563eb;
+            background-color: rgba(30, 58, 138, 0.2);
+        }
+        .share-btn:hover svg {
+            transform: rotate(-12deg) scale(1.08);
+        }
+        .share-btn svg {
+            transition: transform 0.2s ease;
+        }
+
+        .ribbon-wrapper {
+            width: 95px;
+            height: 95px;
+            overflow: hidden;
+            position: absolute;
+            top: -1px;
+            right: -1px;
+            z-index: 10;
+        }
+        .ribbon {
+            font-weight: 800;
+            font-size: 10px;
+            text-align: center;
+            letter-spacing: 0.5px;
+            transform: rotate(45deg);
+            position: relative;
+            padding: 5px 0;
+            left: -5px;
+            top: 17px;
+            width: 140px;
+            background-color: #10b981;
+            color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        html {
+            transition: font-size 0.2s ease;
+        }
+    </style>
+
+
+    <!-- Modern Glass Art Direction: visual-only layer -->
+    <style id="modern-glass-art-direction">
+        :root {
+            color-scheme: light;
+            --ak-bg: #f4f7ff;
+            --ak-bg-soft: rgba(248, 250, 255, 0.72);
+            --ak-surface: rgba(255, 255, 255, 0.64);
+            --ak-surface-strong: rgba(255, 255, 255, 0.84);
+            --ak-surface-subtle: rgba(255, 255, 255, 0.46);
+            --ak-border: rgba(255, 255, 255, 0.82);
+            --ak-border-soft: rgba(99, 102, 241, 0.14);
+            --ak-text: #15213c;
+            --ak-muted: #65718a;
+            --ak-accent: #5368ff;
+            --ak-accent-2: #8758ff;
+            --ak-accent-3: #18b6d9;
+            --ak-shadow: 0 24px 80px rgba(65, 73, 125, 0.13), 0 4px 18px rgba(65, 73, 125, 0.06);
+            --ak-shadow-hover: 0 34px 90px rgba(71, 78, 150, 0.2), 0 10px 30px rgba(90, 101, 210, 0.12);
+            --ak-blur: blur(24px) saturate(145%);
+        }
+
+        html.dark {
+            color-scheme: dark;
+            --ak-bg: #070b18;
+            --ak-bg-soft: rgba(9, 14, 31, 0.76);
+            --ak-surface: rgba(18, 25, 50, 0.58);
+            --ak-surface-strong: rgba(21, 29, 58, 0.82);
+            --ak-surface-subtle: rgba(21, 29, 58, 0.44);
+            --ak-border: rgba(159, 176, 255, 0.14);
+            --ak-border-soft: rgba(129, 140, 248, 0.19);
+            --ak-text: #f1f4ff;
+            --ak-muted: #a8b2ca;
+            --ak-accent: #7c91ff;
+            --ak-accent-2: #af78ff;
+            --ak-accent-3: #48d5ef;
+            --ak-shadow: 0 30px 90px rgba(0, 0, 0, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+            --ak-shadow-hover: 0 38px 110px rgba(0, 0, 0, 0.5), 0 14px 42px rgba(78, 93, 220, 0.16);
+        }
+
+        html {
+            background: var(--ak-bg);
+        }
+
+        html::before,
+        html::after,
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            inset: auto;
+            pointer-events: none;
+            z-index: -4;
+            will-change: transform, opacity, filter;
+        }
+
+        html::before {
+            top: -18vh;
+            left: -10vw;
+            width: 72vw;
+            height: 72vw;
+            min-width: 44rem;
+            min-height: 44rem;
+            border-radius: 50%;
+            background:
+                radial-gradient(circle at 35% 35%, rgba(122, 154, 255, 0.42), transparent 26%),
+                radial-gradient(circle at 58% 44%, rgba(255, 255, 255, 0.4), transparent 16%),
+                radial-gradient(circle at 66% 72%, rgba(115, 229, 241, 0.22), transparent 20%),
+                radial-gradient(circle at 82% 22%, rgba(191, 115, 255, 0.28), transparent 18%);
+            filter: blur(24px) saturate(135%);
+            opacity: 0.92;
+            animation: akAuroraDrift 28s ease-in-out infinite alternate;
+        }
+
+        html::after {
+            inset: 0;
+            z-index: -5;
+            background:
+                linear-gradient(135deg, rgba(255,255,255,0.28), transparent 32%),
+                radial-gradient(circle at 12% 10%, rgba(112, 146, 255, 0.18), transparent 18%),
+                radial-gradient(circle at 84% 12%, rgba(196, 122, 255, 0.16), transparent 20%),
+                radial-gradient(circle at 70% 62%, rgba(92, 219, 234, 0.12), transparent 20%),
+                radial-gradient(circle at 24% 78%, rgba(255, 255, 255, 0.55), transparent 18%),
+                linear-gradient(135deg, #f8fbff 0%, #eef3ff 38%, #f9f4ff 100%);
+            opacity: 1;
+        }
+
+        body {
+            position: relative;
+            isolation: isolate;
+            overflow-x: hidden;
+            background:
+                radial-gradient(circle at 10% 6%, rgba(112, 146, 255, 0.22), transparent 28rem),
+                radial-gradient(circle at 90% 10%, rgba(188, 117, 255, 0.18), transparent 28rem),
+                radial-gradient(circle at 72% 58%, rgba(75, 214, 231, 0.11), transparent 34rem),
+                radial-gradient(circle at 20% 88%, rgba(255, 255, 255, 0.46), transparent 24rem),
+                linear-gradient(135deg, rgba(248, 251, 255, 0.82) 0%, rgba(241, 244, 255, 0.72) 44%, rgba(250, 247, 255, 0.86) 100%) !important;
+            color: var(--ak-text) !important;
+            transition: background 0.55s ease, color 0.35s ease;
+        }
+
+        .dark html::before {
+            background:
+                radial-gradient(circle at 35% 35%, rgba(92, 118, 255, 0.34), transparent 26%),
+                radial-gradient(circle at 62% 44%, rgba(106, 226, 255, 0.16), transparent 16%),
+                radial-gradient(circle at 70% 70%, rgba(178, 104, 255, 0.24), transparent 20%),
+                radial-gradient(circle at 80% 22%, rgba(99, 118, 255, 0.24), transparent 18%);
+            filter: blur(30px) saturate(145%);
+            opacity: 0.78;
+        }
+
+        .dark html::after {
+            background:
+                linear-gradient(140deg, rgba(18,25,54,0.18), transparent 32%),
+                radial-gradient(circle at 13% 10%, rgba(84, 104, 235, 0.18), transparent 18%),
+                radial-gradient(circle at 84% 12%, rgba(164, 89, 247, 0.16), transparent 20%),
+                radial-gradient(circle at 70% 62%, rgba(54, 202, 225, 0.12), transparent 22%),
+                radial-gradient(circle at 24% 78%, rgba(36, 52, 105, 0.36), transparent 18%),
+                linear-gradient(145deg, #050814 0%, #0a1023 47%, #0a0d1f 100%);
+        }
+
+        .dark body {
+            background:
+                radial-gradient(circle at 13% 3%, rgba(82, 101, 230, 0.18), transparent 32rem),
+                radial-gradient(circle at 87% 8%, rgba(138, 73, 215, 0.16), transparent 30rem),
+                radial-gradient(circle at 69% 58%, rgba(28, 171, 205, 0.09), transparent 34rem),
+                radial-gradient(circle at 18% 82%, rgba(32, 45, 92, 0.32), transparent 28rem),
+                linear-gradient(145deg, rgba(6, 10, 22, 0.9) 0%, rgba(10, 16, 35, 0.82) 47%, rgba(11, 13, 32, 0.9) 100%) !important;
+        }
+
+        body::before {
+            width: 36rem;
+            height: 36rem;
+            left: -14rem;
+            top: 22%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(129, 157, 255, 0.26), transparent 67%);
+            filter: blur(10px);
+            opacity: 0.78;
+            animation: akFloatOne 22s ease-in-out infinite alternate;
+        }
+
+        body::after {
+            width: 32rem;
+            height: 32rem;
+            right: -12rem;
+            top: 60%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(196, 102, 255, 0.22), transparent 68%);
+            filter: blur(10px);
+            opacity: 0.7;
+            animation: akFloatTwo 24s ease-in-out infinite alternate;
+        }
+
+        @keyframes akFloatOne {
+            0% { transform: translate3d(0, 0, 0) scale(1); }
+            100% { transform: translate3d(6rem, -4rem, 0) scale(1.12); }
+        }
+
+        @keyframes akFloatTwo {
+            0% { transform: translate3d(0, 0, 0) scale(1); }
+            100% { transform: translate3d(-4rem, 3rem, 0) scale(1.14); }
+        }
+
+        @keyframes akAuroraDrift {
+            0% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+            50% { transform: translate3d(4vw, 2vh, 0) scale(1.05) rotate(5deg); }
+            100% { transform: translate3d(8vw, -1vh, 0) scale(1.12) rotate(10deg); }
+        }
+
+        @keyframes akRibbonWave {
+            0% { transform: translate3d(-2%, 0, 0) scale(1) rotate(0deg); }
+            50% { transform: translate3d(2%, -2%, 0) scale(1.06) rotate(4deg); }
+            100% { transform: translate3d(4%, 1%, 0) scale(1.1) rotate(8deg); }
+        }
+
+        @keyframes akPulseGlow {
+            0%, 100% { opacity: 0.62; filter: blur(70px) saturate(120%); }
+            50% { opacity: 0.88; filter: blur(86px) saturate(145%); }
+        }
+
+        body > div[aria-hidden="true"] {
+            position: fixed !important;
+            inset: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            pointer-events: none !important;
+            opacity: 1 !important;
+            overflow: visible !important;
+            z-index: -3 !important;
+            mix-blend-mode: screen;
+            filter: saturate(135%);
+        }
+
+        body > div[aria-hidden="true"]::before,
+        body > div[aria-hidden="true"]::after {
+            content: "";
+            position: absolute;
+            inset: auto;
+            pointer-events: none;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.72;
+        }
+
+        body > div[aria-hidden="true"]::before {
+            width: 48vw;
+            min-width: 24rem;
+            max-width: 42rem;
+            height: 36vh;
+            left: 28%;
+            top: 18%;
+            background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.5), rgba(120, 143, 255, 0.16) 28%, transparent 72%);
+            animation: akRibbonWave 20s ease-in-out infinite alternate;
+        }
+
+        body > div[aria-hidden="true"]::after {
+            width: 42vw;
+            min-width: 22rem;
+            max-width: 38rem;
+            height: 30vh;
+            left: 12%;
+            bottom: 12%;
+            background: radial-gradient(circle at 38% 40%, rgba(103, 228, 244, 0.2), rgba(197, 116, 255, 0.18) 34%, transparent 74%);
+            animation: akPulseGlow 18s ease-in-out infinite;
+        }
+
+        .dark body > div[aria-hidden="true"] {
+            opacity: 0.9 !important;
+            mix-blend-mode: screen;
+            filter: saturate(150%);
+        }
+
+        body > div[aria-hidden="true"] > div:first-child {
+            width: min(48rem, 62vw) !important;
+            height: min(48rem, 62vw) !important;
+            left: -10rem !important;
+            top: -6rem !important;
+            background: radial-gradient(circle, rgba(92, 132, 255, 0.28), rgba(135, 175, 255, 0.12) 42%, transparent 70%) !important;
+            filter: blur(130px) !important;
+            animation: akFloatOne 22s ease-in-out infinite alternate !important;
+        }
+
+        body > div[aria-hidden="true"] > div:last-child {
+            width: min(42rem, 54vw) !important;
+            height: min(42rem, 54vw) !important;
+            right: -8rem !important;
+            top: 4rem !important;
+            background: radial-gradient(circle, rgba(175, 96, 255, 0.24), rgba(104, 224, 240, 0.1) 42%, transparent 70%) !important;
+            filter: blur(130px) !important;
+            animation: akFloatTwo 24s ease-in-out infinite alternate !important;
+        }
+
+        .dark body > div[aria-hidden="true"]::before {
+            background: radial-gradient(circle at 35% 35%, rgba(72, 97, 231, 0.34), rgba(87, 194, 215, 0.1) 32%, transparent 72%);
+        }
+
+        .dark body > div[aria-hidden="true"]::after {
+            background: radial-gradient(circle at 42% 42%, rgba(91, 218, 240, 0.18), rgba(181, 96, 255, 0.2) 36%, transparent 76%);
+        }
+
+        .dark body > div[aria-hidden="true"] > div:first-child {
+            background: radial-gradient(circle, rgba(74, 96, 233, 0.34), rgba(90, 126, 255, 0.14) 44%, transparent 72%) !important;
+        }
+
+        .dark body > div[aria-hidden="true"] > div:last-child {
+            background: radial-gradient(circle, rgba(155, 88, 240, 0.28), rgba(74, 204, 225, 0.12) 46%, transparent 72%) !important;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html::before,
+            body::before,
+            body::after,
+            body > div[aria-hidden="true"]::before,
+            body > div[aria-hidden="true"]::after,
+            body > div[aria-hidden="true"] > div:first-child,
+            body > div[aria-hidden="true"] > div:last-child {
+                animation: none !important;
+            }
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.53) !important;
+            border-color: rgba(255, 255, 255, 0.74) !important;
+            box-shadow: 0 10px 40px rgba(65, 76, 126, 0.08), inset 0 -1px 0 rgba(99, 102, 241, 0.07);
+            backdrop-filter: blur(24px) saturate(165%) !important;
+            -webkit-backdrop-filter: blur(24px) saturate(165%) !important;
+        }
+
+        .dark header {
+            background: rgba(8, 12, 27, 0.61) !important;
+            border-color: rgba(152, 167, 255, 0.1) !important;
+            box-shadow: 0 16px 50px rgba(0, 0, 0, 0.24), inset 0 -1px 0 rgba(145, 157, 255, 0.08);
+        }
+
+        header .h-20 {
+            min-height: 5.35rem;
+        }
+
+        #aboutModalBtn,
+        #themeBtn,
+        #mobileMenuBtn,
+        header .size-btn,
+        #mobileMenuDropdown {
+            background: var(--ak-surface-subtle) !important;
+            border: 1px solid var(--ak-border) !important;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.58), 0 8px 24px rgba(61, 72, 120, 0.07);
+            backdrop-filter: blur(18px) saturate(145%);
+            -webkit-backdrop-filter: blur(18px) saturate(145%);
+        }
+
+        .dark #aboutModalBtn,
+        .dark #themeBtn,
+        .dark #mobileMenuBtn,
+        .dark header .size-btn,
+        .dark #mobileMenuDropdown {
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 10px 28px rgba(0, 0, 0, 0.18);
+        }
+
+        #aboutModalBtn:hover,
+        #themeBtn:hover,
+        #mobileMenuBtn:hover,
+        header .size-btn:hover {
+            border-color: rgba(112, 126, 255, 0.33) !important;
+            background: var(--ak-surface-strong) !important;
+            transform: translateY(-1px);
+        }
+
+        header .absolute.left-1\/2 span {
+            position: relative;
+            font-weight: 800 !important;
+            letter-spacing: -0.04em !important;
+            filter: drop-shadow(0 8px 18px rgba(92, 89, 222, 0.12));
+        }
+
+        header .absolute.left-1\/2 span::after {
+            content: "";
+            position: absolute;
+            left: 18%;
+            right: 18%;
+            bottom: -0.45rem;
+            height: 2px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, transparent, rgba(107, 114, 255, 0.6), transparent);
+            opacity: 0.6;
+        }
+
+        main {
+            position: relative;
+        }
+
+        main > .text-center:first-child {
+            position: relative;
+            padding-top: 1rem;
+        }
+
+        #totalAppsBadge {
+            background: rgba(255, 255, 255, 0.5) !important;
+            border-color: rgba(255, 255, 255, 0.78) !important;
+            color: #5161df !important;
+            box-shadow: 0 12px 32px rgba(69, 77, 136, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(18px) saturate(160%);
+            -webkit-backdrop-filter: blur(18px) saturate(160%);
+        }
+
+        .dark #totalAppsBadge {
+            background: rgba(20, 28, 58, 0.54) !important;
+            border-color: rgba(146, 160, 255, 0.17) !important;
+            color: #9eacff !important;
+            box-shadow: 0 14px 36px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+        }
+
+        main h2 {
+            color: var(--ak-text) !important;
+            letter-spacing: -0.055em !important;
+            text-wrap: balance;
+            text-shadow: 0 8px 30px rgba(71, 75, 135, 0.08);
+        }
+
+        main h2 span {
+            background-image: linear-gradient(100deg, #4d72ff 5%, #735aff 47%, #b454e8 96%) !important;
+            filter: drop-shadow(0 12px 26px rgba(103, 91, 238, 0.16));
+        }
+
+        .dark main h2 span {
+            background-image: linear-gradient(100deg, #8ea2ff 4%, #b482ff 48%, #63d4ec 100%) !important;
+        }
+
+        main > .text-center:first-child > p {
+            color: var(--ak-muted) !important;
+            line-height: 1.8 !important;
+            font-weight: 500 !important;
+            text-wrap: pretty;
+        }
+
+        main > .bg-white\/80 {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.43)) !important;
+            border: 1px solid rgba(255, 255, 255, 0.85) !important;
+            box-shadow: var(--ak-shadow) !important;
+            backdrop-filter: var(--ak-blur) !important;
+            -webkit-backdrop-filter: var(--ak-blur) !important;
+        }
+
+        main > .bg-white\/80::before {
+            content: "";
+            position: absolute;
+            width: 18rem;
+            height: 18rem;
+            top: -12rem;
+            right: -6rem;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(127, 103, 255, 0.18), transparent 70%);
+            pointer-events: none;
+        }
+
+        .dark main > .bg-white\/80 {
+            background: linear-gradient(145deg, rgba(23, 31, 61, 0.69), rgba(13, 19, 40, 0.5)) !important;
+            border-color: rgba(154, 168, 255, 0.14) !important;
+            box-shadow: var(--ak-shadow) !important;
+        }
+
+        #searchBar {
+            background: rgba(255, 255, 255, 0.58) !important;
+            color: var(--ak-text) !important;
+            border: 1px solid rgba(255, 255, 255, 0.9) !important;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.76), 0 10px 28px rgba(67, 74, 128, 0.07);
+            backdrop-filter: blur(16px) saturate(150%);
+            -webkit-backdrop-filter: blur(16px) saturate(150%);
+        }
+
+        #searchBar:focus {
+            border-color: rgba(99, 102, 241, 0.44) !important;
+            box-shadow: 0 0 0 5px rgba(99, 102, 241, 0.09), 0 18px 42px rgba(67, 74, 128, 0.1) !important;
+            background: rgba(255, 255, 255, 0.83) !important;
+        }
+
+        .dark #searchBar {
+            background: rgba(7, 12, 29, 0.5) !important;
+            border-color: rgba(151, 164, 255, 0.14) !important;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035), 0 12px 30px rgba(0, 0, 0, 0.16);
+        }
+
+        .dark #searchBar:focus {
+            background: rgba(10, 16, 36, 0.76) !important;
+            border-color: rgba(130, 144, 255, 0.46) !important;
+            box-shadow: 0 0 0 5px rgba(104, 120, 255, 0.1), 0 20px 46px rgba(0, 0, 0, 0.24) !important;
+        }
+
+        #searchBar::placeholder {
+            color: rgba(99, 112, 140, 0.72) !important;
+        }
+
+        .dark #searchBar::placeholder {
+            color: rgba(171, 181, 207, 0.6) !important;
+        }
+
+        .cat-btn {
+            border: 1px solid rgba(255, 255, 255, 0.72) !important;
+            background: rgba(255, 255, 255, 0.45) !important;
+            color: #62708a !important;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.68), 0 7px 20px rgba(64, 74, 124, 0.06) !important;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+
+        .cat-btn:hover {
+            transform: translateY(-2px);
+            color: #4c5bd2 !important;
+            background: rgba(255, 255, 255, 0.75) !important;
+            border-color: rgba(111, 123, 241, 0.25) !important;
+        }
+
+        .cat-btn[aria-pressed="true"] {
+            color: white !important;
+            border-color: rgba(255, 255, 255, 0.38) !important;
+            background: linear-gradient(135deg, #5675ff 0%, #745ef2 54%, #9c5dde 100%) !important;
+            box-shadow: 0 13px 28px rgba(91, 93, 225, 0.26), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+        }
+
+        .dark .cat-btn {
+            background: rgba(18, 26, 51, 0.54) !important;
+            color: #aab4cc !important;
+            border-color: rgba(148, 161, 255, 0.12) !important;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 8px 22px rgba(0, 0, 0, 0.17) !important;
+        }
+
+        .dark .cat-btn:hover {
+            color: #d6dcff !important;
+            background: rgba(29, 39, 75, 0.72) !important;
+            border-color: rgba(132, 147, 255, 0.26) !important;
+        }
+
+        #recentSection {
+            border-color: rgba(113, 125, 173, 0.12) !important;
+        }
+
+        .project-card {
+            position: relative;
+            isolation: isolate;
+            border-radius: 2rem !important;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.43)) !important;
+            border: 1px solid rgba(255, 255, 255, 0.88) !important;
+            box-shadow: var(--ak-shadow) !important;
+            backdrop-filter: blur(20px) saturate(150%) !important;
+            -webkit-backdrop-filter: blur(20px) saturate(150%) !important;
+            transform-origin: center bottom;
+        }
+
+        .project-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            border-radius: inherit;
+            background:
+                radial-gradient(circle at 10% 0%, rgba(94, 129, 255, 0.17), transparent 14rem),
+                radial-gradient(circle at 100% 100%, rgba(177, 95, 234, 0.11), transparent 15rem);
+            opacity: 0.55;
+            transition: opacity 0.45s ease, transform 0.55s ease;
+        }
+
+        .project-card::after {
+            content: "";
+            position: absolute;
+            left: 12%;
+            right: 12%;
+            top: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent);
+            opacity: 0.85;
+        }
+
+        .dark .project-card {
+            background: linear-gradient(145deg, rgba(22, 30, 59, 0.69), rgba(13, 19, 40, 0.51)) !important;
+            border-color: rgba(148, 162, 255, 0.14) !important;
+            box-shadow: var(--ak-shadow) !important;
+        }
+
+        .dark .project-card::before {
+            background:
+                radial-gradient(circle at 8% 0%, rgba(92, 117, 255, 0.18), transparent 14rem),
+                radial-gradient(circle at 100% 100%, rgba(161, 81, 224, 0.12), transparent 15rem);
+        }
+
+        .project-card:hover,
+        .project-card:active {
+            transform: translateY(-9px) scale(1.012) !important;
+            border-color: rgba(133, 142, 255, 0.36) !important;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.84), rgba(249, 249, 255, 0.58)) !important;
+            box-shadow: var(--ak-shadow-hover) !important;
+        }
+
+        .dark .project-card:hover,
+        .dark .project-card:active {
+            border-color: rgba(135, 151, 255, 0.31) !important;
+            background: linear-gradient(145deg, rgba(28, 38, 75, 0.8), rgba(16, 22, 47, 0.66)) !important;
+            box-shadow: var(--ak-shadow-hover) !important;
+        }
+
+        .project-card:hover::before {
+            opacity: 0.9;
+            transform: scale(1.04);
+        }
+
+        .project-icon {
+            position: relative;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.78), rgba(238, 242, 255, 0.52)) !important;
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 10px 26px rgba(66, 74, 128, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .dark .project-icon {
+            background: linear-gradient(145deg, rgba(30, 40, 79, 0.76), rgba(15, 22, 47, 0.62)) !important;
+            border-color: rgba(148, 162, 255, 0.13);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+        }
+
+        .project-card:hover .project-icon,
+        .dark .project-card:hover .project-icon {
+            transform: translateY(-2px) rotate(-2deg) scale(1.05);
+            background: linear-gradient(145deg, rgba(238, 243, 255, 0.95), rgba(238, 231, 255, 0.68)) !important;
+        }
+
+        .dark .project-card:hover .project-icon {
+            background: linear-gradient(145deg, rgba(48, 61, 113, 0.86), rgba(29, 35, 76, 0.76)) !important;
+        }
+
+        .project-card h3 {
+            color: var(--ak-text) !important;
+            letter-spacing: -0.025em;
+        }
+
+        .project-card p {
+            color: var(--ak-muted) !important;
+            line-height: 1.72 !important;
+        }
+
+        .project-card [data-element="category-badge"],
+        .project-card [data-element="parent-badge"],
+        .project-card [data-element="status-badge"] {
+            background: rgba(255, 255, 255, 0.5) !important;
+            border-color: rgba(255, 255, 255, 0.75) !important;
+            color: #66708b !important;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.62);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .dark .project-card [data-element="category-badge"],
+        .dark .project-card [data-element="parent-badge"],
+        .dark .project-card [data-element="status-badge"] {
+            background: rgba(22, 31, 61, 0.58) !important;
+            border-color: rgba(145, 159, 255, 0.12) !important;
+            color: #adb7d0 !important;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+        }
+
+        .project-card [data-element="fav-btn"] {
+            background: rgba(255, 255, 255, 0.5) !important;
+            border-color: rgba(255, 255, 255, 0.78) !important;
+            box-shadow: 0 8px 20px rgba(63, 72, 123, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.66);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .dark .project-card [data-element="fav-btn"] {
+            background: rgba(13, 20, 43, 0.56) !important;
+            border-color: rgba(144, 158, 255, 0.13) !important;
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.19), inset 0 1px 0 rgba(255, 255, 255, 0.035);
+        }
+
+        .project-card > .flex.flex-col.gap-2 {
+            border-color: rgba(107, 118, 164, 0.11) !important;
+        }
+
+        .share-btn,
+        .project-card [data-element="version-btn"] {
+            background: rgba(255, 255, 255, 0.42) !important;
+            border-color: rgba(255, 255, 255, 0.78) !important;
+            color: #56647e !important;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.62), 0 8px 20px rgba(64, 73, 123, 0.055) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .share-btn:hover,
+        .project-card [data-element="version-btn"]:hover {
+            color: #5365dc !important;
+            border-color: rgba(105, 118, 237, 0.25) !important;
+            background: rgba(255, 255, 255, 0.72) !important;
+            transform: translateY(-1px);
+        }
+
+        .dark .share-btn,
+        .dark .project-card [data-element="version-btn"] {
+            background: rgba(14, 21, 45, 0.5) !important;
+            border-color: rgba(145, 158, 255, 0.11) !important;
+            color: #aab5ce !important;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 9px 22px rgba(0, 0, 0, 0.14) !important;
+        }
+
+        .go-app-btn:not(.cursor-not-allowed) {
+            border-color: rgba(255, 255, 255, 0.32) !important;
+            color: white !important;
+            background: linear-gradient(135deg, #5274ff 0%, #7159ef 53%, #9658dc 100%) !important;
+            box-shadow: 0 14px 30px rgba(87, 91, 220, 0.27), inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .go-app-btn:not(.cursor-not-allowed)::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 42%;
+            left: -52%;
+            transform: skewX(-24deg);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.28), transparent);
+            transition: left 0.55s ease;
+        }
+
+        .go-app-btn:not(.cursor-not-allowed):hover {
+            transform: translateY(-2px) !important;
+            background: linear-gradient(135deg, #4468f6 0%, #6951e8 53%, #8e4ed5 100%) !important;
+            box-shadow: 0 18px 38px rgba(87, 91, 220, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+        }
+
+        .go-app-btn:not(.cursor-not-allowed):hover::before {
+            left: 112%;
+        }
+
+        .go-app-btn.cursor-not-allowed {
+            background: rgba(126, 135, 161, 0.12) !important;
+            border-color: rgba(126, 135, 161, 0.15) !important;
+        }
+
+        #noResults > div,
+        #loadingMessage + *,
+        #toastAlert {
+            backdrop-filter: blur(18px) saturate(145%);
+            -webkit-backdrop-filter: blur(18px) saturate(145%);
+        }
+
+        #toastAlert {
+            background: rgba(17, 24, 48, 0.82) !important;
+            color: white !important;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 18px 50px rgba(0, 0, 0, 0.25);
+        }
+
+        #shareModal,
+        #linkChoiceModal,
+        #versionModal,
+        #privacyModal,
+        #aboutModal {
+            background: rgba(6, 10, 24, 0.47) !important;
+            backdrop-filter: blur(16px) saturate(120%) !important;
+            -webkit-backdrop-filter: blur(16px) saturate(120%) !important;
+        }
+
+        #shareModal > div,
+        #linkChoiceModal > div,
+        #versionModal > div,
+        #privacyModal > div,
+        #aboutModal > div {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.86), rgba(246, 247, 255, 0.7)) !important;
+            border: 1px solid rgba(255, 255, 255, 0.88) !important;
+            box-shadow: 0 36px 110px rgba(13, 18, 52, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+            backdrop-filter: blur(30px) saturate(165%) !important;
+            -webkit-backdrop-filter: blur(30px) saturate(165%) !important;
+        }
+
+        .dark #shareModal > div,
+        .dark #linkChoiceModal > div,
+        .dark #versionModal > div,
+        .dark #privacyModal > div,
+        .dark #aboutModal > div {
+            background: linear-gradient(145deg, rgba(25, 34, 68, 0.91), rgba(10, 16, 37, 0.82)) !important;
+            border-color: rgba(152, 166, 255, 0.16) !important;
+            box-shadow: 0 40px 120px rgba(0, 0, 0, 0.58), inset 0 1px 0 rgba(255, 255, 255, 0.045) !important;
+        }
+
+        #shareModal h3,
+        #linkChoiceModal h3,
+        #versionModal h3,
+        #privacyModal h3,
+        #aboutModal h3,
+        #privacyModal h4 {
+            color: var(--ak-text) !important;
+        }
+
+        #shareModal p,
+        #linkChoiceModal p,
+        #versionModal p,
+        #privacyModal p,
+        #aboutModal p,
+        #aboutModal span,
+        #privacyModal div {
+            color: var(--ak-muted);
+        }
+
+        #mobileMenuDropdown {
+            overflow: hidden;
+            color: var(--ak-text) !important;
+        }
+
+        #mobileMenuDropdown button:hover {
+            background: rgba(255, 255, 255, 0.48) !important;
+        }
+
+        .dark #mobileMenuDropdown button:hover {
+            background: rgba(41, 52, 93, 0.55) !important;
+        }
+
+        /* Mobile dropdown readability fix */
+        #mobileMenuDropdown {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(245, 248, 255, 0.92)) !important;
+            border: 1px solid rgba(255, 255, 255, 0.92) !important;
+            box-shadow: 0 22px 48px rgba(45, 57, 98, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+            backdrop-filter: blur(22px) saturate(165%) !important;
+            -webkit-backdrop-filter: blur(22px) saturate(165%) !important;
+            color: #23314f !important;
+        }
+
+        .dark #mobileMenuDropdown {
+            background: linear-gradient(180deg, rgba(18, 26, 52, 0.96), rgba(11, 17, 37, 0.94)) !important;
+            border: 1px solid rgba(143, 158, 255, 0.16) !important;
+            box-shadow: 0 24px 54px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+            color: #edf2ff !important;
+        }
+
+        #mobileMenuDropdown hr {
+            border-color: rgba(119, 132, 177, 0.14) !important;
+        }
+
+        .dark #mobileMenuDropdown hr {
+            border-color: rgba(138, 153, 231, 0.14) !important;
+        }
+
+        #mobileMenuDropdown button,
+        #mobileMenuDropdown button span,
+        #mobileMenuDropdown button svg,
+        #mobileMenuDropdown .grid-col-count-disp,
+        #mobileMenuDropdown .px-4.py-3 {
+            color: #23314f !important;
+        }
+
+        .dark #mobileMenuDropdown button,
+        .dark #mobileMenuDropdown button span,
+        .dark #mobileMenuDropdown button svg,
+        .dark #mobileMenuDropdown .grid-col-count-disp,
+        .dark #mobileMenuDropdown .px-4.py-3 {
+            color: #edf2ff !important;
+        }
+
+        #mobileMenuDropdown .px-4.py-3 {
+            color: #7180a0 !important;
+            letter-spacing: 0.08em;
+        }
+
+        .dark #mobileMenuDropdown .px-4.py-3 {
+            color: #aeb9d5 !important;
+        }
+
+        #mobileMenuDropdown #mobileThemeBtn,
+        #mobileMenuDropdown #mobileAboutBtn,
+        #mobileMenuDropdown [data-action="font-size"],
+        #mobileMenuDropdown [data-action="grid-cols"] {
+            background: rgba(255, 255, 255, 0.68) !important;
+            border: 1px solid rgba(214, 223, 255, 0.9) !important;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.82), 0 8px 18px rgba(78, 88, 138, 0.08) !important;
+            backdrop-filter: blur(12px) saturate(145%);
+            -webkit-backdrop-filter: blur(12px) saturate(145%);
+        }
+
+        .dark #mobileMenuDropdown #mobileThemeBtn,
+        .dark #mobileMenuDropdown #mobileAboutBtn,
+        .dark #mobileMenuDropdown [data-action="font-size"],
+        .dark #mobileMenuDropdown [data-action="grid-cols"] {
+            background: rgba(24, 34, 66, 0.82) !important;
+            border: 1px solid rgba(114, 132, 215, 0.22) !important;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 10px 22px rgba(0, 0, 0, 0.2) !important;
+        }
+
+        #mobileMenuDropdown #mobileThemeBtn:hover,
+        #mobileMenuDropdown #mobileAboutBtn:hover,
+        #mobileMenuDropdown [data-action="font-size"]:hover,
+        #mobileMenuDropdown [data-action="grid-cols"]:hover {
+            background: rgba(255, 255, 255, 0.88) !important;
+            border-color: rgba(123, 136, 235, 0.28) !important;
+            color: #4256c9 !important;
+        }
+
+        .dark #mobileMenuDropdown #mobileThemeBtn:hover,
+        .dark #mobileMenuDropdown #mobileAboutBtn:hover,
+        .dark #mobileMenuDropdown [data-action="font-size"]:hover,
+        .dark #mobileMenuDropdown [data-action="grid-cols"]:hover {
+            background: rgba(33, 46, 87, 0.95) !important;
+            border-color: rgba(131, 145, 247, 0.3) !important;
+            color: #ffffff !important;
+        }
+
+        #mobileMenuDropdown .grid-col-count-disp {
+            background: rgba(255, 255, 255, 0.36);
+            border-radius: 0.9rem;
+            border: 1px solid rgba(215, 224, 255, 0.76);
+        }
+
+        .dark #mobileMenuDropdown .grid-col-count-disp {
+            background: rgba(31, 42, 78, 0.72);
+            border-color: rgba(113, 129, 205, 0.24);
+        }
+
+        footer {
+            position: relative;
+            background: rgba(255, 255, 255, 0.38) !important;
+            border-color: rgba(255, 255, 255, 0.68) !important;
+            backdrop-filter: blur(22px) saturate(150%);
+            -webkit-backdrop-filter: blur(22px) saturate(150%);
+            box-shadow: 0 -12px 42px rgba(61, 72, 121, 0.045);
+        }
+
+        .dark footer {
+            background: rgba(8, 13, 29, 0.55) !important;
+            border-color: rgba(145, 159, 255, 0.08) !important;
+            box-shadow: 0 -14px 48px rgba(0, 0, 0, 0.16);
+        }
+
+        footer p,
+        footer button {
+            color: var(--ak-muted) !important;
+        }
+
+        ::selection {
+            color: white;
+            background: rgba(99, 102, 241, 0.82);
+        }
+
+
+        /* External deep-link card spotlight */
+        .project-card.deep-link-highlight {
+            transform: translateY(-8px) scale(1.025) !important;
+            border-color: rgba(103, 112, 255, 0.78) !important;
+            outline: 2px solid rgba(112, 122, 255, 0.42);
+            outline-offset: 4px;
+            box-shadow:
+                0 0 0 1px rgba(255, 255, 255, 0.88),
+                0 0 34px rgba(82, 104, 255, 0.34),
+                0 24px 70px rgba(91, 80, 195, 0.24),
+                inset 0 1px 0 rgba(255, 255, 255, 0.92) !important;
+            filter: saturate(1.12) brightness(1.025);
+            animation: akDeepLinkHalo 1.2s ease-in-out 4;
+            z-index: 35 !important;
+        }
+
+        .dark .project-card.deep-link-highlight {
+            border-color: rgba(132, 151, 255, 0.86) !important;
+            outline-color: rgba(126, 145, 255, 0.5);
+            box-shadow:
+                0 0 0 1px rgba(149, 163, 255, 0.2),
+                0 0 42px rgba(87, 113, 255, 0.43),
+                0 0 82px rgba(171, 91, 255, 0.22),
+                0 28px 78px rgba(0, 0, 0, 0.48),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+            filter: saturate(1.18) brightness(1.1);
+        }
+
+        .project-card.deep-link-highlight::before {
+            inset: -18% !important;
+            opacity: 1 !important;
+            transform: scale(1.06) !important;
+            background:
+                radial-gradient(circle at 12% 12%, rgba(86, 126, 255, 0.36), transparent 32%),
+                radial-gradient(circle at 88% 18%, rgba(177, 93, 255, 0.3), transparent 32%),
+                radial-gradient(circle at 52% 96%, rgba(67, 215, 235, 0.23), transparent 34%) !important;
+            filter: blur(18px);
+            animation: akDeepLinkAura 2.4s ease-in-out 2;
+        }
+
+        .dark .project-card.deep-link-highlight::before {
+            background:
+                radial-gradient(circle at 12% 12%, rgba(82, 116, 255, 0.42), transparent 34%),
+                radial-gradient(circle at 88% 18%, rgba(174, 83, 255, 0.34), transparent 34%),
+                radial-gradient(circle at 52% 96%, rgba(57, 209, 236, 0.25), transparent 36%) !important;
+        }
+
+        .project-card.deep-link-highlight::after {
+            left: -58% !important;
+            right: auto !important;
+            top: -18% !important;
+            width: 42% !important;
+            height: 136% !important;
+            opacity: 0;
+            z-index: 30;
+            border-radius: 40%;
+            background: linear-gradient(
+                105deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.08) 18%,
+                rgba(255, 255, 255, 0.7) 49%,
+                rgba(137, 184, 255, 0.2) 66%,
+                transparent 100%
+            ) !important;
+            mix-blend-mode: screen;
+            transform: skewX(-18deg);
+            animation: akDeepLinkSweep 1.55s ease-in-out 3;
+            pointer-events: none;
+        }
+
+        @keyframes akDeepLinkHalo {
+            0%, 100% {
+                outline-color: rgba(112, 122, 255, 0.34);
+                outline-offset: 3px;
+                filter: saturate(1.06) brightness(1.015);
+            }
+            50% {
+                outline-color: rgba(126, 102, 255, 0.88);
+                outline-offset: 9px;
+                filter: saturate(1.22) brightness(1.075);
+            }
+        }
+
+        @keyframes akDeepLinkAura {
+            0%, 100% { opacity: 0.72; transform: scale(1.01) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1.1) rotate(3deg); }
+        }
+
+        @keyframes akDeepLinkSweep {
+            0% { left: -58%; opacity: 0; }
+            14% { opacity: 0.7; }
+            58% { opacity: 0.42; }
+            100% { left: 122%; opacity: 0; }
+        }
+
+        /* Smooth light / dark theme transition */
+        html {
+            view-transition-name: root;
+        }
+
+        html.theme-transitioning *,
+        html.theme-transitioning *::before,
+        html.theme-transitioning *::after {
+            transition-property: none !important;
+        }
+
+        html.theme-transitioning body::before,
+        html.theme-transitioning body::after,
+        html.theme-transitioning > body > div[aria-hidden="true"],
+        html.theme-transitioning > body > div[aria-hidden="true"]::before,
+        html.theme-transitioning > body > div[aria-hidden="true"]::after,
+        html.theme-transitioning > body > div[aria-hidden="true"] > div {
+            animation-play-state: paused !important;
+        }
+
+        ::view-transition-group(root) {
+            animation-duration: 680ms;
+            animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        ::view-transition-image-pair(root) {
+            isolation: isolate;
+        }
+
+        ::view-transition-old(root),
+        ::view-transition-new(root) {
+            mix-blend-mode: normal;
+            backface-visibility: hidden;
+        }
+
+        ::view-transition-old(root) {
+            animation: akThemeFadeOut 680ms cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        ::view-transition-new(root) {
+            animation: akThemeFadeIn 680ms cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        @keyframes akThemeFadeOut {
+            0% {
+                opacity: 1;
+                filter: blur(0) saturate(1);
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0;
+                filter: blur(4px) saturate(0.92);
+                transform: scale(0.994);
+            }
+        }
+
+        @keyframes akThemeFadeIn {
+            0% {
+                opacity: 0;
+                filter: blur(5px) saturate(0.92);
+                transform: scale(1.006);
+            }
+            100% {
+                opacity: 1;
+                filter: blur(0) saturate(1);
+                transform: scale(1);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            ::view-transition-group(root),
+            ::view-transition-old(root),
+            ::view-transition-new(root) {
+                animation-duration: 1ms !important;
+            }
+        }
+
+        @media (max-width: 767px) {
+            body::before,
+            body::after {
+                width: 25rem;
+                height: 25rem;
+                opacity: 0.58;
+            }
+
+            main {
+                padding-top: 2.4rem !important;
+            }
+
+            main h2 {
+                font-size: clamp(2.45rem, 12vw, 4rem) !important;
+                line-height: 1.02 !important;
+            }
+
+            main > .bg-white\/80 {
+                border-radius: 1.7rem !important;
+                padding: 1.15rem !important;
+            }
+
+            .project-card {
+                border-radius: 1.7rem !important;
+                padding: 1.25rem !important;
+            }
+
+            .project-card:hover,
+            .project-card:active {
+                transform: translateY(-4px) scale(1.005) !important;
+            }
+        }
+
+        /* Deep-link version row spotlight */
+        #versionListContainer .deep-link-version-highlight {
+            position: relative;
+            isolation: isolate;
+            z-index: 12;
+            transform: scale(1.018);
+            border-color: rgba(88, 105, 255, 0.72) !important;
+            background: linear-gradient(135deg, rgba(232, 238, 255, 0.96), rgba(247, 239, 255, 0.94)) !important;
+            box-shadow:
+                0 0 0 1px rgba(255, 255, 255, 0.9),
+                0 0 30px rgba(82, 104, 255, 0.26),
+                0 16px 34px rgba(79, 72, 165, 0.18) !important;
+            animation: akVersionLinkPulse 1.2s ease-in-out 4;
+        }
+
+        .dark #versionListContainer .deep-link-version-highlight {
+            border-color: rgba(132, 151, 255, 0.74) !important;
+            background: linear-gradient(135deg, rgba(35, 48, 94, 0.96), rgba(42, 28, 79, 0.93)) !important;
+            box-shadow:
+                0 0 0 1px rgba(149, 163, 255, 0.16),
+                0 0 34px rgba(87, 113, 255, 0.34),
+                0 0 58px rgba(171, 91, 255, 0.16),
+                0 18px 42px rgba(0, 0, 0, 0.38) !important;
+        }
+
+        #versionListContainer .deep-link-version-highlight::before {
+            content: "";
+            position: absolute;
+            inset: -1px;
+            z-index: -1;
+            border-radius: inherit;
+            pointer-events: none;
+            background:
+                radial-gradient(circle at 8% 16%, rgba(91, 125, 255, 0.3), transparent 35%),
+                radial-gradient(circle at 92% 18%, rgba(182, 94, 255, 0.24), transparent 34%),
+                linear-gradient(105deg, transparent 28%, rgba(255, 255, 255, 0.58) 49%, transparent 70%);
+            background-size: 100% 100%, 100% 100%, 220% 100%;
+            animation: akVersionLinkSweep 2.1s ease-in-out 2;
+        }
+
+        .dark #versionListContainer .deep-link-version-highlight::before {
+            background:
+                radial-gradient(circle at 8% 16%, rgba(91, 125, 255, 0.34), transparent 35%),
+                radial-gradient(circle at 92% 18%, rgba(182, 94, 255, 0.28), transparent 34%),
+                linear-gradient(105deg, transparent 28%, rgba(182, 210, 255, 0.28) 49%, transparent 70%);
+            background-size: 100% 100%, 100% 100%, 220% 100%;
+        }
+
+        @keyframes akVersionLinkPulse {
+            0%, 100% {
+                transform: scale(1.008);
+                filter: saturate(1.04) brightness(1.01);
+            }
+            50% {
+                transform: scale(1.024);
+                filter: saturate(1.16) brightness(1.045);
+            }
+        }
+
+        @keyframes akVersionLinkSweep {
+            0% { background-position: 0 0, 0 0, 130% 0; opacity: 0.72; }
+            50% { opacity: 1; }
+            100% { background-position: 0 0, 0 0, -110% 0; opacity: 0.72; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            body::before,
+            body::after {
+                animation: none !important;
+            }
+
+            .project-card,
+            .go-app-btn,
+            .cat-btn,
+            #aboutModalBtn,
+            #themeBtn,
+            #mobileMenuBtn {
+                transition-duration: 0.01ms !important;
+            }
+
+            .project-card.deep-link-highlight,
+            .project-card.deep-link-highlight::before,
+            .project-card.deep-link-highlight::after,
+            #versionListContainer .deep-link-version-highlight,
+            #versionListContainer .deep-link-version-highlight::before {
+                animation: none !important;
+            }
+        }
+    
+
+        /* In-app browser and unsupported-feature compatibility layer */
+        html.modal-open,
+        body.modal-open {
+            overflow: hidden !important;
+            overscroll-behavior: none;
+        }
+
+        #shareModal,
+        #linkChoiceModal,
+        #versionModal,
+        #privacyModal,
+        #aboutModal {
+            position: fixed !important;
+            inset: 0 !important;
+            width: 100% !important;
+            min-height: 100vh;
+            height: 100vh;
+            height: 100dvh;
+            padding-top: max(1rem, env(safe-area-inset-top)) !important;
+            padding-right: max(1rem, env(safe-area-inset-right)) !important;
+            padding-bottom: max(1rem, env(safe-area-inset-bottom)) !important;
+            padding-left: max(1rem, env(safe-area-inset-left)) !important;
+            overflow-x: hidden !important;
+            overflow-y: auto !important;
+            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
+            align-items: flex-start !important;
+            z-index: 9999 !important;
+        }
+
+        #shareModal > div,
+        #linkChoiceModal > div,
+        #versionModal > div,
+        #privacyModal > div,
+        #aboutModal > div {
+            width: 100%;
+            margin: auto !important;
+            max-height: calc(100vh - 2rem);
+            max-height: calc(100dvh - 2rem);
+            overflow-y: auto !important;
+            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
+            flex-shrink: 0;
+        }
+
+        html.no-dvh #shareModal,
+        html.no-dvh #linkChoiceModal,
+        html.no-dvh #versionModal,
+        html.no-dvh #privacyModal,
+        html.no-dvh #aboutModal {
+            height: 100vh !important;
+        }
+
+        html.no-dvh #shareModal > div,
+        html.no-dvh #linkChoiceModal > div,
+        html.no-dvh #versionModal > div,
+        html.no-dvh #privacyModal > div,
+        html.no-dvh #aboutModal > div {
+            max-height: calc(100vh - 2rem) !important;
+        }
+
+        @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+            header,
+            footer,
+            main > .bg-white\/80,
+            .project-card,
+            #mobileMenuDropdown,
+            #shareModal > div,
+            #linkChoiceModal > div,
+            #versionModal > div,
+            #privacyModal > div,
+            #aboutModal > div {
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+            }
+
+            header { background: rgba(250, 252, 255, 0.97) !important; }
+            .dark header { background: rgba(8, 13, 29, 0.97) !important; }
+            main > .bg-white\/80,
+            .project-card { background: rgba(250, 252, 255, 0.96) !important; }
+            .dark main > .bg-white\/80,
+            .dark .project-card { background: rgba(16, 23, 48, 0.97) !important; }
+        }
+
+        html.compat-browser::before,
+        html.compat-browser::after,
+        html.compat-browser body::before,
+        html.compat-browser body::after,
+        html.compat-browser body > div[aria-hidden="true"] {
+            display: none !important;
+            animation: none !important;
+        }
+
+        html.compat-browser body {
+            background:
+                radial-gradient(circle at 10% 5%, rgba(111, 145, 255, 0.25), transparent 20rem),
+                radial-gradient(circle at 88% 12%, rgba(192, 113, 255, 0.2), transparent 22rem),
+                radial-gradient(circle at 22% 38%, rgba(95, 218, 236, 0.12), transparent 25rem),
+                radial-gradient(circle at 82% 58%, rgba(126, 121, 255, 0.14), transparent 26rem),
+                radial-gradient(circle at 18% 82%, rgba(207, 126, 255, 0.13), transparent 25rem),
+                linear-gradient(145deg, #f7faff 0%, #eef3ff 44%, #faf5ff 100%) !important;
+            background-attachment: scroll !important;
+            background-repeat: no-repeat !important;
+            min-height: 100%;
+        }
+
+        html.compat-browser.dark body {
+            background:
+                radial-gradient(circle at 10% 5%, rgba(75, 99, 231, 0.24), transparent 21rem),
+                radial-gradient(circle at 88% 12%, rgba(158, 84, 239, 0.18), transparent 22rem),
+                radial-gradient(circle at 22% 38%, rgba(58, 198, 221, 0.1), transparent 25rem),
+                radial-gradient(circle at 82% 58%, rgba(77, 92, 205, 0.14), transparent 26rem),
+                radial-gradient(circle at 18% 82%, rgba(146, 75, 221, 0.13), transparent 25rem),
+                linear-gradient(145deg, #050914 0%, #0a1023 48%, #0b0d20 100%) !important;
+        }
+
+        html.compat-browser *,
+        html.no-backdrop * {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+
+        html.no-backdrop header {
+            background: rgba(249, 251, 255, 0.98) !important;
+        }
+
+        html.no-backdrop.dark header {
+            background: rgba(8, 13, 29, 0.98) !important;
+        }
+
+        html.no-backdrop main > .bg-white\/80,
+        html.no-backdrop .project-card,
+        html.no-backdrop #mobileMenuDropdown,
+        html.no-backdrop #shareModal > div,
+        html.no-backdrop #linkChoiceModal > div,
+        html.no-backdrop #versionModal > div,
+        html.no-backdrop #privacyModal > div,
+        html.no-backdrop #aboutModal > div {
+            background: rgba(249, 251, 255, 0.98) !important;
+        }
+
+        html.no-backdrop.dark main > .bg-white\/80,
+        html.no-backdrop.dark .project-card,
+        html.no-backdrop.dark #mobileMenuDropdown,
+        html.no-backdrop.dark #shareModal > div,
+        html.no-backdrop.dark #linkChoiceModal > div,
+        html.no-backdrop.dark #versionModal > div,
+        html.no-backdrop.dark #privacyModal > div,
+        html.no-backdrop.dark #aboutModal > div {
+            background: rgba(15, 23, 47, 0.98) !important;
+        }
+
+        html.compat-browser header {
+            background: rgba(249, 251, 255, 0.97) !important;
+            border-color: rgba(111, 125, 177, 0.16) !important;
+        }
+
+        html.compat-browser.dark header {
+            background: rgba(8, 13, 29, 0.97) !important;
+            border-color: rgba(143, 158, 255, 0.12) !important;
+        }
+
+        html.compat-browser main > .bg-white\/80,
+        html.compat-browser .project-card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.98), rgba(245,248,255,0.97)) !important;
+            border-color: rgba(117, 130, 181, 0.16) !important;
+        }
+
+        html.compat-browser.dark main > .bg-white\/80,
+        html.compat-browser.dark .project-card {
+            background: linear-gradient(145deg, rgba(20,28,56,0.98), rgba(11,17,37,0.98)) !important;
+            border-color: rgba(143, 158, 255, 0.13) !important;
+        }
+
+        html.compat-browser .project-card::before,
+        html.compat-browser .project-card::after {
+            mix-blend-mode: normal !important;
+        }
+
+        html.compat-browser #mobileMenuDropdown { background: #f9fbff !important; }
+        html.compat-browser.dark #mobileMenuDropdown { background: #101831 !important; }
+
+        html.compat-browser #shareModal,
+        html.compat-browser #linkChoiceModal,
+        html.compat-browser #versionModal,
+        html.compat-browser #privacyModal,
+        html.compat-browser #aboutModal {
+            background: rgba(16, 22, 42, 0.86) !important;
+        }
+
+        html.compat-browser #shareModal > div,
+        html.compat-browser #linkChoiceModal > div,
+        html.compat-browser #versionModal > div,
+        html.compat-browser #privacyModal > div,
+        html.compat-browser #aboutModal > div {
+            transform: none !important;
+            background: #f9fbff !important;
+            border-color: rgba(111, 125, 177, 0.2) !important;
+            box-shadow: 0 20px 60px rgba(13, 20, 45, 0.28) !important;
+        }
+
+        html.compat-browser.dark #shareModal > div,
+        html.compat-browser.dark #linkChoiceModal > div,
+        html.compat-browser.dark #versionModal > div,
+        html.compat-browser.dark #privacyModal > div,
+        html.compat-browser.dark #aboutModal > div {
+            background: #111a35 !important;
+            border-color: rgba(143, 158, 255, 0.16) !important;
+            box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5) !important;
+        }
+
+        html.compat-browser .project-card:hover,
+        html.compat-browser .project-card:active {
+            transform: none !important;
+        }
+
+        html.compat-browser .deep-link-highlight::after,
+        html.compat-browser .deep-link-version-highlight::after {
+            mix-blend-mode: normal !important;
+        }
+
+        html.compat-browser.theme-transitioning *,
+        html.compat-browser.theme-transitioning *::before,
+        html.compat-browser.theme-transitioning *::after {
+            animation: none !important;
+            transition: none !important;
+        }
+
+        @media (max-width: 480px) {
+            #shareModal,
+            #linkChoiceModal,
+            #versionModal,
+            #privacyModal,
+            #aboutModal {
+                padding: 0.75rem !important;
+                padding-top: max(0.75rem, env(safe-area-inset-top)) !important;
+                padding-bottom: max(0.75rem, env(safe-area-inset-bottom)) !important;
+            }
+
+            #shareModal > div,
+            #linkChoiceModal > div,
+            #versionModal > div,
+            #privacyModal > div,
+            #aboutModal > div {
+                max-height: calc(100vh - 1.5rem);
+                max-height: calc(100dvh - 1.5rem);
+            }
+        }
+
+    </style>
+
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-400 min-h-screen flex flex-col antialiased transition-colors duration-300">
+
+    <div class="absolute top-0 left-0 w-full h-[600px] pointer-events-none overflow-hidden z-0 opacity-70 dark:opacity-40" aria-hidden="true">
+        <div class="absolute -top-[200px] left-1/4 w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-blue-400/20 dark:bg-blue-600/10 rounded-full filter blur-[100px]"></div>
+        <div class="absolute -top-[160px] right-1/4 w-[350px] md:w-[500px] h-[350px] md:h-[500px] bg-indigo-400/20 dark:bg-indigo-600/10 rounded-full filter blur-[100px]"></div>
+    </div>
+
+    <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 transition-colors duration-300">
+        <div class="w-full px-4 sm:px-8 lg:px-12 2xl:px-24 mx-auto h-20 flex items-center justify-between gap-4 relative">
+            
+            <div class="flex items-center space-x-2 flex-shrink-0">
+                <button id="aboutModalBtn" class="inline-flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-sm md:text-base font-medium transition-all text-slate-600 dark:text-slate-400 active:scale-95 touch-manipulation" aria-haspopup="dialog" aria-expanded="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span class="hidden sm:inline">Hakkında</span>
+                </button>
+
+                <div class="hidden md:inline-flex items-center p-1 bg-slate-100 dark:bg-slate-800 rounded-xl border border-slate-200/40 dark:border-slate-700/40 select-none">
+                    <button data-action="font-size" data-val="-1" class="size-btn px-2.5 py-1 text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-900 rounded-lg transition-all touch-manipulation" title="Yazıları Küçült">A-</button>
+                    <button data-action="font-size" data-val="0" class="size-btn px-2.5 py-1 text-xs font-extrabold text-blue-600 dark:text-blue-400 hover:bg-white dark:hover:bg-slate-900 rounded-lg transition-all touch-manipulation" title="Boyutu Sıfırla">A</button>
+                    <button data-action="font-size" data-val="1" class="size-btn px-2.5 py-1 text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-900 rounded-lg transition-all touch-manipulation" title="Yazıları Büyüt">A+</button>
+                </div>
+            </div>
+
+           <div class="flex items-center space-x-3 select-none absolute left-1/2 -translate-x-1/2">
+                <span class="text-lg md:text-2xl font-extrabold tracking-tight bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-400 dark:via-indigo-400 dark:to-purple-400 bg-clip-text text-transparent whitespace-nowrap">
+                    Akıllı Kürsü
+                </span>
+            </div>
+               
+            <div class="flex items-center space-x-2 flex-shrink-0">
+                <button id="themeBtn" class="hidden md:block p-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 transition-all active:scale-95 touch-manipulation" aria-label="Tema Değiştir">
+                    <svg class="h-5 w-5 hidden dark:block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.364l-.707.707M12 5a7 7 0 100 14 7 7 0 000-14z" /></svg>
+                    <svg class="h-5 w-5 block dark:hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+                </button>
+
+                <div class="relative">
+                    <button id="mobileMenuBtn" class="p-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 transition-all active:scale-95 touch-manipulation" aria-label="Menüyü Aç" aria-expanded="false" aria-haspopup="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                    
+                    <div id="mobileMenuDropdown" class="hidden absolute right-0 mt-2 w-64 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl py-3 z-50 animate-fadeIn text-base">
+                        <button id="mobileThemeBtn" class="w-full flex items-center space-x-3 px-4 py-4 hover:bg-slate-50 dark:hover:bg-slate-800/60 text-slate-700 dark:text-slate-400 font-medium">
+                            <span class="dark:hidden flex items-center space-x-3 w-full">
+                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+                                <span>Karanlık Mod</span>
+                            </span>
+                            <span class="hidden dark:flex items-center space-x-3 w-full">
+                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.364l-.707.707M12 5a7 7 0 100 14 7 7 0 000-14z" /></svg>
+                                <span>Aydınlık Mod</span>
+                            </span>
+                        </button>
+                        <hr class="border-slate-100 dark:border-slate-800 my-2">
+                        <div class="px-4 py-3 text-sm font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Yazı Boyutu</div>
+                        <div class="flex items-center justify-between px-3 pb-2">
+                            <button data-action="font-size" data-val="-1" class="px-3 py-2.5 font-bold text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg flex-1 text-center mx-1">A-</button>
+                            <button data-action="font-size" data-val="0" class="px-3 py-2.5 font-extrabold text-blue-600 dark:text-blue-400 bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg flex-1 text-center mx-1">A</button>
+                            <button data-action="font-size" data-val="1" class="px-3 py-2.5 font-bold text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg flex-1 text-center mx-1">A+</button>
+                        </div>
+
+                        <hr class="border-slate-100 dark:border-slate-800 my-2">
+                        <div class="px-4 py-3 text-sm font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Sütun Sayısı</div>
+                        <div class="flex items-center justify-between px-3 pb-2">
+                            <button data-action="grid-cols" data-val="-1" class="px-3 py-2.5 font-bold text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg flex-1 text-center mx-1">-</button>
+                            <span class="grid-col-count-disp px-3 py-2.5 font-extrabold text-blue-600 dark:text-blue-400 flex-1 text-center flex items-center justify-center">3</span>
+                            <button data-action="grid-cols" data-val="1" class="px-3 py-2.5 font-bold text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg flex-1 text-center mx-1">+</button>
+                        </div>
+
+                        <hr class="border-slate-100 dark:border-slate-800 my-2">
+                        <button id="mobileAboutBtn" class="w-full flex items-center space-x-3 px-4 py-4 hover:bg-slate-50 dark:hover:bg-slate-800/60 text-slate-700 dark:text-slate-400 font-medium">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            <span>Hakkında</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </header>
+
+    <main class="w-full px-4 sm:px-8 lg:px-12 2xl:px-24 mx-auto py-12 md:py-20 flex-grow z-10">
+        
+        <div class="text-center mb-12 md:mb-16">
+            <span id="totalAppsBadge" class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 text-sm font-semibold mb-5 border border-blue-200/50 dark:border-blue-800/30">
+                <span>🚀 Uygulamalar yükleniyor...</span>
+            </span>
+            <h2 class="text-4xl md:text-6xl font-black text-slate-900 dark:text-slate-400 tracking-tight mb-5 max-w-4xl mx-auto leading-tight">
+                Sınıflar İçin <br class="hidden sm:inline"><span class="bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 bg-clip-text text-transparent">Akıllı Çözümler</span>
+            </h2>
+            <p class="text-base md:text-xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto px-2 font-medium">
+                Öğretmenlerin günlük işlerini kolaylaştıran, sınıf yönetimini pratikleştiren ve okul bilişim süreçlerini hızlandıran %100 güvenli, ücretsiz web araçları. Tüm işlemler doğrudan kendi cihazınızda gerçekleşir ve hiçbir veriniz toplanmaz. Sunucu tabanlı işlemler ise yalnızca sizin belirleyeceğiniz, kendinize ait kişisel bulut hesabınız üzerinden yürütülür.
+            </p>
+        </div>
+
+        <div class="bg-white/80 dark:bg-slate-900/60 backdrop-blur-md p-5 md:p-8 rounded-3xl shadow-xl shadow-slate-200/40 dark:shadow-none border border-slate-200/60 dark:border-slate-800/60 mb-10 md:mb-16 space-y-5 md:space-y-6 w-full">
+            
+            <div class="relative max-w-2xl mx-auto w-full group">
+                <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+                <input 
+                    type="text" 
+                    id="searchBar" 
+                    inputmode="search"
+                    placeholder="Aramak için yazın... (Kısayol: / veya Ctrl+K)" 
+                    class="w-full pl-14 pr-14 py-4 bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-slate-950 transition-all text-base md:text-lg placeholder-slate-400 dark:placeholder-slate-500 dark:text-slate-400"
+                    aria-label="Uygulamalarda ara"
+                >
+                <button 
+                    id="clearSearchBtn"
+                    class="absolute inset-y-0 right-0 pr-5 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-all opacity-0 pointer-events-none scale-75 z-10"
+                    aria-label="Aramayı Temizle"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 p-0.5 bg-slate-200/60 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 rounded-full" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <div id="searchHelpContainer" class="text-center text-xs text-slate-400 dark:text-slate-500 font-medium transition-all duration-300 opacity-0 -mt-2 h-0 overflow-hidden flex flex-col items-center gap-2">
+                <span id="searchResultsCount" class="hidden text-blue-600 dark:text-blue-400 font-bold text-sm bg-blue-50 dark:bg-blue-900/30 px-3 py-1 rounded-full border border-blue-200 dark:border-blue-800 shadow-sm transition-all"></span>
+                <span>Kutuyu temizlemek için <kbd class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 font-sans text-[11px] shadow-sm">Esc</kbd> veya <kbd class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 font-sans text-[11px] shadow-sm">Alt + Backspace</kbd> tuşlarını kullanabilirsiniz.</span>
+            </div>
+
+            <div class="w-full overflow-x-auto no-scrollbar -mx-4 px-4 md:mx-0 md:px-0 snap-x snap-mandatory">
+                <div class="flex flex-nowrap md:flex-wrap md:justify-center gap-3 pb-2" id="categoryContainer">
+                    </div>
+            </div>
+
+            <div id="recentSection" class="hidden border-t border-slate-100 dark:border-slate-800/80 pt-4 max-w-2xl mx-auto w-full">
+                <div class="flex items-center space-x-3 mb-3">
+                    <div class="flex items-center space-x-2 text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>Son Kullanılanlar</span>
+                    </div>
+                    <button id="btnClearRecents" class="text-[11px] font-bold text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 transition-colors flex items-center px-2 py-1 rounded-lg bg-red-50 hover:bg-red-100 dark:bg-red-950/20 dark:hover:bg-red-950/40 border border-red-200/40 dark:border-red-900/40 touch-manipulation">
+                        Tümünü Temizle
+                    </button>
+                </div>
+                <div id="recentContainer" class="flex flex-wrap gap-2.5"></div>
+            </div>
+
+        </div>
+
+        <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8 items-start" aria-live="polite">
+            <div class="col-span-full text-center py-20 text-slate-400 dark:text-slate-600">
+                <svg class="animate-spin h-12 w-12 mx-auto mb-5 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span id="loadingMessage" class="text-base font-medium">Uygulama havuzu yükleniyor...</span>
+            </div>
+        </div>
+
+        <div id="noResults" class="hidden text-center py-20 px-4" aria-live="assertive">
+            <div class="w-20 h-20 bg-slate-100 dark:bg-slate-900 rounded-3xl flex items-center justify-center mx-auto mb-5 text-3xl shadow-inner" aria-hidden="true">🔍</div>
+            <h3 class="text-lg md:text-xl font-bold text-slate-800 dark:text-slate-400">Sonuç Bulunamadı</h3>
+            <p class="text-slate-500 dark:text-slate-400 mt-2 max-w-sm mx-auto text-sm md:text-base mb-5">Farklı anahtar kelimeler aramayı veya kategoriyi değiştirmeyi deneyebilirsiniz.</p>
+            <button id="btnEmptyClearSearch" class="inline-flex items-center space-x-2 px-5 py-2.5 bg-blue-50 hover:bg-blue-100 dark:bg-blue-950/40 dark:hover:bg-blue-900/40 text-blue-600 dark:text-blue-400 border border-blue-200/50 dark:border-blue-800/40 rounded-xl text-sm font-semibold transition-all active:scale-95 touch-manipulation">
+                <span>Aramayı Temizle</span>
+            </button>
+        </div>
+
+    </main>
+
+    <div id="shareModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300" role="dialog" aria-modal="true" aria-labelledby="shareModalTitle">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 w-full max-w-md rounded-3xl p-6 shadow-2xl scale-95 transition-transform duration-300 relative">
+            <button id="btnCloseShareModal" class="absolute top-5 right-5 p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            <div class="text-center mb-6">
+                <h3 id="shareModalTitle" class="text-xl font-bold text-slate-900 dark:text-slate-400 flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+                    Uygulamayı Paylaş
+                </h3>
+                <div id="sharePreview" class="mt-4 p-3 bg-slate-50 dark:bg-slate-950 rounded-2xl border border-slate-200/60 dark:border-slate-800 flex items-center gap-3 text-left">
+                    <span id="sharePreviewIcon" class="text-3xl p-2 bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200/40 dark:border-slate-800/60">🚀</span>
+                    <div>
+                        <h4 id="sharePreviewTitle" class="font-bold text-sm text-slate-900 dark:text-slate-400 truncate max-w-[240px]">Uygulama Adı</h4>
+                        <p id="sharePreviewDesc" class="text-xs text-slate-500 dark:text-slate-400 line-clamp-1 mt-0.5">Uygulama açıklaması buraya gelecek.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-100 dark:bg-slate-800/60 p-1.5 rounded-xl mb-2 flex items-center gap-1 select-none">
+                <button id="btnShareDirect" data-type="direct" class="flex-1 py-2 text-xs font-bold bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 rounded-lg shadow-sm transition-all focus:outline-none">Uygulama Linki</button>
+                <button id="btnSharePortal" data-type="portal" class="flex-1 py-2 text-xs font-bold text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300 transition-all focus:outline-none">Akıllı Kürsü Linki</button>
+            </div>
+            <div class="text-[11px] text-center text-slate-400 dark:text-slate-500 mb-5 truncate px-2" id="currentShareUrlDisplay">https://...</div>
+            
+            <div class="grid grid-cols-3 gap-3 mb-5">
+                <a id="shareWA" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center justify-center p-3 rounded-2xl bg-slate-50 hover:bg-emerald-50 dark:bg-slate-950 dark:hover:bg-emerald-950/30 border border-slate-200/60 dark:border-slate-800 transition-all group">
+                    <svg class="h-6 w-6 text-emerald-500 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397 0 11.948 0c3.179.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.907-11.892 11.907-2.001-.001-3.97-.51-5.733-1.482L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.747 1.451 5.436 0 9.86-4.42 9.864-9.864.002-2.637-1.03-5.114-2.904-6.989-1.873-1.876-4.354-2.907-6.992-2.908-5.441 0-9.866 4.425-9.87 9.867-.002 1.637.454 3.237 1.32 4.633l-.995 3.633 3.734-.979zm11.233-6.273c-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.668.149-.198.297-.766.967-.94 1.164-.173.199-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347z"/></svg>
+                    <span class="text-xs font-bold mt-1.5 text-slate-600 dark:text-slate-400">WhatsApp</span>
+                </a>
+                <a id="shareX" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center justify-center p-3 rounded-2xl bg-slate-50 hover:bg-slate-200 dark:bg-slate-950 dark:hover:bg-slate-800 border border-slate-200/60 dark:border-slate-800 transition-all group">
+                    <svg class="h-6 w-6 text-slate-900 dark:text-slate-400 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    <span class="text-xs font-bold mt-1.5 text-slate-600 dark:text-slate-400">X / Twitter</span>
+                </a>
+                <a id="shareTG" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center justify-center p-3 rounded-2xl bg-slate-50 hover:bg-sky-50 dark:bg-slate-950 dark:hover:bg-sky-950/30 border border-slate-200/60 dark:border-slate-800 transition-all group">
+                    <svg class="h-6 w-6 text-sky-500 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0C5.344 0 0 5.344 0 11.944c0 5.622 3.88 10.331 9.089 11.612.112.022.213-.034.247-.14l.851-3.17c.023-.084-.004-.175-.067-.233l-1.89-1.743c-.08-.073-.09-.196-.023-.282.87-1.118 1.344-2.484 1.344-3.89 0-3.483-2.833-6.317-6.317-6.317s-6.317 2.834-6.317 6.317c0 1.94.885 3.754 2.404 4.939.08.062.112.163.08.258l-.662 2.052c-.035.107.034.219.146.236.196.03.393.045.59.045 1.54 0 2.96-.54 4.09-1.44.062-.05.14-.067.213-.045l3.204.933c.107.03.213-.034.247-.14l.852-3.17c.022-.084-.005-.175-.068-.233L10.3 14.832c-.08-.073-.09-.196-.023-.282.87-1.118 1.344-2.484 1.344-3.89 0-3.483-2.833-6.316-6.316-6.316z M23.891 3.535c-.179-.438-.582-.739-1.054-.783l-1.83 19.5c-.053.562.29 1.077.84 1.21.55.132 1.11-.158 1.31-.68l6.75-18c.06-.17.09-.35.09-.53 0-.43-.23-.83-.61-1.04-.49-.27-1.09-.23-1.54.09z"/></svg>
+                    <span class="text-xs font-bold mt-1.5 text-slate-600 dark:text-slate-400">Telegram</span>
+                </a>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 mb-2">
+                <a id="shareFB" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-slate-50 hover:bg-blue-100 dark:bg-slate-950 dark:hover:bg-blue-900/30 border border-slate-200/60 dark:border-slate-800 transition-colors text-xs font-bold text-slate-700 dark:text-slate-400">
+                    <svg class="h-4 w-4 text-blue-600" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                    Facebook
+                </a>
+                <a id="shareLN" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-slate-50 hover:bg-indigo-100 dark:bg-slate-950 dark:hover:bg-indigo-900/30 border border-slate-200/60 dark:border-slate-800 transition-colors text-xs font-bold text-slate-700 dark:text-slate-400">
+                    <svg class="h-4 w-4 text-indigo-600" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                    LinkedIn
+                </a>
+            </div>
+
+            <div class="border-t border-slate-100 dark:border-slate-800 pt-4 mt-4">
+                <button id="btnCopyShare" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-2xl transition-all shadow-md shadow-blue-500/10 touch-manipulation">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+                    <span>Bağlantıyı Kopyala</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="linkChoiceModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300" role="dialog" aria-modal="true" aria-labelledby="linkChoiceModalTitle">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 w-full max-w-sm rounded-3xl p-6 shadow-2xl scale-95 transition-transform duration-300 relative">
+            <button id="btnCloseLinkChoiceModal" class="absolute top-5 right-5 p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            <div class="text-center mb-6">
+                <span id="linkChoiceIcon" class="inline-flex items-center justify-center w-14 h-14 text-3xl bg-slate-50 dark:bg-slate-950 rounded-2xl shadow-sm border border-slate-200/40 dark:border-slate-800/60 mb-3">🚀</span>
+                <h3 id="linkChoiceModalTitle" class="text-xl font-bold text-slate-900 dark:text-slate-400">Paylaşım Bağlantısı</h3>
+                <p class="text-xs text-slate-500 mt-1">Hangi adresi paylaşmak istersiniz?</p>
+            </div>
+            <div class="flex flex-col gap-3">
+                <button data-action="execute-share" data-type="direct" class="w-full flex flex-col items-center justify-center p-4 bg-slate-50 hover:bg-blue-50 dark:bg-slate-950 dark:hover:bg-slate-800 border border-slate-200/60 dark:border-slate-800 hover:border-blue-300 dark:hover:border-slate-600 transition-all rounded-2xl group touch-manipulation">
+                    <span class="font-bold text-slate-800 dark:text-slate-300 group-hover:text-blue-600 dark:group-hover:text-blue-400">Uygulama Linki</span>
+                    <span id="linkChoiceDirectUrl" class="text-[10px] text-slate-500 mt-1 truncate max-w-[250px] w-full px-2 text-center">...</span>
+                </button>
+                <button data-action="execute-share" data-type="portal" class="w-full flex flex-col items-center justify-center p-4 bg-slate-50 hover:bg-indigo-50 dark:bg-slate-950 dark:hover:bg-slate-800 border border-slate-200/60 dark:border-slate-800 hover:border-indigo-300 dark:hover:border-slate-600 transition-all rounded-2xl group touch-manipulation">
+                    <span class="font-bold text-slate-800 dark:text-slate-300 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">Akıllı Kürsü Linki</span>
+                    <span id="linkChoicePortalUrl" class="text-[10px] text-slate-500 mt-1 truncate max-w-[250px] w-full px-2 text-center">...</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="versionModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300" role="dialog" aria-modal="true" aria-labelledby="versionModalTitle">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 w-full max-w-md rounded-3xl p-6 shadow-2xl scale-95 transition-transform duration-300 relative max-h-[85vh] flex flex-col">
+            
+            <button id="btnCloseVersionModal" class="absolute top-5 right-5 p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors z-10">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            
+            <div class="text-center mb-5 flex-shrink-0">
+                <span id="versionModalIcon" class="inline-flex items-center justify-center w-14 h-14 text-3xl bg-slate-50 dark:bg-slate-950 rounded-2xl shadow-sm border border-slate-200/40 dark:border-slate-800/60 mb-3">🚀</span>
+                <h3 id="versionModalTitle" class="text-xl font-bold text-slate-900 dark:text-slate-400">Sürüm Geçmişi</h3>
+                <p class="text-xs text-slate-500 mt-1">Bu uygulamanın tüm yayınlanmış sürümleri</p>
+            </div>
+            
+            <div id="versionListContainer" class="flex-grow overflow-y-auto no-scrollbar space-y-3 pb-2 px-2 -mx-2 pt-2 -mt-2">
+            </div>
+            
+        </div>
+    </div>
+
+    <div id="toastAlert" class="fixed top-24 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-white dark:bg-white dark:text-slate-900 px-4 py-2.5 rounded-full shadow-xl text-xs md:text-sm font-bold opacity-0 scale-90 pointer-events-none transition-all duration-300 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+        <span id="toastMessage">Bağlantı başarıyla kopyalandı!</span>
+    </div>
+
+    <div id="privacyModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300" role="dialog" aria-modal="true" aria-labelledby="privacyModalTitle">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 w-full max-w-2xl rounded-3xl p-6 md:p-8 shadow-2xl scale-95 transition-transform duration-300 relative max-h-[85vh] flex flex-col">
+            
+            <button id="btnClosePrivacyModal" class="absolute top-5 right-5 p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors z-10" aria-label="Kapat">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            
+            <div class="text-center mb-5 flex-shrink-0">
+                <span class="inline-flex items-center justify-center w-12 h-12 text-2xl bg-slate-50 dark:bg-slate-950 rounded-2xl shadow-sm border border-slate-200/40 dark:border-slate-800/60 mb-2 select-none">🛡️</span>
+                <h3 id="privacyModalTitle" class="text-lg md:text-xl font-bold text-slate-900 dark:text-slate-400 uppercase tracking-wide px-6">AKILLI KÜRSÜ GİZLİLİK POLİTİKASI VE KVKK AYDINLATMA METNİ</h3>
+            </div>
+            
+            <div class="flex-grow overflow-y-auto no-scrollbar space-y-4 text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed pr-1 text-left font-medium">
+                
+                <div>
+                    <h4 class="font-bold text-slate-900 dark:text-slate-300 mb-1">1. Veri Sorumlusu</h4>
+                    <p>Bu gizlilik politikası, Akıllı Kürsü web portalı üzerinden sunulan eğitimsel ve idari dijital araçların kullanımına ilişkin veri işleme ilkelerini belirlemektedir.</p>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-slate-900 dark:text-slate-300 mb-1">2. Veri İşleme İlkeleri ve Mutlak Gizlilik</h4>
+                    <p class="mb-2">Akıllı Kürsü, öğretmenlerin ve eğitimcilerin iş süreçlerini kolaylaştırmak amacıyla tamamen sunucu bağımsız (client-side) mimariyle tasarlanmıştır.</p>
+                    <p class="mb-2">Sitede yer alan hiçbir dijital araç (belge düzenleyiciler, liste yönetim araçları vb.) işlediğiniz verileri, yüklediğiniz dokümanları veya oluşturduğunuz listeleri harici bir sunucuya (server) göndermez.</p>
+                    <p>Tüm veri işleme, dönüştürme ve hesaplama işlemleri doğrudan kullanıcının kendi cihazında (tarayıcı üzerinde) gerçekleşir. Akıllı Kürsü bünyesinde kullanıcı verilerinin toplandığı, işlendiği veya saklandığı herhangi bir veri tabanı bulunmamaktadır.</p>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-slate-900 dark:text-slate-300 mb-1">3. Üçüncü Taraf Entegrasyonları ve Bulut İşlemleri</h4>
+                    <p>Uzak sunucu bağlantısı veya depolama gerektiren istisnai araçlarda, işlemler yalnızca kullanıcının kendi rızasıyla yetkilendireceği, kendisine ait kişisel bulut hesapları (Google Drive vb.) üzerinden yürütülür. Bu süreçte bulut hesabınıza ait erişim yetkileri veya token bilgileri hiçbir şekilde Akıllı Kürsü tarafından kaydedilmez ve üçüncü taraflarla paylaşılmaz.</p>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-slate-900 dark:text-slate-300 mb-1">4. Çerezler (Cookies)</h4>
+                    <p>Akıllı Kürsü, platformun temel işlevselliğini (örneğin favorilere ekleme veya kullanıcı tercihlerini hatırlama) optimize etmek amacıyla yalnızca tarayıcınızın yerel depolama birimlerini (Local Storage) kullanabilir. Reklam veya pazarlama amaçlı takip çerezleri kullanılmamaktadır.</p>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-slate-900 dark:text-slate-300 mb-1">5. İptal, İade ve Destek Politikası</h4>
+                    <p>Akıllı Kürsü platformunda sunulan tüm araçlar ve hizmetler tamamen ücretsizdir. Platform üzerinde yer alan "Destek Ol" veya "Bir Kahve Ismarla" benzeri alanlar üzerinden yapılan tüm ödemeler, kullanıcıların tamamen kendi rızalarıyla harcanan emeği takdir etmek amacıyla yaptıkları gönüllü bağış/teberru niteliğindedir. Ticari bir ürün veya hizmet satışı söz konusu olmadığından, yapılan gönüllü desteklerin iptali veya iadesi mümkün değildir.</p>
+                </div>
+                
+            </div>
+            
+        </div>
+    </div>
+	
+    <div id="aboutModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 w-full max-w-lg rounded-3xl p-8 shadow-2xl scale-95 transition-transform duration-300 relative max-h-[90vh] overflow-y-auto">
+            <button id="btnCloseAboutModal" class="absolute top-5 right-5 p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors" aria-label="Kapat">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            
+            <div class="text-center mb-6">
+                <span class="inline-flex items-center justify-center w-24 h-24 text-5xl bg-slate-50 dark:bg-slate-950 rounded-3xl shadow-sm border border-slate-200/40 dark:border-slate-800/60 mb-4 select-none">🎓</span>
+                <h3 id="modalTitle" class="text-2xl font-bold text-slate-900 dark:text-slate-400">Akıllı Kürsü Hakkında</h3>
+            </div>
+            
+            <div class="space-y-5 text-base text-slate-600 dark:text-slate-400 leading-relaxed">
+                <p>
+                    <strong>Akıllı Kürsü</strong>, öğretmenlerin sınıf yönetimini pratikleştiren ve okul bilişim süreçlerini hızlandıran ücretsiz bir dijital araçlar platformudur. Belge düzenleme, liste yönetimi ve pratik sınıf içi çözümlerle öğretmenlere zaman kazandırır. Sadelik, hız ve mutlak gizlilik odaklı platformumuzda hiçbir veriniz toplanmaz. Tüm işlemler doğrudan kendi cihazınızda gerçekleşir.
+                </p>
+                
+               <div class="pt-2">
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdHL6whn90TrOXcFdrAJBXy9ws-_yXEGyzrRiBNEgcD96btrw/viewform?usp=sharing&ouid=107628919335880554081" target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center px-5 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-2xl shadow-md shadow-blue-500/10 transition-all text-sm md:text-base active:scale-95">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>Görüş Bildir</span>
+                    </a>
+                </div>
+                
+                <div class="pt-4 mt-4 border-t border-slate-100 dark:border-slate-800 flex flex-wrap justify-between items-center gap-2 text-sm text-slate-400">
+                    <span>Geliştirici: Murat AKIN</span>
+                    <span>Versiyon: 1.4</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200/80 dark:border-slate-800/80 py-8 text-center text-sm text-slate-400 dark:text-slate-500 transition-colors duration-300">
+        <p>&copy; 2026 Akıllı Kürsü. Tüm hakları saklıdır.</p>
+        <button id="btnOpenPrivacyModal" class="mt-2 text-xs font-semibold text-slate-400 hover:text-blue-500 dark:text-slate-500 dark:hover:text-blue-400 transition-colors focus:outline-none touch-manipulation">
+            Gizlilik Politikası & KVKK Aydınlatma Metni
+        </button>
+    </footer>
+
+    <template id="project-card-template">
+        <div class="project-card bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/70 dark:border-slate-800/70 p-6 shadow-sm dark:shadow-none transition-all duration-500 flex flex-col justify-between opacity-0 translate-y-4 relative z-10 touch-manipulation overflow-hidden min-h-[320px] h-full gap-4">
+            <div class="ribbon-wrapper hidden" data-element="ribbon-container">
+                <div class="ribbon" data-element="ribbon-text"></div>
+            </div>
+            
+            <div class="flex flex-col gap-3 flex-grow">
+                <div class="flex flex-nowrap items-center justify-between gap-2 md:gap-3 relative z-20">
+                    <span class="project-icon flex items-center justify-center w-14 h-14 flex-shrink-0 text-3xl bg-slate-50 dark:bg-slate-950 rounded-2xl transition-colors select-none shadow-sm" aria-hidden="true" data-element="icon"></span>
+                    
+                    <div class="flex flex-nowrap items-center justify-end gap-2 flex-grow pl-1 min-w-0" data-element="badge-container">
+                        <div class="flex flex-nowrap items-center gap-1.5 select-none overflow-hidden">
+                            <span data-element="status-badge" class="hidden text-[10px] font-extrabold px-2 py-0.5 rounded-md border tracking-wide uppercase"></span>
+                            <span data-element="category-badge" class="text-xs md:text-sm font-bold px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-xl tracking-wide uppercase whitespace-nowrap"></span>
+                        </div>
+                        
+                        <button data-action="toggle-favorite" class="flex-shrink-0 p-3.5 rounded-xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-950 dark:hover:bg-slate-800 border border-slate-200/50 dark:border-slate-800/80 transition-all hover:scale-110 active:scale-90 z-30 touch-manipulation group" data-element="fav-btn">
+                            <svg data-element="fav-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-300 dark:text-slate-600 group-hover:text-amber-400/60 transition-colors" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <div data-element="parent-badge-container" class="hidden mb-1.5">
+                        <span data-element="parent-badge" class="inline-block text-[10px] font-bold px-2 py-0.5 bg-indigo-50 text-indigo-600 dark:bg-indigo-950/40 dark:text-indigo-400 rounded-md border border-indigo-200/60 tracking-wide uppercase"></span>
+                    </div>
+                    <h3 class="text-lg md:text-xl font-bold text-slate-900 dark:text-slate-400 transition-colors relative z-20" data-element="title"></h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm md:text-base leading-relaxed font-medium relative z-20 break-words" data-element="desc"></p>
+                </div>
+            </div>
+            
+            <div class="flex flex-col gap-2 relative z-20 pt-2 border-t border-slate-100 dark:border-slate-800/60 mt-auto">
+                <button data-action="open-version-modal" class="hidden mb-3 w-full inline-flex items-center justify-center gap-1.5 py-1.5 text-xs font-bold text-slate-500 hover:text-blue-600 dark:text-slate-500 dark:hover:text-blue-400 bg-slate-50 hover:bg-blue-50 dark:bg-slate-900/50 dark:hover:bg-slate-800 rounded-xl transition-all border border-transparent hover:border-blue-200 dark:hover:border-slate-700" data-element="version-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <span data-element="version-text">Tüm Sürümler</span>
+                </button>
+                <button data-action="open-share-menu" class="share-btn w-full inline-flex items-center justify-center px-5 py-3 bg-slate-100/80 dark:bg-slate-900/60 text-slate-700 dark:text-slate-400 font-bold text-sm md:text-base rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm touch-manipulation" data-element="share-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                    </svg>
+                    <span>Paylaş</span>
+                </button>
+                
+                <a target="_blank" rel="noopener noreferrer" class="go-app-btn w-full inline-flex items-center justify-center px-5 py-4 text-sm md:text-base rounded-2xl border transition-all shadow-sm touch-manipulation" data-element="go-btn">
+                    <span data-element="go-btn-text">Uygulamaya Git</span>
+                    <svg data-element="go-btn-icon" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </template>
+
+    <script>
+        const svgNS = "http://www.w3.org/2000/svg";
+
+        function safeGetLS(key, defaultValue, requireArray = false) {
+            try {
+                const item = localStorage.getItem(key);
+                if (!item) return defaultValue;
+                const parsed = JSON.parse(item);
+                if (requireArray && !Array.isArray(parsed)) return defaultValue;
+                return parsed;
+            } catch (error) {
+                console.error(`LocalStorage okuma hatası (${key}):`, error);
+                return defaultValue;
+            }
+        }
+
+        function safeSetLS(key, value) {
+            try {
+                if (key === 'theme') {
+                    localStorage.setItem('theme', value);
+                } else {
+                    localStorage.setItem(key, JSON.stringify(value));
+                }
+            } catch (error) {
+                console.error(`LocalStorage yazma hatası (${key}):`, error);
+            }
+        }
+
+        function secureUrl(inputUrl) {
+            if (!inputUrl || typeof inputUrl !== 'string') return '#';
+            try {
+                const parsedUrl = new URL(inputUrl.trim(), window.location.origin);
+                
+                if (parsedUrl.protocol !== 'https:' && parsedUrl.protocol !== 'http:') {
+                    return '#';
+                }
+
+                if (parsedUrl.protocol === 'http:' && !['localhost', '127.0.0.1'].includes(parsedUrl.hostname)) {
+                    return '#';
+                }
+
+                return parsedUrl.href;
+            } catch (e) {
+                return '#';
+            }
+        }
+
+        const jsonUrl = 'projeler.json'; 
+        let allProjects = [];
+        let groupedProjects = [];
+        let activeCategory = 'Tümü';
+        let gridCols = 3;
+
+        let favorites = safeGetLS('ak_favorites', [], true);
+        let recents = safeGetLS('ak_recents', [], true);
+        let lastAnimatedStars = {};
+        
+        let activeShareName = '';
+        let activeShareDesc = '';
+        let activeDirectUrl = '';
+        let activePortalUrl = '';
+        let activeShareUrl = '';
+		
+		
+        let activeShareIcon = '🚀';
+
+        function getCompatInfo() {
+            return window.__AK_COMPAT__ || { isInApp: false, canNativeShare: !!navigator.share };
+        }
+
+        function safeWindowScrollTo(top, behavior = 'auto') {
+            const safeTop = Math.max(0, Number(top) || 0);
+            try { window.scrollTo({ top: safeTop, left: 0, behavior }); }
+            catch (error) { window.scrollTo(0, safeTop); }
+        }
+
+        function safeElementScrollTo(element, top, behavior = 'auto') {
+            if (!element) return;
+            const safeTop = Math.max(0, Number(top) || 0);
+            try { element.scrollTo({ top: safeTop, left: 0, behavior }); }
+            catch (error) { element.scrollTop = safeTop; }
+        }
+
+        function copyTextCompat(text) {
+            if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
+
+            return new Promise((resolve, reject) => {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                textarea.setAttribute('readonly', '');
+                textarea.setAttribute('aria-hidden', 'true');
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                textarea.style.pointerEvents = 'none';
+                textarea.style.left = '-9999px';
+                textarea.style.top = '0';
+                document.body.appendChild(textarea);
+
+                try {
+                    textarea.focus();
+                    textarea.select();
+                    textarea.setSelectionRange(0, textarea.value.length);
+                    const copied = document.execCommand && document.execCommand('copy');
+                    document.body.removeChild(textarea);
+                    copied ? resolve() : reject(new Error('Kopyalama desteklenmiyor.'));
+                } catch (error) {
+                    document.body.removeChild(textarea);
+                    reject(error);
+                }
+            });
+        }
+
+        function syncModalScrollLock() {
+            const modalIds = ['shareModal', 'linkChoiceModal', 'versionModal', 'privacyModal', 'aboutModal'];
+            const hasOpenModal = modalIds.some(id => {
+                const modal = document.getElementById(id);
+                return modal && !modal.classList.contains('opacity-0');
+            });
+            document.documentElement.classList.toggle('modal-open', hasOpenModal);
+            document.body.classList.toggle('modal-open', hasOpenModal);
+        }
+
+        function showCustomShareModal() {
+            document.getElementById('sharePreviewTitle').textContent = activeShareName;
+            document.getElementById('sharePreviewDesc').textContent = activeShareDesc;
+            document.getElementById('sharePreviewIcon').textContent = activeShareIcon || '🚀';
+
+            const modal = document.getElementById('shareModal');
+            const inner = modal.firstElementChild || modal.querySelector('div');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            if (inner) {
+                inner.classList.remove('scale-95');
+                inner.classList.add('scale-100');
+                inner.scrollTop = 0;
+            }
+            modal.scrollTop = 0;
+            updateShareLinks('direct');
+            syncModalScrollLock();
+        }
+
+        function buildShareText() {
+            return `Akıllı Kürsü - ${activeShareName}, ${activeShareDesc}`;
+        }
+
+        let wasVersionModalOpen = false;
+        let lastVersionGrupId = '';
+        let lastVersionIcon = '';
+
+        function normalizeText(text) {
+            if (!text) return '';
+            return String(text).toLowerCase()
+                .replace(/ı/g, 'i')
+                .replace(/ğ/g, 'g')
+                .replace(/ü/g, 'u')
+                .replace(/ş/g, 's')
+                .replace(/ö/g, 'o')
+                .replace(/ç/g, 'c')
+                .replace(/[^a-z0-9]/g, ''); 
+        }
+
+        async function fetchProjects() {
+            try {
+                const response = await fetch(jsonUrl);
+                
+                if (!response.ok) {
+                    throw new Error(`Ağ hatası (${response.status})`);
+                }
+                
+                const rawData = await response.json();
+                
+                if (!Array.isArray(rawData)) {
+                    throw new Error('Veri formatı dizisi (array) değil.');
+                }
+                
+                const groups = {};
+                const seenIds = new Set();
+                
+                rawData.forEach(app => {
+                    app.adi = String(app.adi || '');
+                    app.aciklama = String(app.aciklama || '');
+                    app.kategori = String(app.kategori || 'Genel');
+                    app.id = String(app.id || app.adi); 
+                    
+                    if (seenIds.has(app.id)) {
+                        console.warn(`Uyarı: Çakışan proje ID'si tespit edildi: ${app.id}. Otomatik düzeltildi.`);
+                        app.id = app.id + '-' + Math.random().toString(36).substr(2, 5);
+                    }
+                    seenIds.add(app.id);
+
+                    const gid = app.grupId || app.id;
+                    if(!groups[gid]) groups[gid] = [];
+                    groups[gid].push(app);
+                });
+
+                groupedProjects = Object.values(groups).map(versions => {
+                    const mainApp = versions.find(v => v.surumTipi === 'Onerilen') || versions[0];
+                    return { ...mainApp, tumSurumler: versions };
+                });
+
+                allProjects = groupedProjects; 
+                
+                updateTotalAppsCount(allProjects.length);
+                generateCategoryButtons();
+                applyFilters(); 
+                renderRecents();
+                checkUrlParameterAndHighlight();
+            } catch (error) {
+                console.error('Proje çekme hatası:', error);
+                const isNetwork = error.message.includes('Ağ hatası');
+                const userMsg = isNetwork ? 'Sunucu bağlantısı kurulamadı.' : 'Uygulama listesi veri formatı geçersiz.';
+                
+                const grid = document.getElementById('projectsGrid');
+                grid.replaceChildren();
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'col-span-full text-center py-20 text-red-500 font-medium text-base';
+                errorDiv.textContent = `❌ ${userMsg} Lütfen daha sonra tekrar deneyin veya sistem yöneticisine bildirin.`;
+                grid.appendChild(errorDiv);
+            }
+        }
+
+        function checkUrlParameterAndHighlight() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const queryProjectParam = urlParams.get('p');
+            let projectParam = queryProjectParam;
+
+            if (!projectParam) {
+                const path = window.location.pathname;
+                if (path && path.length > 1 && !path.includes('index.html')) {
+                    try {
+                        const cleanPath = decodeURIComponent(path).replace(/^\/+|\/+$/g, '');
+                        const pathParts = cleanPath.split('/').filter(Boolean);
+                        projectParam = pathParts[pathParts.length - 1] || null;
+                    } catch(e) {
+                        projectParam = null;
+                    }
+                }
+            }
+
+            if (!projectParam) return;
+
+            const normalizedSearchParam = normalizeText(projectParam);
+            let targetMainProject = null;
+            let targetSpecificVersion = null;
+            let matchWasGroupAlias = false;
+
+            const getUrlAliases = (project) => {
+                const aliases = [];
+                if (project.url) {
+                    try {
+                        const parsed = new URL(project.url, window.location.origin);
+                        const cleanPath = parsed.pathname.replace(/^\/+|\/+$/g, '');
+                        const parts = cleanPath.split('/').filter(Boolean);
+                        aliases.push(parts[parts.length - 1], cleanPath);
+                    } catch (e) {
+                        aliases.push(project.url);
+                    }
+                }
+                return aliases.filter(Boolean);
+            };
+
+            const getVersionMatchScore = (version) => {
+                const id = normalizeText(version.id || '');
+                const name = normalizeText(version.adi || '');
+                const urlAliases = getUrlAliases(version).map(normalizeText);
+
+                // Eski bağlantıların grup kimliğiyle karışmaması için gerçek sürüm
+                // kimliği ve sürüm URL'si her zaman önce değerlendirilir.
+                if (id && id === normalizedSearchParam) return 400;
+                if (urlAliases.includes(normalizedSearchParam)) return 300;
+                if (name && name === normalizedSearchParam) return 200;
+                return 0;
+            };
+
+            // 1. Öncelik: tüm gruplardaki gerçek sürüm kimlikleri / URL'leri.
+            let bestMatchScore = 0;
+            for (const mainApp of allProjects) {
+                const versions = Array.isArray(mainApp.tumSurumler) && mainApp.tumSurumler.length
+                    ? mainApp.tumSurumler
+                    : [mainApp];
+
+                for (const version of versions) {
+                    const score = getVersionMatchScore(version);
+                    if (score > bestMatchScore) {
+                        bestMatchScore = score;
+                        targetMainProject = mainApp;
+                        targetSpecificVersion = version;
+                    }
+                }
+            }
+
+            // 2. Öncelik: sürüm bulunamazsa uygulama grubu / ana kart eşleşmesi.
+            if (!targetMainProject) {
+                for (const mainApp of allProjects) {
+                    const groupAliases = [
+                        mainApp.grupId,
+                        mainApp.id,
+                        mainApp.adi,
+                        ...getUrlAliases(mainApp)
+                    ].filter(Boolean).map(normalizeText);
+
+                    if (groupAliases.includes(normalizedSearchParam)) {
+                        targetMainProject = mainApp;
+                        targetSpecificVersion = mainApp;
+                        matchWasGroupAlias = normalizeText(mainApp.grupId || '') === normalizedSearchParam;
+                        break;
+                    }
+                }
+            } else {
+                matchWasGroupAlias = normalizeText(targetMainProject.grupId || '') === normalizedSearchParam &&
+                    normalizeText(targetSpecificVersion.id || '') !== normalizedSearchParam;
+            }
+
+            if (!targetMainProject || !targetSpecificVersion) return;
+
+            document.title = `Akıllı Kürsü - ${targetSpecificVersion.adi}`;
+
+            const metaDesc = document.querySelector('meta[name="description"]');
+            if (metaDesc) metaDesc.content = targetSpecificVersion.aciklama || targetMainProject.aciklama || '';
+
+            const ogTitle = document.querySelector('meta[property="og:title"]');
+            if (ogTitle) ogTitle.content = `Akıllı Kürsü - ${targetSpecificVersion.adi}`;
+
+            const ogDesc = document.querySelector('meta[property="og:description"]');
+            if (ogDesc) ogDesc.content = targetSpecificVersion.aciklama || targetMainProject.aciklama || '';
+
+            const targetId = `project-${normalizeText(targetMainProject.adi)}`;
+
+            if (activeCategory !== 'Tümü') {
+                filterCategory('Tümü');
+            }
+
+            const searchBar = document.getElementById('searchBar');
+            if (searchBar && searchBar.value) {
+                searchBar.value = '';
+                applyFilters();
+            }
+
+            setTimeout(() => {
+                const targetCard = document.getElementById(targetId);
+                if (!targetCard) return;
+
+                targetCard.classList.remove('deep-link-highlight');
+                void targetCard.offsetWidth;
+                targetCard.classList.add('deep-link-highlight');
+
+                const centerHighlightedCard = (behavior = 'smooth') => {
+                    const card = document.getElementById(targetId);
+                    if (!card) return;
+
+                    const header = document.querySelector('header');
+                    const headerBottom = header ? header.getBoundingClientRect().bottom : 0;
+                    const visualViewport = window.visualViewport;
+                    const viewportTop = visualViewport ? visualViewport.offsetTop : 0;
+                    const viewportHeight = visualViewport ? visualViewport.height : window.innerHeight;
+                    const viewportBottom = viewportTop + viewportHeight;
+
+                    const effectMargin = Math.min(42, Math.max(26, viewportHeight * 0.045));
+                    const safeTop = Math.max(headerBottom, viewportTop) + effectMargin;
+                    const safeBottom = viewportBottom - effectMargin;
+                    const availableHeight = Math.max(1, safeBottom - safeTop);
+
+                    const rect = card.getBoundingClientRect();
+                    const effectTop = rect.top - effectMargin;
+                    const effectHeight = rect.height + (effectMargin * 2);
+
+                    const desiredEffectTop = effectHeight <= availableHeight
+                        ? safeTop + ((availableHeight - effectHeight) / 2)
+                        : safeTop;
+
+                    const delta = effectTop - desiredEffectTop;
+                    const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+                    const destination = Math.min(maxScroll, Math.max(0, window.scrollY + delta));
+
+                    safeWindowScrollTo(destination, behavior);
+                };
+
+                requestAnimationFrame(() => centerHighlightedCard('smooth'));
+                setTimeout(() => centerHighlightedCard('auto'), 750);
+
+                const highlightDuration = 4800;
+                const versions = Array.isArray(targetMainProject.tumSurumler)
+                    ? targetMainProject.tumSurumler
+                    : [];
+                const isHistoricalVersion = normalizeText(targetMainProject.id || targetMainProject.adi) !==
+                    normalizeText(targetSpecificVersion.id || targetSpecificVersion.adi);
+                const shouldOpenVersionModal = versions.length > 1 &&
+                    (isHistoricalVersion || matchWasGroupAlias);
+
+                setTimeout(() => {
+                    const liveCard = document.getElementById(targetId);
+                    if (liveCard) liveCard.classList.remove('deep-link-highlight');
+                }, highlightDuration);
+
+                if (shouldOpenVersionModal) {
+                    // Kartın sayfadaki konumu anlaşıldıktan sonra tüm sürümleri aç.
+                    // Eski URL'nin işaret ettiği sürüm satırı ayrıca vurgulanır.
+                    setTimeout(() => {
+                        openVersionModal(
+                            targetMainProject.grupId || targetMainProject.id,
+                            targetMainProject.ikon,
+                            targetSpecificVersion.id || targetSpecificVersion.adi
+                        );
+                    }, 900);
+                }
+            }, 350);
+        }
+
+        function updateTotalAppsCount(count) {
+            const badge = document.getElementById('totalAppsBadge');
+            if (badge) {
+                badge.querySelector('span').textContent = `🚀 ${count} Eğitim Odaklı Ücretsiz Proje`;
+            }
+        }
+
+        function applyFilters() {
+            const searchBar = document.getElementById('searchBar');
+            const clearBtn = document.getElementById('clearSearchBtn');
+            const helpText = document.getElementById('searchHelpContainer');
+            const countBadge = document.getElementById('searchResultsCount');
+            const originalSearchTerm = String(searchBar.value || '');
+            
+            if (originalSearchTerm.length > 0) {
+                if (clearBtn) {
+                    clearBtn.classList.remove('opacity-0', 'pointer-events-none', 'scale-75');
+                    clearBtn.classList.add('opacity-100', 'scale-100');
+                }
+                if (helpText) {
+                    helpText.classList.remove('opacity-0', 'h-0', 'overflow-hidden');
+                    helpText.classList.add('opacity-100', 'mt-2', 'h-auto');
+                }
+            } else {
+                if (clearBtn) {
+                    clearBtn.classList.remove('opacity-100', 'scale-100');
+                    clearBtn.classList.add('opacity-0', 'pointer-events-none', 'scale-75');
+                }
+                if (helpText) {
+                    helpText.classList.remove('opacity-100', 'mt-2', 'h-auto');
+                    helpText.classList.add('opacity-0', 'h-0', 'overflow-hidden');
+                }
+                if (countBadge) countBadge.classList.add('hidden');
+            }
+
+            const normalize = (text) => String(text || '').toLowerCase().replace(/[\s-]/g, '');
+            const normalizedSearch = normalize(originalSearchTerm);
+
+            let filtered = [];
+
+            allProjects.forEach(project => {
+                let matchesCategory = false;
+                if (activeCategory === 'Tümü') matchesCategory = true;
+                else if (activeCategory === 'Favoriler') matchesCategory = favorites.includes(project.id);
+                else matchesCategory = project.kategori === activeCategory;
+
+                if (!matchesCategory) return; 
+
+                const checkMatch = (item) => {
+                    const itemTags = Array.isArray(item.etiketler) ? item.etiketler.join(' ') : '';
+                    return String(item.adi || '').toLowerCase().includes(originalSearchTerm.toLowerCase()) || 
+                           String(item.aciklama || '').toLowerCase().includes(originalSearchTerm.toLowerCase()) ||
+                           itemTags.toLowerCase().includes(originalSearchTerm.toLowerCase()) ||
+                           normalize(item.adi).includes(normalizedSearch) || 
+                           normalize(item.aciklama).includes(normalizedSearch) ||
+                           normalize(itemTags).includes(normalizedSearch);
+                };
+
+                if (originalSearchTerm.length === 0) {
+                    filtered.push(project);
+                } else {
+                    if (checkMatch(project)) {
+                        filtered.push(project);
+                    }
+                    
+                    if (project.tumSurumler && project.tumSurumler.length > 1) {
+                        project.tumSurumler.forEach(subVersion => {
+                            if (subVersion.id !== project.id && checkMatch(subVersion)) {
+                                filtered.push({
+                                    ...subVersion,
+                                    ikon: subVersion.ikon || project.ikon,
+                                    kategori: subVersion.kategori || project.kategori,
+                                    parentName: project.adi
+                                });
+                            }
+                        });
+                    }
+                }
+            });
+
+            filtered = filtered.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
+
+            filtered.sort((a, b) => {
+                const indexA = recents.indexOf(a.id);
+                const indexB = recents.indexOf(b.id);
+                
+                const isRecentA = indexA !== -1;
+                const isRecentB = indexB !== -1;
+
+                if (isRecentA && isRecentB) return indexA - indexB; 
+                if (isRecentA) return -1; 
+                if (isRecentB) return 1;  
+                
+                return 0; 
+            });
+
+            if (originalSearchTerm.length > 0 && countBadge) {
+                countBadge.textContent = `${filtered.length} adet sonuç bulundu`;
+                countBadge.classList.remove('hidden');
+            }
+
+            renderProjects(filtered);
+        }
+
+        function renderProjects(projects) {
+            const grid = document.getElementById('projectsGrid');
+            const noResults = document.getElementById('noResults');
+            const template = document.getElementById('project-card-template');
+            
+            grid.replaceChildren();
+
+            if (projects.length === 0) {
+                noResults.classList.remove('hidden');
+                return;
+            } else {
+                noResults.classList.add('hidden');
+            }
+
+            let sortedProjects = [...projects];
+            
+            const searchBar = document.getElementById('searchBar');
+            if (activeCategory === 'Tümü' && favorites.length > 0 && (!searchBar || searchBar.value.length === 0)) {
+                sortedProjects.sort((a, b) => {
+                    const aFav = favorites.includes(a.id) ? 1 : 0;
+                    const bFav = favorites.includes(b.id) ? 1 : 0;
+                    return bFav - aFav; 
+                });
+            }
+
+            sortedProjects.forEach((project, index) => {
+                const isFav = favorites.includes(project.id); 
+                const safeUrl = secureUrl(project.url);
+                const clone = template.content.cloneNode(true);
+                
+                const card = clone.querySelector('.project-card');
+                card.id = `project-${normalizeText(project.adi)}`;
+                card.style.animation = `fadeInUp 0.4s ease forwards ${index * 0.05}s`;
+                
+                if (project.duyur && project.duyur.trim() !== "") {
+                    const ribbonContainer = clone.querySelector('[data-element="ribbon-container"]');
+                    const ribbonText = clone.querySelector('[data-element="ribbon-text"]');
+                    ribbonContainer.classList.remove('hidden');
+                    ribbonText.textContent = project.duyur.toUpperCase();
+                    clone.querySelector('[data-element="badge-container"]').classList.add('pr-14');
+                }
+
+                if (project.durum) {
+                    const badge = clone.querySelector('[data-element="status-badge"]');
+                    badge.classList.remove('hidden');
+                    badge.textContent = project.durum;
+                    
+                    let badgeColor = 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400 border-emerald-200/60';
+                    if (project.durum === 'Güncellendi') badgeColor = 'bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400 border-amber-200/60';
+                    if (project.durum === 'Beta') badgeColor = 'bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400 border-blue-200/60';
+                    
+                    badge.className = `text-[10px] font-extrabold px-2 py-0.5 rounded-md border ${badgeColor} tracking-wide uppercase`;
+                }
+
+                if (project.parentName) {
+                    const parentBadgeContainer = clone.querySelector('[data-element="parent-badge-container"]');
+                    const parentBadge = clone.querySelector('[data-element="parent-badge"]');
+                    if (parentBadgeContainer && parentBadge) {
+                        parentBadgeContainer.classList.remove('hidden');
+                        parentBadge.textContent = `Ana Uygulama: ${project.parentName}`;
+                    }
+                }
+
+                clone.querySelector('[data-element="category-badge"]').textContent = project.kategori;
+                clone.querySelector('[data-element="icon"]').textContent = project.ikon || '🚀';
+                clone.querySelector('[data-element="title"]').textContent = project.adi;
+                clone.querySelector('[data-element="desc"]').textContent = project.aciklama;
+
+                const favBtn = clone.querySelector('[data-element="fav-btn"]');
+                const favIcon = clone.querySelector('[data-element="fav-icon"]');
+                favBtn.setAttribute('aria-label', `${project.adi} uygulamasını favorilere ${isFav ? 'çıkar' : 'ekle'}`);
+                favBtn.dataset.project = project.id; 
+                
+                if (isFav) {
+                    favIcon.classList.remove('text-slate-300', 'dark:text-slate-600', 'group-hover:text-amber-400/60');
+                    favIcon.classList.add('text-amber-400', 'fill-amber-400');
+                }
+                
+                if (lastAnimatedStars[project.id] === 'active') {
+                    favIcon.classList.add('animate-star-active');
+                } else if (lastAnimatedStars[project.id] === 'inactive') {
+                    favIcon.classList.add('animate-star-inactive');
+                }
+
+                if (project.tumSurumler && project.tumSurumler.length > 1 && !project.parentName) {
+                    const vBtn = clone.querySelector('[data-element="version-btn"]');
+                    vBtn.classList.remove('hidden');
+                    vBtn.dataset.grupid = project.grupId || project.id;
+                    vBtn.dataset.icon = project.ikon || '🚀';
+                    clone.querySelector('[data-element="version-text"]').textContent = `Tüm Sürümler (${project.tumSurumler.length})`;
+                }
+
+                const sBtn = clone.querySelector('[data-element="share-btn"]');
+                sBtn.dataset.name = project.adi; 
+                sBtn.dataset.desc = project.aciklama;
+                sBtn.dataset.url = safeUrl;
+                sBtn.dataset.icon = project.ikon || '🚀';
+                sBtn.dataset.id = project.id;
+
+                const gBtn = clone.querySelector('[data-element="go-btn"]');
+                if (safeUrl === '#') {
+                    gBtn.href = "javascript:void(0);";
+                    gBtn.className = "go-app-btn w-full inline-flex items-center justify-center px-5 py-4 bg-slate-100 dark:bg-slate-900 text-slate-400 dark:text-slate-600 font-bold text-sm md:text-base rounded-2xl border border-slate-200/50 dark:border-slate-800 cursor-not-allowed opacity-70 touch-manipulation";
+                    clone.querySelector('[data-element="go-btn-text"]').textContent = "Bağlantı Geçersiz";
+                    clone.querySelector('[data-element="go-btn-icon"]').style.display = 'none';
+                } else {
+                    gBtn.href = safeUrl;
+                    gBtn.className = "go-app-btn w-full inline-flex items-center justify-center px-5 py-4 bg-slate-50 hover:bg-blue-600 dark:bg-slate-950 dark:hover:bg-blue-600 text-slate-700 hover:text-white dark:text-slate-400 dark:hover:text-white font-bold text-sm md:text-base rounded-2xl border border-slate-200/80 dark:border-slate-800 hover:border-blue-600 dark:hover:border-blue-600 transition-all shadow-sm touch-manipulation";
+                    gBtn.setAttribute('aria-label', `${project.adi} uygulamasına git`);
+                    gBtn.dataset.action = "track-recent";
+                    gBtn.dataset.name = project.id;
+                }
+
+                grid.appendChild(clone);
+            });
+        }
+
+        function generateCategoryButtons() {
+            const container = document.getElementById('categoryContainer');
+            const uniqueCategories = [...new Set(allProjects.map(p => p.kategori))];
+            
+            const categories = ['Tümü'];
+            if (favorites.length > 0) categories.push('Favoriler');
+            categories.push(...uniqueCategories);
+
+            container.replaceChildren();
+            
+            categories.forEach(cat => {
+                let count = 0;
+                if (cat === 'Tümü') count = allProjects.length;
+                else if (cat === 'Favoriler') count = favorites.length;
+                else count = allProjects.filter(p => p.kategori === cat).length;
+
+                const btn = document.createElement('button');
+                btn.textContent = `${cat} (${count})`;
+                btn.className = `cat-btn whitespace-nowrap px-5 py-2.5 rounded-xl text-sm md:text-base font-semibold transition-all touch-manipulation snap-center ${
+                    cat === activeCategory 
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' 
+                    : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
+                }`;
+                btn.setAttribute('aria-pressed', cat === activeCategory ? 'true' : 'false');
+                btn.addEventListener('click', () => filterCategory(cat));
+                container.appendChild(btn);
+            });
+        }
+
+        function filterCategory(category) {
+            activeCategory = category;
+            generateCategoryButtons();
+            applyFilters();
+        }
+
+        function clearSearch() {
+            const searchBar = document.getElementById('searchBar');
+            searchBar.value = '';
+            searchBar.focus();
+            applyFilters();
+        }
+
+        function toggleFavorite(projectId, event) {
+            event.preventDefault();
+            event.stopPropagation();
+            
+            const index = favorites.indexOf(projectId);
+            if (index > -1) {
+                favorites.splice(index, 1);
+                lastAnimatedStars[projectId] = 'inactive';
+                if (favorites.length === 0 && activeCategory === 'Favoriler') activeCategory = 'Tümü';
+            } else {
+                favorites.push(projectId);
+                lastAnimatedStars[projectId] = 'active';
+            }
+            
+            safeSetLS('ak_favorites', favorites);
+            generateCategoryButtons();
+            applyFilters();
+
+            setTimeout(() => {
+                delete lastAnimatedStars[projectId];
+            }, 450);
+        }
+
+        function trackRecent(projectId) {
+            recents = recents.filter(id => id !== projectId);
+            recents.unshift(projectId);
+            if (recents.length > 3) recents.pop(); 
+            safeSetLS('ak_recents', recents);
+            renderRecents();
+        }
+
+        function removeRecentItem(projectId, event) {
+            event.preventDefault();
+            event.stopPropagation(); 
+            
+            recents = recents.filter(id => id !== projectId);
+            safeSetLS('ak_recents', recents);
+            renderRecents();
+        }
+
+        function clearAllRecents() {
+            recents = [];
+            localStorage.removeItem('ak_recents');
+            renderRecents();
+        }
+
+        function renderRecents() {
+            const section = document.getElementById('recentSection');
+            const container = document.getElementById('recentContainer');
+            container.replaceChildren();
+
+            if (recents.length === 0 || allProjects.length === 0) {
+                section.classList.add('hidden');
+                return;
+            }
+
+            section.classList.remove('hidden');
+            recents.forEach(id => {
+                let foundProj = null;
+                
+                foundProj = allProjects.find(p => p.id === id);
+                
+                if (!foundProj) {
+                    for (const main of allProjects) {
+                        if (main.tumSurumler) {
+                            const sub = main.tumSurumler.find(v => (v.id || v.adi) === id);
+                            if (sub) {
+                                foundProj = { ...sub, ikon: sub.ikon || main.ikon, id: sub.id || sub.adi };
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (foundProj) {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'inline-flex items-center divide-x divide-slate-200 dark:divide-slate-700 bg-slate-50 hover:bg-blue-50 dark:bg-slate-950 dark:hover:bg-blue-950/30 rounded-2xl border border-slate-200/60 dark:border-slate-800/80 transition-all shadow-sm';
+                    
+                    const linkUrl = secureUrl(foundProj.url);
+                    const isInvalid = linkUrl === '#';
+
+                    const link = document.createElement('a');
+                    link.href = isInvalid ? "javascript:void(0);" : linkUrl;
+                    link.target = isInvalid ? "_self" : "_blank";
+                    link.rel = isInvalid ? "" : "noopener noreferrer";
+                    link.className = `inline-flex items-center space-x-2 px-4 py-2.5 text-sm font-bold transition-colors rounded-l-2xl ${isInvalid ? 'text-slate-400 dark:text-slate-600 cursor-not-allowed' : 'text-slate-700 dark:text-slate-400 active:scale-95'}`;
+                    link.setAttribute('aria-label', `Son kullanılanlardan ${foundProj.adi} uygulamasını aç`);
+                    
+                    if (!isInvalid) {
+                        link.addEventListener('click', () => trackRecent(foundProj.id));
+                    }
+                    
+                    const spanIcon = document.createElement('span');
+                    spanIcon.setAttribute('aria-hidden', 'true');
+                    spanIcon.className = 'text-lg';
+                    spanIcon.textContent = foundProj.ikon || '🚀';
+                    
+                    const spanText = document.createElement('span');
+                    spanText.textContent = isInvalid ? 'Bağlantı Bozuk' : foundProj.adi;
+                    
+                    link.appendChild(spanIcon);
+                    link.appendChild(spanText);
+                    
+                    const removeBtn = document.createElement('button');
+                    removeBtn.addEventListener('click', (e) => removeRecentItem(foundProj.id, e));
+                    removeBtn.className = 'p-3 text-slate-400 hover:text-red-500 dark:text-slate-500 dark:hover:text-red-400 transition-colors rounded-r-2xl focus:outline-none';
+                    removeBtn.setAttribute('aria-label', `${foundProj.adi} uygulamasını sil`);
+                    
+                    const svgDel = document.createElementNS(svgNS, "svg");
+                    svgDel.setAttribute("xmlns", svgNS);
+                    svgDel.setAttribute("class", "h-4 w-4");
+                    svgDel.setAttribute("fill", "none");
+                    svgDel.setAttribute("viewBox", "0 0 24 24");
+                    svgDel.setAttribute("stroke", "currentColor");
+                    
+                    const pathDel = document.createElementNS(svgNS, "path");
+                    pathDel.setAttribute("stroke-linecap", "round");
+                    pathDel.setAttribute("stroke-linejoin", "round");
+                    pathDel.setAttribute("stroke-width", "2.5");
+                    pathDel.setAttribute("d", "M6 18L18 6M6 6l12 12");
+                    
+                    svgDel.appendChild(pathDel);
+                    removeBtn.appendChild(svgDel);
+                    
+                    wrapper.appendChild(link);
+                    wrapper.appendChild(removeBtn);
+                    container.appendChild(wrapper);
+                }
+            });
+        }
+
+        let currentSizeLevel = parseInt(safeGetLS('ak_font_size_level', 0)) || 0;
+
+        function applyFontSize() {
+            if (currentSizeLevel < -4) currentSizeLevel = -4;
+            if (currentSizeLevel > 3) currentSizeLevel = 3;
+
+            const newFontSize = (100 + (currentSizeLevel * 10)) + "%";
+            document.documentElement.style.fontSize = newFontSize;
+        }
+
+        function changeFontSize(action) {
+            if (action === 0) currentSizeLevel = 0;
+            else {
+                currentSizeLevel += action;
+                if (currentSizeLevel < -4) currentSizeLevel = -4;
+                if (currentSizeLevel > 3) currentSizeLevel = 3;
+            }
+            safeSetLS('ak_font_size_level', currentSizeLevel);
+            applyFontSize();
+        }
+
+        function changeGridCols(action) {
+            gridCols += action;
+            if (gridCols < 1) gridCols = 1;
+            if (gridCols > 10) gridCols = 10;
+            safeSetLS('ak_grid_cols', gridCols);
+            applyGridCols();
+        }
+
+        function applyGridCols() {
+            document.querySelectorAll('.grid-col-count-disp').forEach(el => el.textContent = gridCols);
+            const grid = document.getElementById('projectsGrid');
+            if (grid) grid.style.gridTemplateColumns = `repeat(${gridCols}, minmax(0, 1fr))`;
+        }
+
+        function toggleMobileMenu() {
+            const dropdown = document.getElementById('mobileMenuDropdown');
+            const btn = document.getElementById('mobileMenuBtn');
+            const isHidden = dropdown.classList.contains('hidden');
+            
+            if (isHidden) {
+                dropdown.classList.remove('hidden');
+                btn.setAttribute('aria-expanded', 'true');
+            } else {
+                dropdown.classList.add('hidden');
+                btn.setAttribute('aria-expanded', 'false');
+            }
+        }
+
+        function openShareMenu(name, desc, url, icon, id) {
+            activeShareName = name;
+            activeShareDesc = desc;
+            activeShareIcon = icon || '🚀';
+            activeDirectUrl = secureUrl(url);
+            activePortalUrl = secureUrl(`https://akillikursu.netlify.app/?p=${id || normalizeText(name)}`);
+
+            const versionModal = document.getElementById('versionModal');
+            wasVersionModalOpen = !versionModal.classList.contains('opacity-0');
+            if (wasVersionModalOpen) closeVersionModal();
+
+            const compat = getCompatInfo();
+            const canUseNativeShare = !!navigator.share && compat.canNativeShare;
+
+            if (canUseNativeShare) {
+                document.getElementById('linkChoiceIcon').textContent = activeShareIcon;
+                document.getElementById('linkChoiceDirectUrl').textContent = activeDirectUrl;
+                document.getElementById('linkChoicePortalUrl').textContent = activePortalUrl;
+
+                const modal = document.getElementById('linkChoiceModal');
+                const inner = modal.firstElementChild || modal.querySelector('div');
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                if (inner) {
+                    inner.classList.remove('scale-95');
+                    inner.classList.add('scale-100');
+                }
+                modal.scrollTop = 0;
+                syncModalScrollLock();
+            } else {
+                showCustomShareModal();
+            }
+        }
+
+        function executeNativeShare(type) {
+            const targetUrl = type === 'direct' ? activeDirectUrl : activePortalUrl;
+            if (!targetUrl || targetUrl === '#') {
+                showToast("Geçersiz veya güvensiz bağlantı!");
+                closeLinkChoiceModal();
+                return;
+            }
+
+            const compat = getCompatInfo();
+            if (!navigator.share || !compat.canNativeShare) {
+                closeLinkChoiceModal();
+                setTimeout(showCustomShareModal, 60);
+                return;
+            }
+
+            const shareText = buildShareText();
+            navigator.share({
+                title: `Akıllı Kürsü - ${activeShareName}`,
+                text: shareText,
+                url: targetUrl
+            }).then(() => {
+                closeLinkChoiceModal();
+            }).catch((err) => {
+                const wasCancelled = err && (err.name === 'AbortError' || err.name === 'NotAllowedError');
+                closeLinkChoiceModal();
+                if (!wasCancelled) {
+                    setTimeout(() => {
+                        showCustomShareModal();
+                        showToast("Sistem paylaşımı açılamadı. Paylaşım seçenekleri gösterildi.");
+                    }, 100);
+                }
+            });
+        }
+
+        function updateShareLinks(type) {
+            const targetUrl = type === 'direct' ? activeDirectUrl : activePortalUrl;
+            activeShareUrl = targetUrl; 
+            
+            const btnDirect = document.getElementById('btnShareDirect');
+            const btnPortal = document.getElementById('btnSharePortal');
+            const urlDisplay = document.getElementById('currentShareUrlDisplay');
+            
+            urlDisplay.textContent = targetUrl;
+            
+            if (type === 'direct') {
+                btnDirect.className = "flex-1 py-2 text-xs font-bold bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 rounded-lg shadow-sm transition-all focus:outline-none";
+                btnPortal.className = "flex-1 py-2 text-xs font-bold text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300 transition-all focus:outline-none";
+            } else {
+                btnPortal.className = "flex-1 py-2 text-xs font-bold bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 rounded-lg shadow-sm transition-all focus:outline-none";
+                btnDirect.className = "flex-1 py-2 text-xs font-bold text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300 transition-all focus:outline-none";
+            }
+
+            const shareText = buildShareText();
+            const validUrl = (targetUrl !== '#') ? targetUrl : '';
+            
+            document.getElementById('shareWA').href = validUrl ? secureUrl(`https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + validUrl)}`) : '#';
+            document.getElementById('shareX').href = validUrl ? secureUrl(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(validUrl)}`) : '#';
+            document.getElementById('shareTG').href = validUrl ? secureUrl(`https://t.me/share/url?url=${encodeURIComponent(validUrl)}&text=${encodeURIComponent(shareText)}`) : '#';
+            document.getElementById('shareFB').href = validUrl ? secureUrl(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(validUrl)}`) : '#';
+            document.getElementById('shareLN').href = validUrl ? secureUrl(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(validUrl)}`) : '#';
+        }
+
+        function closeShareModal() {
+            const modal = document.getElementById('shareModal');
+            const inner = modal.querySelector('div');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            inner.classList.remove('scale-100');
+            inner.classList.add('scale-95');
+            setTimeout(syncModalScrollLock, 0);
+
+            if (wasVersionModalOpen) {
+                setTimeout(() => {
+                    openVersionModal(lastVersionGrupId, lastVersionIcon);
+                    wasVersionModalOpen = false;
+                }, 300); 
+            }
+        }
+
+        function closeLinkChoiceModal() {
+            const modal = document.getElementById('linkChoiceModal');
+            const inner = modal.querySelector('div');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            inner.classList.remove('scale-100');
+            inner.classList.add('scale-95');
+            setTimeout(syncModalScrollLock, 0);
+
+            if (wasVersionModalOpen) {
+                setTimeout(() => {
+                    openVersionModal(lastVersionGrupId, lastVersionIcon);
+                    wasVersionModalOpen = false;
+                }, 300); 
+            }
+        }
+
+        function copyShareLink() {
+            if (!activeShareUrl || activeShareUrl === '#') {
+                showToast("Güvenli bağlantı oluşturulamadı.");
+                return;
+            }
+            const copyText = `${buildShareText()} ${activeShareUrl}`;
+
+            copyTextCompat(copyText).then(() => {
+                closeShareModal();
+                showToast("Paylaşım metni panoya kopyalandı!");
+            }).catch(() => {
+                showToast("Tarayıcı otomatik kopyalamayı engelledi. Metni basılı tutarak kopyalayabilirsiniz.");
+            });
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toastAlert');
+            document.getElementById('toastMessage').textContent = message;
+            toast.classList.remove('opacity-0', 'scale-90', 'pointer-events-none');
+            toast.classList.add('opacity-100', 'scale-100');
+            
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'scale-100');
+                toast.classList.add('opacity-0', 'scale-90', 'pointer-events-none');
+            }, 2000);
+        }
+
+        function openVersionModal(grupId, icon, highlightVersionRef = null) {
+            lastVersionGrupId = grupId;
+            lastVersionIcon = icon;
+
+            const projectGroup = allProjects.find(p => (p.grupId || p.id) === grupId);
+            if(!projectGroup) return;
+
+            const modal = document.getElementById('versionModal');
+            const container = document.getElementById('versionListContainer');
+            
+            const baseName = projectGroup.adi.split(' v')[0];
+            document.getElementById('versionModalTitle').textContent = baseName;
+            document.getElementById('versionModalIcon').textContent = icon || '🚀';
+
+            container.replaceChildren(); 
+            
+            projectGroup.tumSurumler.forEach(v => {
+                let badgeConfig = { class: 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400', label: '⚪ Diğer' };
+                switch(v.surumTipi) {
+                    case 'Onerilen': badgeConfig = { class: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400', label: '🟢 Önerilen' }; break;
+                    case 'LTS': badgeConfig = { class: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-400', label: '🔵 LTS' }; break;
+                    case 'Klasik': badgeConfig = { class: 'bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-300', label: '⚪ Klasik' }; break;
+                    case 'Beta': badgeConfig = { class: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400', label: '🟡 Beta' }; break;
+                    case 'Arsiv': badgeConfig = { class: 'bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-400', label: '🔴 Arşiv' }; break;
+                }
+
+                const safeUrl = secureUrl(v.url);
+                const normalizedHighlightRef = normalizeText(highlightVersionRef || '');
+                const versionAliases = [v.id, v.adi];
+                if (v.url) {
+                    try {
+                        const parsedVersionUrl = new URL(v.url, window.location.origin);
+                        const cleanVersionPath = parsedVersionUrl.pathname.replace(/^\/+|\/+$/g, '');
+                        const versionPathParts = cleanVersionPath.split('/').filter(Boolean);
+                        versionAliases.push(versionPathParts[versionPathParts.length - 1], cleanVersionPath);
+                    } catch (e) {
+                        versionAliases.push(v.url);
+                    }
+                }
+                const isHighlighted = Boolean(normalizedHighlightRef) &&
+                    versionAliases.filter(Boolean).map(normalizeText).includes(normalizedHighlightRef);
+                
+                // SATIR ANA KAPSAYICISI (Wrapper) - Akordeon için dış çatı
+                const rowWrapper = document.createElement('div');
+                rowWrapper.id = `version-row-${normalizeText(v.adi)}`;
+                rowWrapper.dataset.versionId = v.id || v.adi;
+                const baseClasses = "flex flex-col rounded-2xl transition-all duration-500 overflow-hidden border";
+                const normalClasses = "border-slate-200/60 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 hover:border-blue-300 dark:hover:border-slate-600";
+                rowWrapper.className = `${baseClasses} ${normalClasses}${isHighlighted ? ' deep-link-version-highlight' : ''}`;
+                
+                // GÖRÜNÜR ÜST SATIR (Main Row)
+                const mainRow = document.createElement('div');
+                mainRow.className = "flex items-center justify-between p-4 gap-3 z-10 relative bg-transparent";
+
+                // Sol Taraf (Başlık ve Rozet)
+                const infoDiv = document.createElement('div');
+                infoDiv.className = "flex flex-col gap-1.5 min-w-0";
+                
+                const titleSpan = document.createElement('span');
+                titleSpan.className = "font-bold text-sm text-slate-800 dark:text-slate-300 truncate";
+                titleSpan.textContent = v.adi;
+                
+                const badgeWrapper = document.createElement('div');
+                badgeWrapper.className = "flex items-center";
+                
+                const badgeSpan = document.createElement('span');
+                badgeSpan.className = `px-2 py-0.5 rounded-lg text-[10px] font-black tracking-wide uppercase ${badgeConfig.class}`;
+                badgeSpan.textContent = badgeConfig.label;
+                
+                badgeWrapper.appendChild(badgeSpan);
+                infoDiv.appendChild(titleSpan);
+                infoDiv.appendChild(badgeWrapper);
+                
+                // Sağ Taraf (Butonlar)
+                const actionsDiv = document.createElement('div');
+                actionsDiv.className = "flex items-center gap-2 flex-shrink-0";
+
+                let infoBtn = null;
+                let accordionContent = null;
+
+                if (v.aciklama && v.aciklama.trim() !== '') {
+                    infoBtn = document.createElement('button');
+                    infoBtn.className = "accordion-btn flex-shrink-0 p-2.5 bg-white border border-slate-200 hover:bg-slate-100 hover:text-blue-600 dark:bg-slate-800 dark:border-slate-700 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 rounded-xl transition-all shadow-sm active:scale-95";
+                    infoBtn.setAttribute('aria-label', 'Açıklama Detayları');
+                    infoBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
+                    
+                    accordionContent = document.createElement('div');
+                    accordionContent.className = "accordion-content max-h-0 opacity-0 overflow-hidden transition-all duration-300 ease-in-out bg-slate-100/50 dark:bg-slate-800/40 border-t border-transparent";
+                    accordionContent.innerHTML = `<div class="p-4 text-sm text-slate-600 dark:text-slate-400 font-medium leading-relaxed border-t border-slate-200/40 dark:border-slate-700/40 mx-2">${v.aciklama}</div>`;
+
+                    infoBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        
+                        const isOpen = accordionContent.classList.contains('max-h-96');
+                        
+                        const container = document.getElementById('versionListContainer');
+                        const allContents = container.querySelectorAll('.accordion-content');
+                        const allBtns = container.querySelectorAll('.accordion-btn');
+                        
+                        allContents.forEach(el => {
+                            el.classList.remove('max-h-96', 'opacity-100');
+                            el.classList.add('max-h-0', 'opacity-0');
+                        });
+                        
+                        allBtns.forEach(btn => {
+                            btn.classList.remove('bg-blue-50', 'text-blue-600', 'border-blue-200', 'dark:bg-slate-700');
+                        });
+
+                        if (!isOpen) {
+                            accordionContent.classList.remove('max-h-0', 'opacity-0');
+                            accordionContent.classList.add('max-h-96', 'opacity-100');
+                            infoBtn.classList.add('bg-blue-50', 'text-blue-600', 'border-blue-200', 'dark:bg-slate-700');
+                        }
+                    });
+                }
+                
+                const sBtn = document.createElement('button');
+                sBtn.dataset.action = "open-share-menu";
+                sBtn.dataset.name = v.adi;
+                sBtn.dataset.desc = v.aciklama || '';
+                sBtn.dataset.url = safeUrl;
+                sBtn.dataset.icon = v.ikon || icon || '🚀';
+                sBtn.dataset.id = v.id || v.adi;
+                sBtn.className = "flex-shrink-0 p-2.5 bg-white border border-slate-200 hover:bg-slate-100 dark:bg-slate-800 dark:border-slate-700 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 rounded-xl transition-all shadow-sm active:scale-95";
+                sBtn.setAttribute('aria-label', 'Paylaş');
+                
+                const shareSvg = document.createElementNS(svgNS, "svg");
+                shareSvg.setAttribute("xmlns", svgNS);
+                shareSvg.setAttribute("class", "h-4 w-4");
+                shareSvg.setAttribute("fill", "none");
+                shareSvg.setAttribute("viewBox", "0 0 24 24");
+                shareSvg.setAttribute("stroke", "currentColor");
+                const sharePath = document.createElementNS(svgNS, "path");
+                sharePath.setAttribute("stroke-linecap", "round");
+                sharePath.setAttribute("stroke-linejoin", "round");
+                sharePath.setAttribute("stroke-width", "2");
+                sharePath.setAttribute("d", "M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z");
+                shareSvg.appendChild(sharePath);
+                sBtn.appendChild(shareSvg);
+                
+                const goBtn = document.createElement('a');
+                if (safeUrl === '#') {
+                    goBtn.href = "javascript:void(0);";
+                    goBtn.className = "flex-shrink-0 px-4 py-2.5 bg-slate-100 border border-slate-200 dark:border-slate-700 text-slate-400 dark:bg-slate-800 dark:text-slate-500 rounded-xl text-sm font-bold shadow-sm cursor-not-allowed opacity-60";
+                    goBtn.textContent = "Geçersiz";
+                } else {
+                    goBtn.target = "_blank";
+                    goBtn.rel = "noopener noreferrer";
+                    goBtn.dataset.action = "track-recent";
+                    goBtn.href = safeUrl;
+                    goBtn.dataset.name = v.id || v.adi;
+                    goBtn.className = "flex-shrink-0 px-4 py-2.5 bg-white hover:bg-blue-600 border border-slate-200 dark:border-slate-700 text-slate-700 hover:text-white dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-blue-600 dark:hover:text-white rounded-xl text-sm font-bold transition-all shadow-sm active:scale-95";
+                    goBtn.textContent = "Aç";
+                }
+                
+                if (infoBtn) actionsDiv.appendChild(infoBtn);
+                actionsDiv.appendChild(sBtn);
+                actionsDiv.appendChild(goBtn);
+                
+                mainRow.appendChild(infoDiv);
+                mainRow.appendChild(actionsDiv);
+                
+                rowWrapper.appendChild(mainRow);
+                if (accordionContent) rowWrapper.appendChild(accordionContent);
+                
+                container.appendChild(rowWrapper);
+            });
+
+            const inner = modal.querySelector('div');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            inner.classList.remove('scale-95');
+            inner.classList.add('scale-100');
+            syncModalScrollLock();
+
+            if (highlightVersionRef) {
+                setTimeout(() => {
+                    const targetRow = container.querySelector('.deep-link-version-highlight');
+                    if (!targetRow) return;
+
+                    const centeredTop = targetRow.offsetTop - ((container.clientHeight - targetRow.offsetHeight) / 2);
+                    safeElementScrollTo(container, Math.max(0, centeredTop), 'smooth');
+
+                    setTimeout(() => {
+                        targetRow.classList.remove('deep-link-version-highlight');
+                    }, 4800);
+                }, 300);
+            }
+        }
+
+        function closeVersionModal() {
+            const modal = document.getElementById('versionModal');
+            const inner = modal.querySelector('div');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            inner.classList.remove('scale-100');
+            inner.classList.add('scale-95');
+            setTimeout(syncModalScrollLock, 0);
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const useDarkTheme = !html.classList.contains('dark');
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            const applyTheme = () => {
+                html.classList.toggle('dark', useDarkTheme);
+                safeSetLS('theme', useDarkTheme ? 'dark' : 'light');
+            };
+
+            // Modern browsers: capture both themes and cross-fade the whole page.
+            // This prevents individual glass surfaces and gradients from flickering.
+            const compat = getCompatInfo();
+            if (document.startViewTransition && !reduceMotion && !compat.isInApp) {
+                html.classList.add('theme-transitioning');
+
+                const transition = document.startViewTransition(() => {
+                    applyTheme();
+                });
+
+                transition.finished.finally(() => {
+                    html.classList.remove('theme-transitioning');
+                });
+                return;
+            }
+
+            // Safe fallback for browsers without View Transitions support.
+            html.classList.add('theme-transitioning');
+            applyTheme();
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    html.classList.remove('theme-transitioning');
+                });
+            });
+        }
+
+        function toggleAboutModal(show) {
+            const modal = document.getElementById('aboutModal');
+            const btn = document.getElementById('aboutModalBtn');
+            const inner = modal.querySelector('div');
+            if (show) {
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                inner.classList.remove('scale-95');
+                inner.classList.add('scale-100');
+                btn.setAttribute('aria-expanded', 'true');
+                setTimeout(() => modal.querySelector('button').focus(), 100);
+            } else {
+                modal.classList.add('opacity-0', 'pointer-events-none');
+                inner.classList.remove('scale-100');
+                inner.classList.add('scale-95');
+                btn.setAttribute('aria-expanded', 'false');
+                btn.focus();
+            }
+            setTimeout(syncModalScrollLock, 0);
+        }
+
+        function togglePrivacyModal(show) {
+            const modal = document.getElementById('privacyModal');
+            const inner = modal.querySelector('div');
+            if (show) {
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                inner.classList.remove('scale-95');
+                inner.classList.add('scale-100');
+                setTimeout(() => modal.querySelector('button').focus(), 100);
+            } else {
+                modal.classList.add('opacity-0', 'pointer-events-none');
+                inner.classList.remove('scale-100');
+                inner.classList.add('scale-95');
+            }
+            setTimeout(syncModalScrollLock, 0);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const modalIdsForCompatibility = ['shareModal', 'linkChoiceModal', 'versionModal', 'privacyModal', 'aboutModal'];
+            if ('MutationObserver' in window) {
+                const modalObserver = new MutationObserver(syncModalScrollLock);
+                modalIdsForCompatibility.forEach(id => {
+                    const modal = document.getElementById(id);
+                    if (modal) modalObserver.observe(modal, { attributes: true, attributeFilter: ['class'] });
+                });
+            }
+            syncModalScrollLock();
+
+            applyFontSize();
+            fetchProjects();
+            
+            let savedCols = parseInt(safeGetLS('ak_grid_cols', null));
+            if (Number.isFinite(savedCols) && savedCols > 0) {
+                gridCols = Math.max(1, Math.min(10, savedCols));
+            } else {
+                gridCols = window.innerWidth < 768 ? 1 : 3;
+            }
+            applyGridCols();
+
+            document.getElementById('searchBar').addEventListener('input', applyFilters);
+            document.getElementById('clearSearchBtn').addEventListener('click', clearSearch);
+            document.getElementById('btnEmptyClearSearch').addEventListener('click', clearSearch);
+            document.getElementById('themeBtn').addEventListener('click', toggleTheme);
+            document.getElementById('mobileMenuBtn').addEventListener('click', toggleMobileMenu);
+            document.getElementById('mobileThemeBtn').addEventListener('click', () => { toggleTheme(); toggleMobileMenu(); });
+            document.getElementById('aboutModalBtn').addEventListener('click', () => toggleAboutModal(true));
+            document.getElementById('mobileAboutBtn').addEventListener('click', () => { toggleAboutModal(true); toggleMobileMenu(); });
+            document.getElementById('btnCloseAboutModal').addEventListener('click', () => toggleAboutModal(false));
+            document.getElementById('btnOpenPrivacyModal').addEventListener('click', () => togglePrivacyModal(true));
+            document.getElementById('btnClosePrivacyModal').addEventListener('click', () => togglePrivacyModal(false));
+            document.getElementById('btnClearRecents').addEventListener('click', clearAllRecents);
+            document.getElementById('btnCloseShareModal').addEventListener('click', closeShareModal);
+            document.getElementById('btnCloseLinkChoiceModal').addEventListener('click', closeLinkChoiceModal);
+            document.getElementById('btnCloseVersionModal').addEventListener('click', closeVersionModal);
+            document.getElementById('btnCopyShare').addEventListener('click', copyShareLink);
+            
+            document.getElementById('btnShareDirect').addEventListener('click', (e) => updateShareLinks(e.target.dataset.type));
+            document.getElementById('btnSharePortal').addEventListener('click', (e) => updateShareLinks(e.target.dataset.type));
+            
+            document.addEventListener('click', function(e) {
+                
+                const dropdown = document.getElementById('mobileMenuDropdown');
+                const btn = document.getElementById('mobileMenuBtn');
+                if (!btn.contains(e.target) && !dropdown.contains(e.target)) {
+                    dropdown.classList.add('hidden');
+                    btn.setAttribute('aria-expanded', 'false');
+                }
+
+                const fontBtn = e.target.closest('[data-action="font-size"]');
+                if (fontBtn) changeFontSize(parseInt(fontBtn.dataset.val, 10));
+
+                const gridBtn = e.target.closest('[data-action="grid-cols"]');
+                if (gridBtn) changeGridCols(parseInt(gridBtn.dataset.val, 10));
+
+                const favBtn = e.target.closest('[data-action="toggle-favorite"]');
+                if (favBtn) toggleFavorite(favBtn.dataset.project, e);
+
+                const shareBtn = e.target.closest('[data-action="open-share-menu"]');
+                if (shareBtn) openShareMenu(shareBtn.dataset.name, shareBtn.dataset.desc, shareBtn.dataset.url, shareBtn.dataset.icon, shareBtn.dataset.id);
+
+                const verBtn = e.target.closest('[data-action="open-version-modal"]');
+                if (verBtn) openVersionModal(verBtn.dataset.grupid, verBtn.dataset.icon);
+
+                const execShareBtn = e.target.closest('[data-action="execute-share"]');
+                if (execShareBtn) executeNativeShare(execShareBtn.dataset.type);
+
+                const goAppBtn = e.target.closest('[data-action="track-recent"]');
+                if (goAppBtn) trackRecent(goAppBtn.dataset.name);
+
+            });
+        });
+
+        window.addEventListener('keydown', (e) => {
+            const searchBar = document.getElementById('searchBar');
+            
+            if (searchBar && searchBar.value.length > 0 && (e.key === 'Escape' || (e.altKey && e.key === 'Backspace'))) {
+                e.preventDefault();
+                clearSearch();
+                return;
+            }
+
+            if (e.key === 'Escape') {
+                const shareModal = document.getElementById('shareModal');
+                const linkChoiceModal = document.getElementById('linkChoiceModal');
+                const versionModal = document.getElementById('versionModal');
+                const aboutModal = document.getElementById('aboutModal');
+				const privacyModal = document.getElementById('privacyModal');
+                const dropdown = document.getElementById('mobileMenuDropdown');
+
+                if (!shareModal.classList.contains('opacity-0')) {
+                    closeShareModal();
+                } else if (!linkChoiceModal.classList.contains('opacity-0')) {
+                    closeLinkChoiceModal();
+                } else if (!versionModal.classList.contains('opacity-0')) {
+                    closeVersionModal();
+                } else if (!aboutModal.classList.contains('opacity-0')) {
+                    toggleAboutModal(false);
+                } else if (!privacyModal.classList.contains('opacity-0')) {
+                    togglePrivacyModal(false);
+                }
+                
+                if (!dropdown.classList.contains('hidden')) {
+                    dropdown.classList.add('hidden');
+                }
+            }
+
+            if (e.key === '/' || ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k')) {
+                if (!searchBar) return;
+                e.preventDefault(); 
+                
+                const targetY = searchBar.getBoundingClientRect().top + window.scrollY - (window.innerHeight / 3);
+                safeWindowScrollTo(targetY, 'auto');
+                
+                setTimeout(() => {
+                    requestAnimationFrame(() => {
+                        requestAnimationFrame(() => {
+                            searchBar.focus();
+                            searchBar.select();
+                        });
+                    });
+                }, 10);
+            }
+        });
+    </script>
+</body>
+</html>
