@@ -941,6 +941,105 @@
             background: rgba(41, 52, 93, 0.55) !important;
         }
 
+        /* Mobile dropdown readability fix */
+        #mobileMenuDropdown {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(245, 248, 255, 0.92)) !important;
+            border: 1px solid rgba(255, 255, 255, 0.92) !important;
+            box-shadow: 0 22px 48px rgba(45, 57, 98, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+            backdrop-filter: blur(22px) saturate(165%) !important;
+            -webkit-backdrop-filter: blur(22px) saturate(165%) !important;
+            color: #23314f !important;
+        }
+
+        .dark #mobileMenuDropdown {
+            background: linear-gradient(180deg, rgba(18, 26, 52, 0.96), rgba(11, 17, 37, 0.94)) !important;
+            border: 1px solid rgba(143, 158, 255, 0.16) !important;
+            box-shadow: 0 24px 54px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+            color: #edf2ff !important;
+        }
+
+        #mobileMenuDropdown hr {
+            border-color: rgba(119, 132, 177, 0.14) !important;
+        }
+
+        .dark #mobileMenuDropdown hr {
+            border-color: rgba(138, 153, 231, 0.14) !important;
+        }
+
+        #mobileMenuDropdown button,
+        #mobileMenuDropdown button span,
+        #mobileMenuDropdown button svg,
+        #mobileMenuDropdown .grid-col-count-disp,
+        #mobileMenuDropdown .px-4.py-3 {
+            color: #23314f !important;
+        }
+
+        .dark #mobileMenuDropdown button,
+        .dark #mobileMenuDropdown button span,
+        .dark #mobileMenuDropdown button svg,
+        .dark #mobileMenuDropdown .grid-col-count-disp,
+        .dark #mobileMenuDropdown .px-4.py-3 {
+            color: #edf2ff !important;
+        }
+
+        #mobileMenuDropdown .px-4.py-3 {
+            color: #7180a0 !important;
+            letter-spacing: 0.08em;
+        }
+
+        .dark #mobileMenuDropdown .px-4.py-3 {
+            color: #aeb9d5 !important;
+        }
+
+        #mobileMenuDropdown #mobileThemeBtn,
+        #mobileMenuDropdown #mobileAboutBtn,
+        #mobileMenuDropdown [data-action="font-size"],
+        #mobileMenuDropdown [data-action="grid-cols"] {
+            background: rgba(255, 255, 255, 0.68) !important;
+            border: 1px solid rgba(214, 223, 255, 0.9) !important;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.82), 0 8px 18px rgba(78, 88, 138, 0.08) !important;
+            backdrop-filter: blur(12px) saturate(145%);
+            -webkit-backdrop-filter: blur(12px) saturate(145%);
+        }
+
+        .dark #mobileMenuDropdown #mobileThemeBtn,
+        .dark #mobileMenuDropdown #mobileAboutBtn,
+        .dark #mobileMenuDropdown [data-action="font-size"],
+        .dark #mobileMenuDropdown [data-action="grid-cols"] {
+            background: rgba(24, 34, 66, 0.82) !important;
+            border: 1px solid rgba(114, 132, 215, 0.22) !important;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 10px 22px rgba(0, 0, 0, 0.2) !important;
+        }
+
+        #mobileMenuDropdown #mobileThemeBtn:hover,
+        #mobileMenuDropdown #mobileAboutBtn:hover,
+        #mobileMenuDropdown [data-action="font-size"]:hover,
+        #mobileMenuDropdown [data-action="grid-cols"]:hover {
+            background: rgba(255, 255, 255, 0.88) !important;
+            border-color: rgba(123, 136, 235, 0.28) !important;
+            color: #4256c9 !important;
+        }
+
+        .dark #mobileMenuDropdown #mobileThemeBtn:hover,
+        .dark #mobileMenuDropdown #mobileAboutBtn:hover,
+        .dark #mobileMenuDropdown [data-action="font-size"]:hover,
+        .dark #mobileMenuDropdown [data-action="grid-cols"]:hover {
+            background: rgba(33, 46, 87, 0.95) !important;
+            border-color: rgba(131, 145, 247, 0.3) !important;
+            color: #ffffff !important;
+        }
+
+        #mobileMenuDropdown .grid-col-count-disp {
+            background: rgba(255, 255, 255, 0.36);
+            border-radius: 0.9rem;
+            border: 1px solid rgba(215, 224, 255, 0.76);
+        }
+
+        .dark #mobileMenuDropdown .grid-col-count-disp {
+            background: rgba(31, 42, 78, 0.72);
+            border-color: rgba(113, 129, 205, 0.24);
+        }
+
         footer {
             position: relative;
             background: rgba(255, 255, 255, 0.38) !important;
