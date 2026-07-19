@@ -1851,48 +1851,83 @@
             if (ogDesc) ogDesc.content = targetSpecificVersion.aciklama;
 
             const targetId = `project-${normalizeText(targetMainProject.adi)}`;
-            const targetCard = document.getElementById(targetId);
 
-            if (targetCard) {
-                if (activeCategory !== 'Tümü') {
-                    filterCategory('Tümü');
-                }
+            if (activeCategory !== 'Tümü') {
+                filterCategory('Tümü');
+            }
 
-                const searchBar = document.getElementById('searchBar');
-                if(searchBar && searchBar.value) {
-                    searchBar.value = '';
-                    applyFilters();
-                }
+            const searchBar = document.getElementById('searchBar');
+            if (searchBar && searchBar.value) {
+                searchBar.value = '';
+                applyFilters();
+            }
 
-                setTimeout(() => {
-                    const headerOffset = 100;
-                    const elementPosition = targetCard.getBoundingClientRect().top;
-                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+            setTimeout(() => {
+                // Filtreleme kartları yeniden oluşturabildiği için güncel kartı tekrar bul.
+                const targetCard = document.getElementById(targetId);
+                if (!targetCard) return;
 
-                    window.scrollTo({
-                        top: offsetPosition,
-                        behavior: 'smooth'
-                    });
+                targetCard.classList.remove('deep-link-highlight');
+                void targetCard.offsetWidth;
+                targetCard.classList.add('deep-link-highlight');
 
-                    targetCard.classList.remove('deep-link-highlight');
-                    void targetCard.offsetWidth;
-                    targetCard.classList.add('deep-link-highlight');
-                    
-                    const highlightDuration = 4800;
-                    const isSubVersion = (targetMainProject.id !== targetSpecificVersion.id || targetMainProject.adi !== targetSpecificVersion.adi);
+                const centerHighlightedCard = (behavior = 'smooth') => {
+                    const card = document.getElementById(targetId);
+                    if (!card) return;
 
-                    setTimeout(() => {
-                        targetCard.classList.remove('deep-link-highlight');
-                    }, highlightDuration);
+                    const header = document.querySelector('header');
+                    const headerBottom = header ? header.getBoundingClientRect().bottom : 0;
+                    const visualViewport = window.visualViewport;
+                    const viewportTop = visualViewport ? visualViewport.offsetTop : 0;
+                    const viewportHeight = visualViewport ? visualViewport.height : window.innerHeight;
+                    const viewportBottom = viewportTop + viewportHeight;
 
-                    if (isSubVersion) {
-                        setTimeout(() => {
-                            openVersionModal(targetMainProject.grupId || targetMainProject.id, targetMainProject.ikon, targetSpecificVersion.adi);
-                        }, highlightDuration + 250);
+                    // Parlayan dış halkanın da tamamen görünmesi için ek güvenli boşluk.
+                    const effectMargin = Math.min(42, Math.max(26, viewportHeight * 0.045));
+                    const safeTop = Math.max(headerBottom, viewportTop) + effectMargin;
+                    const safeBottom = viewportBottom - effectMargin;
+                    const availableHeight = Math.max(1, safeBottom - safeTop);
+
+                    const rect = card.getBoundingClientRect();
+                    const effectTop = rect.top - effectMargin;
+                    const effectHeight = rect.height + (effectMargin * 2);
+
+                    let desiredEffectTop;
+                    if (effectHeight <= availableHeight) {
+                        desiredEffectTop = safeTop + ((availableHeight - effectHeight) / 2);
+                    } else {
+                        // Çok kısa ekranlarda kartın üst kısmını başlığın hemen altına yerleştir.
+                        desiredEffectTop = safeTop;
                     }
 
-                }, 300);
-            }
+                    const delta = effectTop - desiredEffectTop;
+                    const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+                    const destination = Math.min(maxScroll, Math.max(0, window.scrollY + delta));
+
+                    window.scrollTo({ top: destination, behavior });
+                };
+
+                // Vurgu uygulanmış gerçek ölçülerle kartı görünür alanın merkezine getir.
+                requestAnimationFrame(() => centerHighlightedCard('smooth'));
+
+                // Yumuşak kaydırma ve kart giriş animasyonu tamamlanınca küçük konum sapmalarını düzelt.
+                setTimeout(() => centerHighlightedCard('auto'), 750);
+
+                const highlightDuration = 4800;
+                const isSubVersion = (targetMainProject.id !== targetSpecificVersion.id || targetMainProject.adi !== targetSpecificVersion.adi);
+
+                setTimeout(() => {
+                    const liveCard = document.getElementById(targetId);
+                    if (liveCard) liveCard.classList.remove('deep-link-highlight');
+                }, highlightDuration);
+
+                if (isSubVersion) {
+                    setTimeout(() => {
+                        openVersionModal(targetMainProject.grupId || targetMainProject.id, targetMainProject.ikon, targetSpecificVersion.adi);
+                    }, highlightDuration + 250);
+                }
+
+            }, 350);
         }
 
         function updateTotalAppsCount(count) {
