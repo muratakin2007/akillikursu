@@ -47,9 +47,12 @@
                 cssApi.supports('-webkit-backdrop-filter', 'blur(1px)')
             ));
             var supportsDvh = !!(cssApi && cssApi.supports && cssApi.supports('height', '100dvh'));
+            var supportsSmoothScroll = 'scrollBehavior' in document.documentElement.style;
             var root = document.documentElement;
+            var preferStableScroll = isInApp || isAndroidWebView || !supportsSmoothScroll;
 
             if (isInApp) root.classList.add('compat-browser');
+            if (preferStableScroll) root.classList.add('stable-scroll-browser');
             if (!supportsBackdrop) root.classList.add('no-backdrop');
             if (!supportsDvh) root.classList.add('no-dvh');
 
@@ -59,6 +62,8 @@
                 isAndroidWebView: isAndroidWebView,
                 supportsBackdrop: supportsBackdrop,
                 supportsDvh: supportsDvh,
+                supportsSmoothScroll: supportsSmoothScroll,
+                preferStableScroll: preferStableScroll,
                 canNativeShare: !!navigator.share && !isInApp
             };
         })();
@@ -1613,6 +1618,58 @@
             mix-blend-mode: normal !important;
         }
 
+        /* Instagram, uygulama içi ve eski tarayıcılarda kararlı URL konumlandırması */
+        html.stable-scroll-browser,
+        html.stable-scroll-browser body,
+        html.ak-instant-scroll,
+        html.ak-instant-scroll body {
+            scroll-behavior: auto !important;
+        }
+
+        html.compat-browser .project-card.deep-link-highlight,
+        html.stable-scroll-browser .project-card.deep-link-highlight {
+            transform: none !important;
+            animation: none !important;
+            filter: none !important;
+            outline-offset: 3px !important;
+            box-shadow:
+                0 0 0 2px rgba(101, 119, 255, 0.46),
+                0 0 24px rgba(82, 104, 255, 0.24),
+                0 18px 48px rgba(70, 80, 150, 0.18) !important;
+        }
+
+        html.compat-browser.dark .project-card.deep-link-highlight,
+        html.stable-scroll-browser.dark .project-card.deep-link-highlight {
+            box-shadow:
+                0 0 0 2px rgba(126, 145, 255, 0.5),
+                0 0 28px rgba(87, 113, 255, 0.3),
+                0 20px 52px rgba(0, 0, 0, 0.38) !important;
+        }
+
+        html.compat-browser .project-card.deep-link-highlight::before,
+        html.stable-scroll-browser .project-card.deep-link-highlight::before,
+        html.compat-browser #versionListContainer .deep-link-version-highlight::before,
+        html.stable-scroll-browser #versionListContainer .deep-link-version-highlight::before {
+            animation: none !important;
+            filter: blur(8px) !important;
+            opacity: 0.62 !important;
+        }
+
+        html.compat-browser .project-card.deep-link-highlight::after,
+        html.stable-scroll-browser .project-card.deep-link-highlight::after,
+        html.compat-browser #versionListContainer .deep-link-version-highlight::after,
+        html.stable-scroll-browser #versionListContainer .deep-link-version-highlight::after {
+            display: none !important;
+            animation: none !important;
+        }
+
+        html.compat-browser #versionListContainer .deep-link-version-highlight,
+        html.stable-scroll-browser #versionListContainer .deep-link-version-highlight {
+            animation: none !important;
+            transform: none !important;
+            filter: none !important;
+        }
+
         html.compat-browser.theme-transitioning *,
         html.compat-browser.theme-transitioning *::before,
         html.compat-browser.theme-transitioning *::after {
@@ -2131,11 +2188,46 @@
         let activeShareIcon = '🚀';
 
         function getCompatInfo() {
-            return window.__AK_COMPAT__ || { isInApp: false, canNativeShare: !!navigator.share };
+            return window.__AK_COMPAT__ || {
+                isInApp: false,
+                isAndroidWebView: false,
+                preferStableScroll: false,
+                canNativeShare: !!navigator.share
+            };
+        }
+
+        function shouldUseStableScroll() {
+            const compat = getCompatInfo();
+            const reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+            return !!(
+                compat.preferStableScroll ||
+                compat.isInApp ||
+                compat.isAndroidWebView ||
+                reduceMotion ||
+                document.documentElement.classList.contains('stable-scroll-browser')
+            );
+        }
+
+        function runWithInstantDocumentScroll(callback) {
+            const root = document.documentElement;
+            root.classList.add('ak-instant-scroll');
+            try {
+                callback();
+            } finally {
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => root.classList.remove('ak-instant-scroll'));
+                });
+            }
         }
 
         function safeWindowScrollTo(top, behavior = 'auto') {
             const safeTop = Math.max(0, Number(top) || 0);
+
+            if (shouldUseStableScroll() || behavior === 'instant') {
+                runWithInstantDocumentScroll(() => window.scrollTo(0, safeTop));
+                return;
+            }
+
             try { window.scrollTo({ top: safeTop, left: 0, behavior }); }
             catch (error) { window.scrollTo(0, safeTop); }
         }
@@ -2143,6 +2235,12 @@
         function safeElementScrollTo(element, top, behavior = 'auto') {
             if (!element) return;
             const safeTop = Math.max(0, Number(top) || 0);
+
+            if (shouldUseStableScroll() || behavior === 'instant') {
+                element.scrollTop = safeTop;
+                return;
+            }
+
             try { element.scrollTo({ top: safeTop, left: 0, behavior }); }
             catch (error) { element.scrollTop = safeTop; }
         }
@@ -2405,43 +2503,74 @@
                 const targetCard = document.getElementById(targetId);
                 if (!targetCard) return;
 
-                targetCard.classList.remove('deep-link-highlight');
-                void targetCard.offsetWidth;
-                targetCard.classList.add('deep-link-highlight');
+                const stableScroll = shouldUseStableScroll();
+
+                const activateCardHighlight = () => {
+                    const liveCard = document.getElementById(targetId);
+                    if (!liveCard) return;
+                    liveCard.classList.remove('deep-link-highlight');
+                    void liveCard.offsetWidth;
+                    liveCard.classList.add('deep-link-highlight');
+                };
 
                 const centerHighlightedCard = (behavior = 'smooth') => {
                     const card = document.getElementById(targetId);
                     if (!card) return;
 
                     const header = document.querySelector('header');
-                    const headerBottom = header ? header.getBoundingClientRect().bottom : 0;
-                    const visualViewport = window.visualViewport;
-                    const viewportTop = visualViewport ? visualViewport.offsetTop : 0;
+                    const headerHeight = header ? Math.ceil(header.getBoundingClientRect().height) : 0;
+                    const visualViewport = !stableScroll ? window.visualViewport : null;
+                    const viewportTop = visualViewport ? Math.max(0, visualViewport.offsetTop || 0) : 0;
                     const viewportHeight = visualViewport ? visualViewport.height : window.innerHeight;
                     const viewportBottom = viewportTop + viewportHeight;
 
-                    const effectMargin = Math.min(42, Math.max(26, viewportHeight * 0.045));
-                    const safeTop = Math.max(headerBottom, viewportTop) + effectMargin;
+                    const effectMargin = Math.min(42, Math.max(24, viewportHeight * 0.04));
+                    const safeTop = Math.max(headerHeight, viewportTop) + effectMargin;
                     const safeBottom = viewportBottom - effectMargin;
                     const availableHeight = Math.max(1, safeBottom - safeTop);
 
                     const rect = card.getBoundingClientRect();
                     const effectTop = rect.top - effectMargin;
                     const effectHeight = rect.height + (effectMargin * 2);
-
                     const desiredEffectTop = effectHeight <= availableHeight
                         ? safeTop + ((availableHeight - effectHeight) / 2)
                         : safeTop;
 
                     const delta = effectTop - desiredEffectTop;
-                    const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-                    const destination = Math.min(maxScroll, Math.max(0, window.scrollY + delta));
+                    const currentScroll = window.pageYOffset || document.documentElement.scrollTop || 0;
+                    const scrollingElement = document.scrollingElement || document.documentElement;
+                    const maxScroll = Math.max(0, scrollingElement.scrollHeight - viewportHeight);
+                    const destination = Math.min(maxScroll, Math.max(0, currentScroll + delta));
 
                     safeWindowScrollTo(destination, behavior);
                 };
 
-                requestAnimationFrame(() => centerHighlightedCard('smooth'));
-                setTimeout(() => centerHighlightedCard('auto'), 750);
+                if (stableScroll) {
+                    // Instagram ve eski WebView'larda hareketli kaydırma ile kart animasyonunu
+                    // aynı anda çalıştırmak takılmaya yol açar. Önce tek seferde konumlan,
+                    // sonraki karede yalnızca hafif vurgu efektini başlat.
+                    const positionOnce = () => {
+                        requestAnimationFrame(() => {
+                            requestAnimationFrame(() => {
+                                centerHighlightedCard('instant');
+                                requestAnimationFrame(activateCardHighlight);
+                            });
+                        });
+                    };
+
+                    if (document.fonts && document.fonts.ready) {
+                        Promise.race([
+                            document.fonts.ready,
+                            new Promise(resolve => setTimeout(resolve, 260))
+                        ]).then(positionOnce).catch(positionOnce);
+                    } else {
+                        positionOnce();
+                    }
+                } else {
+                    activateCardHighlight();
+                    requestAnimationFrame(() => centerHighlightedCard('smooth'));
+                    setTimeout(() => centerHighlightedCard('auto'), 750);
+                }
 
                 const highlightDuration = 4800;
                 const versions = Array.isArray(targetMainProject.tumSurumler)
