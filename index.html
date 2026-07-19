@@ -1271,6 +1271,71 @@
             }
         }
 
+        /* Deep-link version row spotlight */
+        #versionListContainer .deep-link-version-highlight {
+            position: relative;
+            isolation: isolate;
+            z-index: 12;
+            transform: scale(1.018);
+            border-color: rgba(88, 105, 255, 0.72) !important;
+            background: linear-gradient(135deg, rgba(232, 238, 255, 0.96), rgba(247, 239, 255, 0.94)) !important;
+            box-shadow:
+                0 0 0 1px rgba(255, 255, 255, 0.9),
+                0 0 30px rgba(82, 104, 255, 0.26),
+                0 16px 34px rgba(79, 72, 165, 0.18) !important;
+            animation: akVersionLinkPulse 1.2s ease-in-out 4;
+        }
+
+        .dark #versionListContainer .deep-link-version-highlight {
+            border-color: rgba(132, 151, 255, 0.74) !important;
+            background: linear-gradient(135deg, rgba(35, 48, 94, 0.96), rgba(42, 28, 79, 0.93)) !important;
+            box-shadow:
+                0 0 0 1px rgba(149, 163, 255, 0.16),
+                0 0 34px rgba(87, 113, 255, 0.34),
+                0 0 58px rgba(171, 91, 255, 0.16),
+                0 18px 42px rgba(0, 0, 0, 0.38) !important;
+        }
+
+        #versionListContainer .deep-link-version-highlight::before {
+            content: "";
+            position: absolute;
+            inset: -1px;
+            z-index: -1;
+            border-radius: inherit;
+            pointer-events: none;
+            background:
+                radial-gradient(circle at 8% 16%, rgba(91, 125, 255, 0.3), transparent 35%),
+                radial-gradient(circle at 92% 18%, rgba(182, 94, 255, 0.24), transparent 34%),
+                linear-gradient(105deg, transparent 28%, rgba(255, 255, 255, 0.58) 49%, transparent 70%);
+            background-size: 100% 100%, 100% 100%, 220% 100%;
+            animation: akVersionLinkSweep 2.1s ease-in-out 2;
+        }
+
+        .dark #versionListContainer .deep-link-version-highlight::before {
+            background:
+                radial-gradient(circle at 8% 16%, rgba(91, 125, 255, 0.34), transparent 35%),
+                radial-gradient(circle at 92% 18%, rgba(182, 94, 255, 0.28), transparent 34%),
+                linear-gradient(105deg, transparent 28%, rgba(182, 210, 255, 0.28) 49%, transparent 70%);
+            background-size: 100% 100%, 100% 100%, 220% 100%;
+        }
+
+        @keyframes akVersionLinkPulse {
+            0%, 100% {
+                transform: scale(1.008);
+                filter: saturate(1.04) brightness(1.01);
+            }
+            50% {
+                transform: scale(1.024);
+                filter: saturate(1.16) brightness(1.045);
+            }
+        }
+
+        @keyframes akVersionLinkSweep {
+            0% { background-position: 0 0, 0 0, 130% 0; opacity: 0.72; }
+            50% { opacity: 1; }
+            100% { background-position: 0 0, 0 0, -110% 0; opacity: 0.72; }
+        }
+
         @media (prefers-reduced-motion: reduce) {
             body::before,
             body::after {
@@ -1288,7 +1353,9 @@
 
             .project-card.deep-link-highlight,
             .project-card.deep-link-highlight::before,
-            .project-card.deep-link-highlight::after {
+            .project-card.deep-link-highlight::after,
+            #versionListContainer .deep-link-version-highlight,
+            #versionListContainer .deep-link-version-highlight::before {
                 animation: none !important;
             }
         }
@@ -1647,7 +1714,7 @@
                 
                 <div class="pt-4 mt-4 border-t border-slate-100 dark:border-slate-800 flex flex-wrap justify-between items-center gap-2 text-sm text-slate-400">
                     <span>Geliştirici: Murat AKIN</span>
-                    <span>Versiyon: 1.5</span>
+                    <span>Versiyon: 1.4</span>
                 </div>
             </div>
         </div>
@@ -1860,7 +1927,8 @@
 
         function checkUrlParameterAndHighlight() {
             const urlParams = new URLSearchParams(window.location.search);
-            let projectParam = urlParams.get('p');
+            const queryProjectParam = urlParams.get('p');
+            let projectParam = queryProjectParam;
 
             if (!projectParam) {
                 const path = window.location.pathname;
@@ -1880,52 +1948,87 @@
             const normalizedSearchParam = normalizeText(projectParam);
             let targetMainProject = null;
             let targetSpecificVersion = null;
+            let matchWasGroupAlias = false;
 
-            const getProjectAliases = (project) => {
-                const aliases = [project.adi, project.id, project.grupId];
+            const getUrlAliases = (project) => {
+                const aliases = [];
                 if (project.url) {
                     try {
                         const parsed = new URL(project.url, window.location.origin);
-                        const parts = parsed.pathname.replace(/^\/+|\/+$/g, '').split('/').filter(Boolean);
-                        aliases.push(parts[parts.length - 1]);
+                        const cleanPath = parsed.pathname.replace(/^\/+|\/+$/g, '');
+                        const parts = cleanPath.split('/').filter(Boolean);
+                        aliases.push(parts[parts.length - 1], cleanPath);
                     } catch (e) {
                         aliases.push(project.url);
                     }
                 }
-                return aliases.filter(Boolean).map(normalizeText);
+                return aliases.filter(Boolean);
             };
 
+            const getVersionMatchScore = (version) => {
+                const id = normalizeText(version.id || '');
+                const name = normalizeText(version.adi || '');
+                const urlAliases = getUrlAliases(version).map(normalizeText);
+
+                // Eski bağlantıların grup kimliğiyle karışmaması için gerçek sürüm
+                // kimliği ve sürüm URL'si her zaman önce değerlendirilir.
+                if (id && id === normalizedSearchParam) return 400;
+                if (urlAliases.includes(normalizedSearchParam)) return 300;
+                if (name && name === normalizedSearchParam) return 200;
+                return 0;
+            };
+
+            // 1. Öncelik: tüm gruplardaki gerçek sürüm kimlikleri / URL'leri.
+            let bestMatchScore = 0;
             for (const mainApp of allProjects) {
-                if (getProjectAliases(mainApp).includes(normalizedSearchParam)) {
-                    targetMainProject = mainApp;
-                    targetSpecificVersion = mainApp;
-                    break;
-                }
-                
-                if (mainApp.tumSurumler && mainApp.tumSurumler.length > 0) {
-                    const subMatch = mainApp.tumSurumler.find(v => 
-                        getProjectAliases(v).includes(normalizedSearchParam)
-                    );
-                    if (subMatch) {
-                        targetMainProject = mainApp; 
-                        targetSpecificVersion = subMatch; 
-                        break;
+                const versions = Array.isArray(mainApp.tumSurumler) && mainApp.tumSurumler.length
+                    ? mainApp.tumSurumler
+                    : [mainApp];
+
+                for (const version of versions) {
+                    const score = getVersionMatchScore(version);
+                    if (score > bestMatchScore) {
+                        bestMatchScore = score;
+                        targetMainProject = mainApp;
+                        targetSpecificVersion = version;
                     }
                 }
             }
 
-            if (!targetMainProject) return; 
+            // 2. Öncelik: sürüm bulunamazsa uygulama grubu / ana kart eşleşmesi.
+            if (!targetMainProject) {
+                for (const mainApp of allProjects) {
+                    const groupAliases = [
+                        mainApp.grupId,
+                        mainApp.id,
+                        mainApp.adi,
+                        ...getUrlAliases(mainApp)
+                    ].filter(Boolean).map(normalizeText);
+
+                    if (groupAliases.includes(normalizedSearchParam)) {
+                        targetMainProject = mainApp;
+                        targetSpecificVersion = mainApp;
+                        matchWasGroupAlias = normalizeText(mainApp.grupId || '') === normalizedSearchParam;
+                        break;
+                    }
+                }
+            } else {
+                matchWasGroupAlias = normalizeText(targetMainProject.grupId || '') === normalizedSearchParam &&
+                    normalizeText(targetSpecificVersion.id || '') !== normalizedSearchParam;
+            }
+
+            if (!targetMainProject || !targetSpecificVersion) return;
 
             document.title = `Akıllı Kürsü - ${targetSpecificVersion.adi}`;
-            
-            let metaDesc = document.querySelector('meta[name="description"]');
-            if (metaDesc) metaDesc.content = targetSpecificVersion.aciklama;
-            
-            let ogTitle = document.querySelector('meta[property="og:title"]');
+
+            const metaDesc = document.querySelector('meta[name="description"]');
+            if (metaDesc) metaDesc.content = targetSpecificVersion.aciklama || targetMainProject.aciklama || '';
+
+            const ogTitle = document.querySelector('meta[property="og:title"]');
             if (ogTitle) ogTitle.content = `Akıllı Kürsü - ${targetSpecificVersion.adi}`;
-            
-            let ogDesc = document.querySelector('meta[property="og:description"]');
-            if (ogDesc) ogDesc.content = targetSpecificVersion.aciklama;
+
+            const ogDesc = document.querySelector('meta[property="og:description"]');
+            if (ogDesc) ogDesc.content = targetSpecificVersion.aciklama || targetMainProject.aciklama || '';
 
             const targetId = `project-${normalizeText(targetMainProject.adi)}`;
 
@@ -1940,7 +2043,6 @@
             }
 
             setTimeout(() => {
-                // Filtreleme kartları yeniden oluşturabildiği için güncel kartı tekrar bul.
                 const targetCard = document.getElementById(targetId);
                 if (!targetCard) return;
 
@@ -1959,7 +2061,6 @@
                     const viewportHeight = visualViewport ? visualViewport.height : window.innerHeight;
                     const viewportBottom = viewportTop + viewportHeight;
 
-                    // Parlayan dış halkanın da tamamen görünmesi için ek güvenli boşluk.
                     const effectMargin = Math.min(42, Math.max(26, viewportHeight * 0.045));
                     const safeTop = Math.max(headerBottom, viewportTop) + effectMargin;
                     const safeBottom = viewportBottom - effectMargin;
@@ -1969,13 +2070,9 @@
                     const effectTop = rect.top - effectMargin;
                     const effectHeight = rect.height + (effectMargin * 2);
 
-                    let desiredEffectTop;
-                    if (effectHeight <= availableHeight) {
-                        desiredEffectTop = safeTop + ((availableHeight - effectHeight) / 2);
-                    } else {
-                        // Çok kısa ekranlarda kartın üst kısmını başlığın hemen altına yerleştir.
-                        desiredEffectTop = safeTop;
-                    }
+                    const desiredEffectTop = effectHeight <= availableHeight
+                        ? safeTop + ((availableHeight - effectHeight) / 2)
+                        : safeTop;
 
                     const delta = effectTop - desiredEffectTop;
                     const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
@@ -1984,26 +2081,34 @@
                     window.scrollTo({ top: destination, behavior });
                 };
 
-                // Vurgu uygulanmış gerçek ölçülerle kartı görünür alanın merkezine getir.
                 requestAnimationFrame(() => centerHighlightedCard('smooth'));
-
-                // Yumuşak kaydırma ve kart giriş animasyonu tamamlanınca küçük konum sapmalarını düzelt.
                 setTimeout(() => centerHighlightedCard('auto'), 750);
 
                 const highlightDuration = 4800;
-                const isSubVersion = (targetMainProject.id !== targetSpecificVersion.id || targetMainProject.adi !== targetSpecificVersion.adi);
+                const versions = Array.isArray(targetMainProject.tumSurumler)
+                    ? targetMainProject.tumSurumler
+                    : [];
+                const isHistoricalVersion = normalizeText(targetMainProject.id || targetMainProject.adi) !==
+                    normalizeText(targetSpecificVersion.id || targetSpecificVersion.adi);
+                const shouldOpenVersionModal = versions.length > 1 &&
+                    (isHistoricalVersion || matchWasGroupAlias);
 
                 setTimeout(() => {
                     const liveCard = document.getElementById(targetId);
                     if (liveCard) liveCard.classList.remove('deep-link-highlight');
                 }, highlightDuration);
 
-                if (isSubVersion) {
+                if (shouldOpenVersionModal) {
+                    // Kartın sayfadaki konumu anlaşıldıktan sonra tüm sürümleri aç.
+                    // Eski URL'nin işaret ettiği sürüm satırı ayrıca vurgulanır.
                     setTimeout(() => {
-                        openVersionModal(targetMainProject.grupId || targetMainProject.id, targetMainProject.ikon, targetSpecificVersion.adi);
-                    }, highlightDuration + 250);
+                        openVersionModal(
+                            targetMainProject.grupId || targetMainProject.id,
+                            targetMainProject.ikon,
+                            targetSpecificVersion.id || targetSpecificVersion.adi
+                        );
+                    }, 900);
                 }
-
             }, 350);
         }
 
@@ -2593,7 +2698,7 @@
             }, 2000);
         }
 
-        function openVersionModal(grupId, icon, highlightVersionName = null) {
+        function openVersionModal(grupId, icon, highlightVersionRef = null) {
             lastVersionGrupId = grupId;
             lastVersionIcon = icon;
 
@@ -2620,15 +2725,28 @@
                 }
 
                 const safeUrl = secureUrl(v.url);
-                const isHighlighted = highlightVersionName && (normalizeText(v.adi) === normalizeText(highlightVersionName));
+                const normalizedHighlightRef = normalizeText(highlightVersionRef || '');
+                const versionAliases = [v.id, v.adi];
+                if (v.url) {
+                    try {
+                        const parsedVersionUrl = new URL(v.url, window.location.origin);
+                        const cleanVersionPath = parsedVersionUrl.pathname.replace(/^\/+|\/+$/g, '');
+                        const versionPathParts = cleanVersionPath.split('/').filter(Boolean);
+                        versionAliases.push(versionPathParts[versionPathParts.length - 1], cleanVersionPath);
+                    } catch (e) {
+                        versionAliases.push(v.url);
+                    }
+                }
+                const isHighlighted = Boolean(normalizedHighlightRef) &&
+                    versionAliases.filter(Boolean).map(normalizeText).includes(normalizedHighlightRef);
                 
                 // SATIR ANA KAPSAYICISI (Wrapper) - Akordeon için dış çatı
                 const rowWrapper = document.createElement('div');
                 rowWrapper.id = `version-row-${normalizeText(v.adi)}`;
+                rowWrapper.dataset.versionId = v.id || v.adi;
                 const baseClasses = "flex flex-col rounded-2xl transition-all duration-500 overflow-hidden border";
                 const normalClasses = "border-slate-200/60 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 hover:border-blue-300 dark:hover:border-slate-600";
-                const highlightClasses = "ring-2 ring-blue-500 bg-blue-50 dark:bg-blue-900/30 scale-[1.02] shadow-md z-10 relative border-blue-300 dark:border-slate-600";
-                rowWrapper.className = isHighlighted ? `${baseClasses} ${highlightClasses}` : `${baseClasses} ${normalClasses}`;
+                rowWrapper.className = `${baseClasses} ${normalClasses}${isHighlighted ? ' deep-link-version-highlight' : ''}`;
                 
                 // GÖRÜNÜR ÜST SATIR (Main Row)
                 const mainRow = document.createElement('div');
@@ -2753,16 +2871,20 @@
             inner.classList.remove('scale-95');
             inner.classList.add('scale-100');
 
-            if (highlightVersionName) {
+            if (highlightVersionRef) {
                 setTimeout(() => {
-                    const targetRow = document.getElementById(`version-row-${normalizeText(highlightVersionName)}`);
-                    if (targetRow) {
-                        targetRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        setTimeout(() => {
-                            targetRow.classList.remove('ring-2', 'ring-blue-500', 'bg-blue-50', 'dark:bg-blue-900/30', 'scale-[1.02]', 'shadow-md', 'z-10', 'relative', 'border-blue-300', 'dark:border-slate-600');
-                            targetRow.classList.add('border-slate-200/60', 'dark:border-slate-800', 'bg-slate-50', 'dark:bg-slate-900/50', 'hover:border-blue-300', 'dark:hover:border-slate-600');
-                        }, 3500); 
-                    }
+                    const targetRow = container.querySelector('.deep-link-version-highlight');
+                    if (!targetRow) return;
+
+                    const centeredTop = targetRow.offsetTop - ((container.clientHeight - targetRow.offsetHeight) / 2);
+                    container.scrollTo({
+                        top: Math.max(0, centeredTop),
+                        behavior: 'smooth'
+                    });
+
+                    setTimeout(() => {
+                        targetRow.classList.remove('deep-link-version-highlight');
+                    }, 4800);
                 }, 300);
             }
         }
