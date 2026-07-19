@@ -1065,6 +1065,102 @@
             background: rgba(99, 102, 241, 0.82);
         }
 
+
+        /* External deep-link card spotlight */
+        .project-card.deep-link-highlight {
+            transform: translateY(-8px) scale(1.025) !important;
+            border-color: rgba(103, 112, 255, 0.78) !important;
+            outline: 2px solid rgba(112, 122, 255, 0.42);
+            outline-offset: 4px;
+            box-shadow:
+                0 0 0 1px rgba(255, 255, 255, 0.88),
+                0 0 34px rgba(82, 104, 255, 0.34),
+                0 24px 70px rgba(91, 80, 195, 0.24),
+                inset 0 1px 0 rgba(255, 255, 255, 0.92) !important;
+            filter: saturate(1.12) brightness(1.025);
+            animation: akDeepLinkHalo 1.2s ease-in-out 4;
+            z-index: 35 !important;
+        }
+
+        .dark .project-card.deep-link-highlight {
+            border-color: rgba(132, 151, 255, 0.86) !important;
+            outline-color: rgba(126, 145, 255, 0.5);
+            box-shadow:
+                0 0 0 1px rgba(149, 163, 255, 0.2),
+                0 0 42px rgba(87, 113, 255, 0.43),
+                0 0 82px rgba(171, 91, 255, 0.22),
+                0 28px 78px rgba(0, 0, 0, 0.48),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+            filter: saturate(1.18) brightness(1.1);
+        }
+
+        .project-card.deep-link-highlight::before {
+            inset: -18% !important;
+            opacity: 1 !important;
+            transform: scale(1.06) !important;
+            background:
+                radial-gradient(circle at 12% 12%, rgba(86, 126, 255, 0.36), transparent 32%),
+                radial-gradient(circle at 88% 18%, rgba(177, 93, 255, 0.3), transparent 32%),
+                radial-gradient(circle at 52% 96%, rgba(67, 215, 235, 0.23), transparent 34%) !important;
+            filter: blur(18px);
+            animation: akDeepLinkAura 2.4s ease-in-out 2;
+        }
+
+        .dark .project-card.deep-link-highlight::before {
+            background:
+                radial-gradient(circle at 12% 12%, rgba(82, 116, 255, 0.42), transparent 34%),
+                radial-gradient(circle at 88% 18%, rgba(174, 83, 255, 0.34), transparent 34%),
+                radial-gradient(circle at 52% 96%, rgba(57, 209, 236, 0.25), transparent 36%) !important;
+        }
+
+        .project-card.deep-link-highlight::after {
+            left: -58% !important;
+            right: auto !important;
+            top: -18% !important;
+            width: 42% !important;
+            height: 136% !important;
+            opacity: 0;
+            z-index: 30;
+            border-radius: 40%;
+            background: linear-gradient(
+                105deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.08) 18%,
+                rgba(255, 255, 255, 0.7) 49%,
+                rgba(137, 184, 255, 0.2) 66%,
+                transparent 100%
+            ) !important;
+            mix-blend-mode: screen;
+            transform: skewX(-18deg);
+            animation: akDeepLinkSweep 1.55s ease-in-out 3;
+            pointer-events: none;
+        }
+
+        @keyframes akDeepLinkHalo {
+            0%, 100% {
+                outline-color: rgba(112, 122, 255, 0.34);
+                outline-offset: 3px;
+                filter: saturate(1.06) brightness(1.015);
+            }
+            50% {
+                outline-color: rgba(126, 102, 255, 0.88);
+                outline-offset: 9px;
+                filter: saturate(1.22) brightness(1.075);
+            }
+        }
+
+        @keyframes akDeepLinkAura {
+            0%, 100% { opacity: 0.72; transform: scale(1.01) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1.1) rotate(3deg); }
+        }
+
+        @keyframes akDeepLinkSweep {
+            0% { left: -58%; opacity: 0; }
+            14% { opacity: 0.7; }
+            58% { opacity: 0.42; }
+            100% { left: 122%; opacity: 0; }
+        }
+
         @media (max-width: 767px) {
             body::before,
             body::after {
@@ -1111,6 +1207,12 @@
             #themeBtn,
             #mobileMenuBtn {
                 transition-duration: 0.01ms !important;
+            }
+
+            .project-card.deep-link-highlight,
+            .project-card.deep-link-highlight::before,
+            .project-card.deep-link-highlight::after {
+                animation: none !important;
             }
         }
     </style>
@@ -1687,7 +1789,9 @@
                 const path = window.location.pathname;
                 if (path && path.length > 1 && !path.includes('index.html')) {
                     try {
-                        projectParam = decodeURIComponent(path.substring(1));
+                        const cleanPath = decodeURIComponent(path).replace(/^\/+|\/+$/g, '');
+                        const pathParts = cleanPath.split('/').filter(Boolean);
+                        projectParam = pathParts[pathParts.length - 1] || null;
                     } catch(e) {
                         projectParam = null;
                     }
@@ -1700,8 +1804,22 @@
             let targetMainProject = null;
             let targetSpecificVersion = null;
 
+            const getProjectAliases = (project) => {
+                const aliases = [project.adi, project.id, project.grupId];
+                if (project.url) {
+                    try {
+                        const parsed = new URL(project.url, window.location.origin);
+                        const parts = parsed.pathname.replace(/^\/+|\/+$/g, '').split('/').filter(Boolean);
+                        aliases.push(parts[parts.length - 1]);
+                    } catch (e) {
+                        aliases.push(project.url);
+                    }
+                }
+                return aliases.filter(Boolean).map(normalizeText);
+            };
+
             for (const mainApp of allProjects) {
-                if (normalizeText(mainApp.adi) === normalizedSearchParam || normalizeText(mainApp.id) === normalizedSearchParam) {
+                if (getProjectAliases(mainApp).includes(normalizedSearchParam)) {
                     targetMainProject = mainApp;
                     targetSpecificVersion = mainApp;
                     break;
@@ -1709,7 +1827,7 @@
                 
                 if (mainApp.tumSurumler && mainApp.tumSurumler.length > 0) {
                     const subMatch = mainApp.tumSurumler.find(v => 
-                        normalizeText(v.adi) === normalizedSearchParam || normalizeText(v.id) === normalizedSearchParam
+                        getProjectAliases(v).includes(normalizedSearchParam)
                     );
                     if (subMatch) {
                         targetMainProject = mainApp; 
@@ -1756,18 +1874,22 @@
                         behavior: 'smooth'
                     });
 
-                    targetCard.classList.add('ring-4', 'ring-blue-500', 'scale-[1.03]', 'shadow-2xl', 'z-30');
+                    targetCard.classList.remove('deep-link-highlight');
+                    void targetCard.offsetWidth;
+                    targetCard.classList.add('deep-link-highlight');
                     
+                    const highlightDuration = 4800;
                     const isSubVersion = (targetMainProject.id !== targetSpecificVersion.id || targetMainProject.adi !== targetSpecificVersion.adi);
-                    if (isSubVersion) {
-                     setTimeout(() => {
-                        openVersionModal(targetMainProject.grupId || targetMainProject.id, targetMainProject.ikon, targetSpecificVersion.adi);
-                      }, 600); 
-                    }
 
                     setTimeout(() => {
-                        targetCard.classList.remove('ring-4', 'ring-blue-500', 'scale-[1.03]');
-                    }, 3500);
+                        targetCard.classList.remove('deep-link-highlight');
+                    }, highlightDuration);
+
+                    if (isSubVersion) {
+                        setTimeout(() => {
+                            openVersionModal(targetMainProject.grupId || targetMainProject.id, targetMainProject.ikon, targetSpecificVersion.adi);
+                        }, highlightDuration + 250);
+                    }
 
                 }, 300);
             }
