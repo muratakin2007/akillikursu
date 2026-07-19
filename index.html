@@ -1161,6 +1161,83 @@
             100% { left: 122%; opacity: 0; }
         }
 
+        /* Smooth light / dark theme transition */
+        html {
+            view-transition-name: root;
+        }
+
+        html.theme-transitioning *,
+        html.theme-transitioning *::before,
+        html.theme-transitioning *::after {
+            transition-property: none !important;
+        }
+
+        html.theme-transitioning body::before,
+        html.theme-transitioning body::after,
+        html.theme-transitioning > body > div[aria-hidden="true"],
+        html.theme-transitioning > body > div[aria-hidden="true"]::before,
+        html.theme-transitioning > body > div[aria-hidden="true"]::after,
+        html.theme-transitioning > body > div[aria-hidden="true"] > div {
+            animation-play-state: paused !important;
+        }
+
+        ::view-transition-group(root) {
+            animation-duration: 680ms;
+            animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        ::view-transition-image-pair(root) {
+            isolation: isolate;
+        }
+
+        ::view-transition-old(root),
+        ::view-transition-new(root) {
+            mix-blend-mode: normal;
+            backface-visibility: hidden;
+        }
+
+        ::view-transition-old(root) {
+            animation: akThemeFadeOut 680ms cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        ::view-transition-new(root) {
+            animation: akThemeFadeIn 680ms cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        @keyframes akThemeFadeOut {
+            0% {
+                opacity: 1;
+                filter: blur(0) saturate(1);
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0;
+                filter: blur(4px) saturate(0.92);
+                transform: scale(0.994);
+            }
+        }
+
+        @keyframes akThemeFadeIn {
+            0% {
+                opacity: 0;
+                filter: blur(5px) saturate(0.92);
+                transform: scale(1.006);
+            }
+            100% {
+                opacity: 1;
+                filter: blur(0) saturate(1);
+                transform: scale(1);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            ::view-transition-group(root),
+            ::view-transition-old(root),
+            ::view-transition-new(root) {
+                animation-duration: 1ms !important;
+            }
+        }
+
         @media (max-width: 767px) {
             body::before,
             body::after {
@@ -2700,13 +2777,37 @@
 
         function toggleTheme() {
             const html = document.documentElement;
-            if (html.classList.contains('dark')) {
-                html.classList.remove('dark');
-                safeSetLS('theme', 'light');
-            } else {
-                html.classList.add('dark');
-                safeSetLS('theme', 'dark');
+            const useDarkTheme = !html.classList.contains('dark');
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            const applyTheme = () => {
+                html.classList.toggle('dark', useDarkTheme);
+                safeSetLS('theme', useDarkTheme ? 'dark' : 'light');
+            };
+
+            // Modern browsers: capture both themes and cross-fade the whole page.
+            // This prevents individual glass surfaces and gradients from flickering.
+            if (document.startViewTransition && !reduceMotion) {
+                html.classList.add('theme-transitioning');
+
+                const transition = document.startViewTransition(() => {
+                    applyTheme();
+                });
+
+                transition.finished.finally(() => {
+                    html.classList.remove('theme-transitioning');
+                });
+                return;
             }
+
+            // Safe fallback for browsers without View Transitions support.
+            html.classList.add('theme-transitioning');
+            applyTheme();
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    html.classList.remove('theme-transitioning');
+                });
+            });
         }
 
         function toggleAboutModal(show) {
