@@ -43,6 +43,9 @@
             var isOtherInApp = /TikTok|Line\/|Twitter|Snapchat|Pinterest|GSA\/|; wv\)|\bwv\b/i.test(ua);
             var isAndroidWebView = /; wv\)/i.test(ua) || (/Version\/4\.0/i.test(ua) && /Chrome\//i.test(ua) && /Mobile Safari/i.test(ua));
             var isInApp = isInstagram || isFacebook || isOtherInApp || isAndroidWebView;
+            var isSmartTV = /SMART[- ]?TV|SmartTV|Android TV|GoogleTV|Tizen|Web0S|WebOS|NetCast|HbbTV|BRAVIA|VIERA|VIDAA|Hisense|PhilipsTV|Roku|AFTB|AFTM|AFTS|AFTT|FireTV|CrKey|DTV|CE-HTML|TV Safari|Maple|MiTV|SHIELD Android TV/i.test(ua);
+            var forcedTvLite = /(?:^|[?&])(?:tv|lite|performance)=(?:1|true|tv|lite)(?:&|$)/i.test(window.location.search || '');
+            var isLowPowerTV = !!(isSmartTV || forcedTvLite);
 
             function versionFrom(regex) {
                 var match = ua.match(regex);
@@ -80,9 +83,11 @@
                 !supportsGrid ||
                 !supportsSticky
             );
-            var preferStableScroll = isInApp || isAndroidWebView || isLegacy || !supportsSmoothScroll;
+            var preferStableScroll = isInApp || isAndroidWebView || isLegacy || isLowPowerTV || !supportsSmoothScroll;
 
-            if (isInApp || isLegacy) root.classList.add('compat-browser');
+            if (isInApp || isLegacy || isLowPowerTV) root.classList.add('compat-browser');
+            if (isSmartTV) root.classList.add('tv-browser');
+            if (isLowPowerTV) root.classList.add('low-power-tv');
             if (isLegacy) root.classList.add('legacy-engine');
             if (preferStableScroll) root.classList.add('stable-scroll-browser');
             if (!supportsBackdrop) root.classList.add('no-backdrop');
@@ -95,13 +100,15 @@
                 isInstagram: isInstagram,
                 isAndroidWebView: isAndroidWebView,
                 isLegacy: isLegacy,
+                isSmartTV: isSmartTV,
+                isLowPowerTV: isLowPowerTV,
                 supportsBackdrop: supportsBackdrop,
                 supportsDvh: supportsDvh,
                 supportsGrid: supportsGrid,
                 supportsSticky: supportsSticky,
                 supportsSmoothScroll: supportsSmoothScroll,
                 preferStableScroll: preferStableScroll,
-                canNativeShare: !!navigator.share && !isInApp && !isLegacy
+                canNativeShare: !!navigator.share && !isInApp && !isLegacy && !isLowPowerTV
             };
         })();
     </script>
@@ -2971,6 +2978,460 @@
         }
     </style>
 
+
+    <style id="ak-low-power-tv-performance-v1">
+        /*
+         * Smart TV / low-power rendering mode.
+         * Activated automatically by common TV user agents, or manually with ?tv=1 / ?lite=1.
+         * Keeps the design language while avoiding costly 4K blur, fixed compositing and animation work.
+         */
+        html.low-power-tv {
+            scroll-behavior: auto !important;
+            background: #eef3ff;
+        }
+
+        html.low-power-tv.dark {
+            background: #080d1d;
+        }
+
+        html.low-power-tv body {
+            background: linear-gradient(145deg, #f5f8ff 0%, #edf2ff 52%, #f7f2ff 100%) !important;
+            background-attachment: scroll !important;
+            text-rendering: optimizeSpeed;
+        }
+
+        html.low-power-tv.dark body {
+            background: linear-gradient(145deg, #070b18 0%, #0b1226 52%, #101126 100%) !important;
+        }
+
+        html.low-power-tv::before,
+        html.low-power-tv::after,
+        html.low-power-tv body::before,
+        html.low-power-tv body::after,
+        html.low-power-tv body > div[aria-hidden="true"] {
+            display: none !important;
+            content: none !important;
+            animation: none !important;
+        }
+
+        html.low-power-tv *,
+        html.low-power-tv *::before,
+        html.low-power-tv *::after {
+            -webkit-backdrop-filter: none !important;
+            backdrop-filter: none !important;
+            animation-duration: 0.01ms !important;
+            animation-delay: 0ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            transition-delay: 0ms !important;
+            text-shadow: none !important;
+        }
+
+        html.low-power-tv header {
+            position: relative !important;
+            top: auto !important;
+            background: rgba(248, 250, 255, 0.99) !important;
+            border-color: rgba(119, 132, 183, 0.2) !important;
+            box-shadow: 0 4px 18px rgba(46, 58, 105, 0.1) !important;
+        }
+
+        html.low-power-tv.dark header {
+            background: rgba(10, 16, 34, 0.99) !important;
+            border-color: rgba(131, 145, 220, 0.14) !important;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.28) !important;
+        }
+
+        html.low-power-tv main > .bg-white\/80,
+        html.low-power-tv .project-card,
+        html.low-power-tv #mobileMenuDropdown,
+        html.low-power-tv #shareModal > div,
+        html.low-power-tv #linkChoiceModal > div,
+        html.low-power-tv #versionModal > div,
+        html.low-power-tv #privacyModal > div,
+        html.low-power-tv #aboutModal > div,
+        html.low-power-tv footer {
+            background: #fbfcff !important;
+            border-color: rgba(116, 129, 179, 0.2) !important;
+            box-shadow: 0 5px 18px rgba(52, 63, 112, 0.1) !important;
+            filter: none !important;
+        }
+
+        html.low-power-tv.dark main > .bg-white\/80,
+        html.low-power-tv.dark .project-card,
+        html.low-power-tv.dark #mobileMenuDropdown,
+        html.low-power-tv.dark #shareModal > div,
+        html.low-power-tv.dark #linkChoiceModal > div,
+        html.low-power-tv.dark #versionModal > div,
+        html.low-power-tv.dark #privacyModal > div,
+        html.low-power-tv.dark #aboutModal > div,
+        html.low-power-tv.dark footer {
+            background: #111a34 !important;
+            border-color: rgba(132, 148, 225, 0.16) !important;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28) !important;
+        }
+
+        html.low-power-tv main > .bg-white\/80::before,
+        html.low-power-tv .project-card::before,
+        html.low-power-tv .project-card::after,
+        html.low-power-tv .go-app-btn::before,
+        html.low-power-tv header .absolute.left-1\/2 span::after {
+            display: none !important;
+            content: none !important;
+        }
+
+        html.low-power-tv #projectsGrid {
+            contain: layout style !important;
+        }
+
+        html.low-power-tv .project-card {
+            opacity: 1 !important;
+            transform: none !important;
+            contain: layout paint style !important;
+            content-visibility: auto;
+            contain-intrinsic-size: 340px;
+            will-change: auto !important;
+        }
+
+        html.low-power-tv .project-card:hover,
+        html.low-power-tv .project-card:active,
+        html.low-power-tv .project-card:hover .project-icon,
+        html.low-power-tv .project-card:active .project-icon,
+        html.low-power-tv .cat-btn:hover,
+        html.low-power-tv .go-app-btn:hover,
+        html.low-power-tv .share-btn:hover {
+            transform: none !important;
+        }
+
+        html.low-power-tv .project-card:hover,
+        html.low-power-tv .project-card:active {
+            border-color: rgba(86, 105, 218, 0.42) !important;
+            box-shadow: 0 6px 20px rgba(52, 63, 112, 0.13) !important;
+        }
+
+        html.low-power-tv.dark .project-card:hover,
+        html.low-power-tv.dark .project-card:active {
+            border-color: rgba(135, 153, 255, 0.4) !important;
+            box-shadow: 0 7px 22px rgba(0, 0, 0, 0.32) !important;
+        }
+
+        html.low-power-tv .project-card.deep-link-highlight {
+            outline: 4px solid rgba(82, 104, 255, 0.72) !important;
+            outline-offset: 4px !important;
+            border-color: rgba(82, 104, 255, 0.72) !important;
+            box-shadow: 0 0 0 7px rgba(82, 104, 255, 0.12), 0 8px 24px rgba(52, 63, 112, 0.16) !important;
+        }
+
+        html.low-power-tv.dark .project-card.deep-link-highlight {
+            outline-color: rgba(143, 161, 255, 0.8) !important;
+            border-color: rgba(143, 161, 255, 0.72) !important;
+            box-shadow: 0 0 0 7px rgba(114, 135, 255, 0.13), 0 9px 26px rgba(0, 0, 0, 0.34) !important;
+        }
+
+        html.low-power-tv #searchBar,
+        html.low-power-tv .cat-btn,
+        html.low-power-tv .project-icon,
+        html.low-power-tv .share-btn,
+        html.low-power-tv .project-card [data-element="version-btn"],
+        html.low-power-tv .project-card [data-element="fav-btn"] {
+            filter: none !important;
+            box-shadow: 0 2px 8px rgba(55, 66, 112, 0.08) !important;
+        }
+
+        html.low-power-tv.dark #searchBar,
+        html.low-power-tv.dark .cat-btn,
+        html.low-power-tv.dark .project-icon,
+        html.low-power-tv.dark .share-btn,
+        html.low-power-tv.dark .project-card [data-element="version-btn"],
+        html.low-power-tv.dark .project-card [data-element="fav-btn"] {
+            box-shadow: 0 3px 9px rgba(0, 0, 0, 0.2) !important;
+        }
+
+        html.low-power-tv #shareModal,
+        html.low-power-tv #linkChoiceModal,
+        html.low-power-tv #versionModal,
+        html.low-power-tv #privacyModal,
+        html.low-power-tv #aboutModal {
+            background: rgba(4, 8, 20, 0.82) !important;
+        }
+
+        html.low-power-tv #mobileMenuDropdown,
+        html.low-power-tv #shareModal,
+        html.low-power-tv #linkChoiceModal,
+        html.low-power-tv #versionModal,
+        html.low-power-tv #privacyModal,
+        html.low-power-tv #aboutModal,
+        html.low-power-tv #shareModal > div,
+        html.low-power-tv #linkChoiceModal > div,
+        html.low-power-tv #versionModal > div,
+        html.low-power-tv #privacyModal > div,
+        html.low-power-tv #aboutModal > div {
+            animation: none !important;
+            transform: none !important;
+            will-change: auto !important;
+        }
+
+        html.low-power-tv #categoryContainer,
+        html.low-power-tv .snap-x,
+        html.low-power-tv .snap-mandatory,
+        html.low-power-tv .snap-center {
+            scroll-snap-type: none !important;
+            scroll-snap-align: none !important;
+        }
+
+        /* TV remotes rely on keyboard focus rather than touch feedback. */
+        html.low-power-tv button:focus,
+        html.low-power-tv a:focus,
+        html.low-power-tv input:focus {
+            outline: 4px solid #5368ff !important;
+            outline-offset: 4px !important;
+            box-shadow: 0 0 0 7px rgba(83, 104, 255, 0.16) !important;
+        }
+
+        html.low-power-tv.dark button:focus,
+        html.low-power-tv.dark a:focus,
+        html.low-power-tv.dark input:focus {
+            outline-color: #9aabff !important;
+            box-shadow: 0 0 0 7px rgba(138, 157, 255, 0.18) !important;
+        }
+
+        @media (min-width: 1280px) {
+            html.low-power-tv .project-card {
+                min-height: 300px !important;
+            }
+        }
+    </style>
+
+
+
+    <style id="ak-tv-remote-stable-render-v2">
+        /*
+         * TV rendering must remain persistent. content-visibility/paint containment
+         * saves memory on phones but causes some TV WebViews to discard and rebuild
+         * cards while scrolling. Keep the complete grid painted and static on TVs.
+         */
+        html.low-power-tv,
+        html.low-power-tv body {
+            overscroll-behavior: none !important;
+            scroll-behavior: auto !important;
+        }
+
+        html.low-power-tv body {
+            font-family: Arial, "Segoe UI", sans-serif !important;
+            -webkit-font-smoothing: antialiased;
+            font-synthesis: none;
+        }
+
+        html.low-power-tv #projectsGrid {
+            contain: none !important;
+            content-visibility: visible !important;
+            overflow: visible !important;
+            overflow-anchor: none !important;
+            transform: none !important;
+            will-change: auto !important;
+        }
+
+        html.low-power-tv .project-card,
+        html.low-power-tv .project-card * {
+            content-visibility: visible !important;
+            backface-visibility: visible !important;
+            -webkit-backface-visibility: visible !important;
+        }
+
+        html.low-power-tv .project-card {
+            contain: none !important;
+            contain-intrinsic-size: auto !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            transform: none !important;
+            translate: none !important;
+            scale: 1 !important;
+            animation: none !important;
+            transition: none !important;
+            will-change: auto !important;
+            isolation: auto !important;
+        }
+
+        html.low-power-tv .project-card:hover,
+        html.low-power-tv .project-card:active {
+            transform: none !important;
+        }
+
+        /* A focused control also marks the entire card so the user's location is clear. */
+        html.low-power-tv .project-card:focus-within,
+        html.low-power-tv .project-card.tv-card-active {
+            outline: 5px solid #435cff !important;
+            outline-offset: 6px !important;
+            border-color: #435cff !important;
+            background: #f4f7ff !important;
+            box-shadow: 0 0 0 10px rgba(67, 92, 255, 0.18), 0 8px 22px rgba(37, 48, 97, 0.18) !important;
+            z-index: 8 !important;
+        }
+
+        html.low-power-tv.dark .project-card:focus-within,
+        html.low-power-tv.dark .project-card.tv-card-active {
+            outline-color: #a5b2ff !important;
+            border-color: #a5b2ff !important;
+            background: #172242 !important;
+            box-shadow: 0 0 0 10px rgba(141, 158, 255, 0.2), 0 8px 24px rgba(0, 0, 0, 0.36) !important;
+        }
+
+        html.low-power-tv .tv-current-focus,
+        html.low-power-tv button:focus,
+        html.low-power-tv a:focus,
+        html.low-power-tv input:focus,
+        html.low-power-tv select:focus,
+        html.low-power-tv textarea:focus,
+        html.low-power-tv [tabindex]:focus {
+            outline: 5px solid #2447ff !important;
+            outline-offset: 4px !important;
+            border-color: #2447ff !important;
+            background-color: #ffffff !important;
+            color: #122044 !important;
+            box-shadow: 0 0 0 9px rgba(36, 71, 255, 0.22) !important;
+            filter: none !important;
+            transform: none !important;
+            transition: none !important;
+            z-index: 20 !important;
+        }
+
+        html.low-power-tv.dark .tv-current-focus,
+        html.low-power-tv.dark button:focus,
+        html.low-power-tv.dark a:focus,
+        html.low-power-tv.dark input:focus,
+        html.low-power-tv.dark select:focus,
+        html.low-power-tv.dark textarea:focus,
+        html.low-power-tv.dark [tabindex]:focus {
+            outline-color: #b6c0ff !important;
+            border-color: #b6c0ff !important;
+            background-color: #24325c !important;
+            color: #ffffff !important;
+            box-shadow: 0 0 0 9px rgba(161, 177, 255, 0.24) !important;
+        }
+
+        html.low-power-tv .cat-btn:focus,
+        html.low-power-tv #mobileMenuDropdown button:focus,
+        html.low-power-tv [role="dialog"] button:focus,
+        html.low-power-tv [role="dialog"] a:focus {
+            font-weight: 800 !important;
+        }
+
+        /* Keep overlays centered and static; no transform/compositor rebuild on TV. */
+        html.low-power-tv #shareModal,
+        html.low-power-tv #linkChoiceModal,
+        html.low-power-tv #versionModal,
+        html.low-power-tv #privacyModal,
+        html.low-power-tv #aboutModal {
+            align-items: center !important;
+            justify-content: center !important;
+            transform: none !important;
+            transition: none !important;
+        }
+
+        html.low-power-tv #shareModal > div,
+        html.low-power-tv #linkChoiceModal > div,
+        html.low-power-tv #versionModal > div,
+        html.low-power-tv #privacyModal > div,
+        html.low-power-tv #aboutModal > div,
+        html.low-power-tv #mobileMenuDropdown {
+            transform: none !important;
+            transition: none !important;
+            animation: none !important;
+            content-visibility: visible !important;
+            contain: none !important;
+        }
+
+        /* Avoid clipping the strong focus halo around cards near grid edges. */
+        html.low-power-tv main {
+            overflow: visible !important;
+        }
+
+        @media (max-width: 1100px) {
+            html.low-power-tv .project-card:focus-within,
+            html.low-power-tv .project-card.tv-card-active {
+                outline-width: 4px !important;
+                outline-offset: 4px !important;
+                box-shadow: 0 0 0 7px rgba(67, 92, 255, 0.16) !important;
+            }
+        }
+    </style>
+
+
+
+    <style id="ak-modal-full-screen-backdrop-fix">
+        /*
+         * Android, Instagram WebView ve bazı mobil tarayıcılarda visualViewport
+         * değerinin kısa bildirilmesi nedeniyle karartma katmanının altta bitmesini önler.
+         * Modal panelinin kendi kaydırması ve mevcut merkezleme davranışı korunur.
+         */
+        :root {
+            --ak-layout-viewport-height: 100vh;
+        }
+
+        #shareModal,
+        #linkChoiceModal,
+        #versionModal,
+        #privacyModal,
+        #aboutModal {
+            position: fixed !important;
+            top: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            width: auto !important;
+            height: auto !important;
+            min-height: max(100vh, var(--ak-layout-viewport-height, 100vh)) !important;
+            max-height: none !important;
+            box-sizing: border-box !important;
+            background-color: rgba(7, 12, 28, 0.86) !important;
+            background-image: none !important;
+        }
+
+        /* max() desteklemeyen eski motorlar için güvenli geri dönüş. */
+        html.legacy-engine #shareModal,
+        html.legacy-engine #linkChoiceModal,
+        html.legacy-engine #versionModal,
+        html.legacy-engine #privacyModal,
+        html.legacy-engine #aboutModal,
+        html.compat-browser #shareModal,
+        html.compat-browser #linkChoiceModal,
+        html.compat-browser #versionModal,
+        html.compat-browser #privacyModal,
+        html.compat-browser #aboutModal {
+            top: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            width: auto !important;
+            height: auto !important;
+            min-height: var(--ak-layout-viewport-height, 100vh) !important;
+            max-height: none !important;
+            background-color: rgba(7, 12, 28, 0.88) !important;
+            background-image: none !important;
+        }
+
+        #shareModal > div,
+        #linkChoiceModal > div,
+        #versionModal > div,
+        #privacyModal > div,
+        #aboutModal > div {
+            position: relative !important;
+            z-index: 1 !important;
+        }
+
+        /* Mobilde paneli tam ekran katmanının gerçek merkezinde tutar. */
+        @media (max-width: 767px) {
+            #shareModal,
+            #linkChoiceModal,
+            #versionModal,
+            #privacyModal,
+            #aboutModal {
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+            }
+        }
+    </style>
+
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-400 min-h-screen flex flex-col antialiased transition-colors duration-300">
 
@@ -3464,6 +3925,8 @@
                 isInstagram: false,
                 isAndroidWebView: false,
                 isLegacy: false,
+                isSmartTV: false,
+                isLowPowerTV: false,
                 preferStableScroll: false,
                 canNativeShare: !!navigator.share
             };
@@ -3476,6 +3939,7 @@
                 compat.preferStableScroll ||
                 compat.isInApp ||
                 compat.isAndroidWebView ||
+                compat.isLowPowerTV ||
                 reduceMotion ||
                 document.documentElement.classList.contains('stable-scroll-browser')
             );
@@ -4029,6 +4493,8 @@
             }
 
             let sortedProjects = [...projects];
+            const renderBatch = document.createDocumentFragment();
+            const lowPowerRendering = !!getCompatInfo().isLowPowerTV;
             
             const searchBar = document.getElementById('searchBar');
             if (activeCategory === 'Tümü' && favorites.length > 0 && (!searchBar || searchBar.value.length === 0)) {
@@ -4046,7 +4512,14 @@
                 
                 const card = clone.querySelector('.project-card');
                 card.id = `project-${normalizeText(project.adi)}`;
-                card.style.animation = `fadeInUp 0.4s ease forwards ${index * 0.05}s`;
+                if (lowPowerRendering) {
+                    card.classList.remove('opacity-0', 'translate-y-4');
+                    card.style.opacity = '1';
+                    card.style.transform = 'none';
+                    card.style.animation = 'none';
+                } else {
+                    card.style.animation = `fadeInUp 0.4s ease forwards ${index * 0.05}s`;
+                }
                 
                 if (project.duyur && project.duyur.trim() !== "") {
                     const ribbonContainer = clone.querySelector('[data-element="ribbon-container"]');
@@ -4127,8 +4600,10 @@
                     gBtn.dataset.name = project.id;
                 }
 
-                grid.appendChild(clone);
+                renderBatch.appendChild(clone);
             });
+
+            grid.appendChild(renderBatch);
         }
 
         function generateCategoryButtons() {
@@ -4717,6 +5192,11 @@
 
             const compat = getCompatInfo();
 
+            if (compat.isLowPowerTV || html.classList.contains('low-power-tv')) {
+                applyTheme();
+                return;
+            }
+
             if ((compat.isInApp || compat.isLegacy || html.classList.contains('compat-browser')) && !reduceMotion) {
                 let curtain = document.getElementById('akCompatThemeCurtain');
                 if (!curtain) {
@@ -4929,10 +5409,25 @@
 
             function updateViewportMetrics() {
                 var viewport = window.visualViewport;
-                var height = viewport && viewport.height ? viewport.height : window.innerHeight;
+                var layoutHeight = Math.max(
+                    Number(window.innerHeight) || 0,
+                    Number(document.documentElement && document.documentElement.clientHeight) || 0
+                );
+                var visualHeight = viewport && viewport.height
+                    ? (Number(viewport.height) || 0) + Math.max(0, Number(viewport.offsetTop) || 0)
+                    : 0;
+
+                /*
+                 * Bazı Android/Instagram WebView sürümleri visualViewport.height değerini
+                 * alt sistem çubuğunun üstünde kesilmiş olarak bildirir. En büyük güvenli
+                 * değeri kullanmak modal karartmasının ekranın altında erken bitmesini önler.
+                 */
+                var height = Math.max(layoutHeight, visualHeight, 320);
                 var header = document.querySelector('header');
                 var headerHeight = header ? header.getBoundingClientRect().height : 80;
-                root.style.setProperty('--ak-viewport-height', Math.max(320, Math.round(height)) + 'px');
+
+                root.style.setProperty('--ak-viewport-height', Math.round(height) + 'px');
+                root.style.setProperty('--ak-layout-viewport-height', Math.max(320, Math.round(layoutHeight || height)) + 'px');
                 root.style.setProperty('--ak-header-height', Math.max(56, Math.round(headerHeight)) + 'px');
             }
 
@@ -4990,8 +5485,21 @@
 
             if (window.visualViewport) {
                 window.visualViewport.addEventListener('resize', scheduleViewportUpdate, false);
-                window.visualViewport.addEventListener('scroll', scheduleViewportUpdate, false);
+                /*
+                 * Adres çubuğu hareket ederken gelen sürekli visualViewport.scroll olayları
+                 * modal yüksekliğini tekrar tekrar değiştirip alt karartmada sıçrama oluşturuyordu.
+                 * Yükseklik için resize yeterlidir.
+                 */
             }
+
+            window.addEventListener('pageshow', function () {
+                window.setTimeout(updateViewportMetrics, 0);
+                window.setTimeout(updateViewportMetrics, 180);
+            }, false);
+
+            document.addEventListener('visibilitychange', function () {
+                if (!document.hidden) window.setTimeout(updateViewportMetrics, 80);
+            }, false);
         })();
     </script>
 
@@ -5141,6 +5649,525 @@
             } else {
                 initialize();
             }
+        })();
+    </script>
+
+
+
+    <script id="ak-tv-four-way-remote-runtime-v2">
+        (function () {
+            'use strict';
+
+            var root = document.documentElement;
+            if (!root.classList.contains('low-power-tv')) return;
+
+            root.classList.add('tv-remote-ready');
+
+            var raf = window.requestAnimationFrame || function (fn) { return window.setTimeout(fn, 16); };
+            var lastFocusedKey = '';
+            var lastTrigger = null;
+            var currentFocused = null;
+            var restoreTimer = 0;
+            var overlayWasOpen = false;
+
+            var modalIds = ['shareModal', 'linkChoiceModal', 'versionModal', 'privacyModal', 'aboutModal'];
+            var focusableSelector = [
+                'button:not([disabled])',
+                'a[href]:not([aria-disabled="true"])',
+                'input:not([disabled])',
+                'select:not([disabled])',
+                'textarea:not([disabled])',
+                '[tabindex]:not([tabindex="-1"])'
+            ].join(',');
+
+            function closestCompat(element, selector) {
+                if (!element || element === document) return null;
+                if (element.closest) return element.closest(selector);
+                var node = element;
+                while (node && node.nodeType === 1) {
+                    var matcher = node.matches || node.msMatchesSelector || node.webkitMatchesSelector;
+                    if (matcher && matcher.call(node, selector)) return node;
+                    node = node.parentElement;
+                }
+                return null;
+            }
+
+            function hasClassInAncestors(element, className) {
+                var node = element;
+                while (node && node !== document.documentElement) {
+                    if (node.classList && node.classList.contains(className)) return true;
+                    node = node.parentElement;
+                }
+                return false;
+            }
+
+            function isClosedLayer(element) {
+                var node = element;
+                while (node && node !== document.documentElement) {
+                    if (node.classList) {
+                        if (node.classList.contains('hidden')) return true;
+                        if (node.classList.contains('pointer-events-none')) return true;
+                    }
+                    if (node.getAttribute && node.getAttribute('aria-hidden') === 'true') return true;
+                    node = node.parentElement;
+                }
+                return false;
+            }
+
+            function isVisible(element) {
+                if (!element || !element.ownerDocument || isClosedLayer(element)) return false;
+                if (element.disabled) return false;
+                var style;
+                try { style = window.getComputedStyle(element); } catch (e) { style = null; }
+                if (style && (style.display === 'none' || style.visibility === 'hidden')) return false;
+                var rect = element.getBoundingClientRect();
+                return rect.width > 1 && rect.height > 1;
+            }
+
+            function getOpenModal() {
+                for (var i = 0; i < modalIds.length; i += 1) {
+                    var modal = document.getElementById(modalIds[i]);
+                    if (!modal) continue;
+                    if (!modal.classList.contains('opacity-0') && !modal.classList.contains('pointer-events-none')) return modal;
+                }
+                return null;
+            }
+
+            function getOpenMenu() {
+                var menu = document.getElementById('mobileMenuDropdown');
+                return menu && !menu.classList.contains('hidden') ? menu : null;
+            }
+
+            function getActiveScope() {
+                var modal = getOpenModal();
+                if (modal) return modal;
+                var menu = getOpenMenu();
+                if (menu) return menu;
+                return document;
+            }
+
+            function getFocusables(scope) {
+                var base = scope && scope.querySelectorAll ? scope : document;
+                var nodes = base.querySelectorAll(focusableSelector);
+                var list = [];
+                for (var i = 0; i < nodes.length; i += 1) {
+                    if (isVisible(nodes[i])) list.push(nodes[i]);
+                }
+                return list;
+            }
+
+            function makeFocusKey(element) {
+                if (!element || element === document.body || element === document.documentElement) return '';
+                if (element.id) return 'id:' + element.id;
+
+                var card = closestCompat(element, '.project-card');
+                var cardId = card && card.id ? card.id : '';
+                var action = element.getAttribute ? (element.getAttribute('data-action') || '') : '';
+                var identity = '';
+                if (element.dataset) {
+                    identity = element.dataset.project || element.dataset.grupid || element.dataset.id || element.dataset.name || element.dataset.type || '';
+                }
+                if (action || identity || cardId) return 'card:' + cardId + '|action:' + action + '|item:' + identity;
+
+                if (element.classList && element.classList.contains('cat-btn')) {
+                    return 'category:' + String(element.textContent || '').replace(/\s+/g, ' ').trim();
+                }
+
+                var href = element.getAttribute && element.getAttribute('href');
+                if (href) return 'href:' + href;
+                var label = element.getAttribute && (element.getAttribute('aria-label') || element.getAttribute('title'));
+                if (label) return 'label:' + label;
+                return '';
+            }
+
+            function findByFocusKey(key, scope) {
+                if (!key) return null;
+                var list = getFocusables(scope || getActiveScope());
+                for (var i = 0; i < list.length; i += 1) {
+                    if (makeFocusKey(list[i]) === key) return list[i];
+                }
+                return null;
+            }
+
+            function setVisualFocus(element) {
+                if (currentFocused && currentFocused.classList) currentFocused.classList.remove('tv-current-focus');
+                var oldCard = document.querySelector('.project-card.tv-card-active');
+                if (oldCard) oldCard.classList.remove('tv-card-active');
+
+                currentFocused = element;
+                if (!element || !element.classList) return;
+                element.classList.add('tv-current-focus');
+                var card = closestCompat(element, '.project-card');
+                if (card) card.classList.add('tv-card-active');
+            }
+
+            function findScrollParent(element) {
+                var node = element ? element.parentElement : null;
+                while (node && node !== document.body && node !== document.documentElement) {
+                    var style;
+                    try { style = window.getComputedStyle(node); } catch (e) { style = null; }
+                    var overflowY = style ? style.overflowY : '';
+                    var overflowX = style ? style.overflowX : '';
+                    var canScrollY = (overflowY === 'auto' || overflowY === 'scroll') && node.scrollHeight > node.clientHeight + 4;
+                    var canScrollX = (overflowX === 'auto' || overflowX === 'scroll') && node.scrollWidth > node.clientWidth + 4;
+                    if (canScrollY || canScrollX) return node;
+                    node = node.parentElement;
+                }
+                return null;
+            }
+
+            function ensureVisible(element) {
+                if (!element) return;
+                var margin = 44;
+                var scrollParent = findScrollParent(element);
+                var rect = element.getBoundingClientRect();
+
+                if (scrollParent) {
+                    var parentRect = scrollParent.getBoundingClientRect();
+                    if (rect.top < parentRect.top + margin) {
+                        scrollParent.scrollTop -= (parentRect.top + margin - rect.top);
+                    } else if (rect.bottom > parentRect.bottom - margin) {
+                        scrollParent.scrollTop += (rect.bottom - (parentRect.bottom - margin));
+                    }
+                    if (rect.left < parentRect.left + margin) {
+                        scrollParent.scrollLeft -= (parentRect.left + margin - rect.left);
+                    } else if (rect.right > parentRect.right - margin) {
+                        scrollParent.scrollLeft += (rect.right - (parentRect.right - margin));
+                    }
+                    return;
+                }
+
+                var viewportHeight = window.innerHeight || document.documentElement.clientHeight || 720;
+                var viewportWidth = window.innerWidth || document.documentElement.clientWidth || 1280;
+                var currentY = window.pageYOffset || document.documentElement.scrollTop || 0;
+                var currentX = window.pageXOffset || document.documentElement.scrollLeft || 0;
+                var targetY = currentY;
+                var targetX = currentX;
+
+                if (rect.top < margin || rect.bottom > viewportHeight - margin) {
+                    targetY = currentY + rect.top - Math.max(margin, (viewportHeight - rect.height) / 2);
+                }
+                if (rect.left < margin || rect.right > viewportWidth - margin) {
+                    targetX = currentX + rect.left - Math.max(margin, (viewportWidth - rect.width) / 2);
+                }
+
+                if (targetX !== currentX || targetY !== currentY) {
+                    try { window.scrollTo(Math.max(0, Math.round(targetX)), Math.max(0, Math.round(targetY))); }
+                    catch (e) {
+                        document.documentElement.scrollLeft = Math.max(0, Math.round(targetX));
+                        document.documentElement.scrollTop = Math.max(0, Math.round(targetY));
+                    }
+                }
+            }
+
+            function focusElement(element, keepPosition) {
+                if (!element || !isVisible(element)) return false;
+                try { element.focus({ preventScroll: true }); }
+                catch (e) { try { element.focus(); } catch (ignore) {} }
+                setVisualFocus(element);
+                lastFocusedKey = makeFocusKey(element) || lastFocusedKey;
+                if (!keepPosition) ensureVisible(element);
+                return true;
+            }
+
+            function getCenter(element) {
+                var rect = element.getBoundingClientRect();
+                return {
+                    x: rect.left + rect.width / 2,
+                    y: rect.top + rect.height / 2,
+                    width: rect.width,
+                    height: rect.height
+                };
+            }
+
+            function directionScore(current, candidate, direction) {
+                var from = getCenter(current);
+                var to = getCenter(candidate);
+                var dx = to.x - from.x;
+                var dy = to.y - from.y;
+                var primary;
+                var cross;
+
+                if (direction === 'left') {
+                    if (dx >= -3) return Infinity;
+                    primary = -dx;
+                    cross = Math.abs(dy);
+                } else if (direction === 'right') {
+                    if (dx <= 3) return Infinity;
+                    primary = dx;
+                    cross = Math.abs(dy);
+                } else if (direction === 'up') {
+                    if (dy >= -3) return Infinity;
+                    primary = -dy;
+                    cross = Math.abs(dx);
+                } else {
+                    if (dy <= 3) return Infinity;
+                    primary = dy;
+                    cross = Math.abs(dx);
+                }
+
+                var anglePenalty = cross / Math.max(primary, 1);
+                var sameBand = direction === 'left' || direction === 'right'
+                    ? cross <= Math.max(from.height, to.height) * 0.75
+                    : cross <= Math.max(from.width, to.width) * 0.75;
+
+                return primary + (cross * (sameBand ? 1.35 : 3.2)) + (anglePenalty * 90);
+            }
+
+            function moveFocus(direction) {
+                var scope = getActiveScope();
+                var list = getFocusables(scope);
+                if (!list.length) return;
+
+                var current = document.activeElement;
+                if (!current || current === document.body || current === document.documentElement || list.indexOf(current) === -1) {
+                    var restored = findByFocusKey(lastFocusedKey, scope);
+                    focusElement(restored || list[0]);
+                    return;
+                }
+
+                var best = null;
+                var bestScore = Infinity;
+                for (var i = 0; i < list.length; i += 1) {
+                    var candidate = list[i];
+                    if (candidate === current) continue;
+                    var score = directionScore(current, candidate, direction);
+                    if (score < bestScore) {
+                        bestScore = score;
+                        best = candidate;
+                    }
+                }
+
+                if (!best) {
+                    /* At an edge, stay in the same scope instead of jumping unpredictably. */
+                    setVisualFocus(current);
+                    ensureVisible(current);
+                    return;
+                }
+                focusElement(best);
+            }
+
+            function keyDirection(event) {
+                var key = event.key || '';
+                var code = event.keyCode || event.which || 0;
+                if (key === 'ArrowLeft' || key === 'Left' || code === 37) return 'left';
+                if (key === 'ArrowUp' || key === 'Up' || code === 38) return 'up';
+                if (key === 'ArrowRight' || key === 'Right' || code === 39) return 'right';
+                if (key === 'ArrowDown' || key === 'Down' || code === 40) return 'down';
+                return '';
+            }
+
+            function isBackKey(event) {
+                var key = event.key || '';
+                var code = event.keyCode || event.which || 0;
+                return key === 'Escape' || key === 'Back' || key === 'GoBack' || key === 'BrowserBack' || code === 27 || code === 461 || code === 10009;
+            }
+
+            function closeTopLayer() {
+                var modal = getOpenModal();
+                if (modal) {
+                    var close = modal.querySelector('button[id^="btnClose"]');
+                    if (close) close.click();
+                    return true;
+                }
+                var menu = getOpenMenu();
+                if (menu) {
+                    var menuButton = document.getElementById('mobileMenuBtn');
+                    if (menuButton) menuButton.click();
+                    else menu.classList.add('hidden');
+                    return true;
+                }
+                return false;
+            }
+
+            function stabilizeCard(card) {
+                if (!card || !card.classList || !card.classList.contains('project-card')) return;
+                card.classList.remove('opacity-0');
+                card.classList.remove('translate-y-4');
+                card.style.opacity = '1';
+                card.style.visibility = 'visible';
+                card.style.transform = 'none';
+                card.style.animation = 'none';
+                card.style.transition = 'none';
+                card.style.contentVisibility = 'visible';
+                card.style.contain = 'none';
+                card.style.willChange = 'auto';
+                card.setAttribute('data-tv-persistent-card', 'true');
+            }
+
+            function stabilizeCards(scope) {
+                var base = scope && scope.querySelectorAll ? scope : document;
+                if (base.classList && base.classList.contains('project-card')) stabilizeCard(base);
+                var cards = base.querySelectorAll('.project-card');
+                for (var i = 0; i < cards.length; i += 1) stabilizeCard(cards[i]);
+            }
+
+            function focusInitial() {
+                var scope = getActiveScope();
+                var current = document.activeElement;
+                if (current && current !== document.body && current !== document.documentElement && isVisible(current)) {
+                    setVisualFocus(current);
+                    return;
+                }
+
+                var restored = findByFocusKey(lastFocusedKey, scope);
+                if (restored) {
+                    focusElement(restored, true);
+                    return;
+                }
+
+                var preferred = null;
+                if (scope === document) {
+                    preferred = document.querySelector('#categoryContainer .cat-btn[aria-pressed="true"]') ||
+                                document.querySelector('#categoryContainer .cat-btn') ||
+                                document.getElementById('mobileMenuBtn') ||
+                                document.getElementById('searchBar');
+                }
+                var list = getFocusables(scope);
+                focusElement(preferred && isVisible(preferred) ? preferred : list[0], true);
+            }
+
+            function scheduleRestoreFocus() {
+                window.clearTimeout(restoreTimer);
+                restoreTimer = window.setTimeout(function () {
+                    stabilizeCards(document);
+                    var scope = getActiveScope();
+                    var active = document.activeElement;
+                    if (!active || active === document.body || active === document.documentElement || !document.documentElement.contains(active)) {
+                        var replacement = findByFocusKey(lastFocusedKey, scope);
+                        if (replacement) focusElement(replacement, true);
+                        else focusInitial();
+                    } else {
+                        setVisualFocus(active);
+                    }
+                }, 36);
+            }
+
+            function syncOverlayFocus() {
+                var modal = getOpenModal();
+                var menu = getOpenMenu();
+                var isOpen = !!(modal || menu);
+
+                if (isOpen && !overlayWasOpen) {
+                    var scope = modal || menu;
+                    var list = getFocusables(scope);
+                    if (list.length) focusElement(list[0], true);
+                } else if (!isOpen && overlayWasOpen) {
+                    if (lastTrigger && document.documentElement.contains(lastTrigger) && isVisible(lastTrigger)) {
+                        focusElement(lastTrigger, true);
+                    } else {
+                        focusInitial();
+                    }
+                }
+                overlayWasOpen = isOpen;
+            }
+
+            document.addEventListener('focusin', function (event) {
+                var target = event.target;
+                if (!target || target === document.body || target === document.documentElement) return;
+                lastFocusedKey = makeFocusKey(target) || lastFocusedKey;
+                setVisualFocus(target);
+                ensureVisible(target);
+            }, true);
+
+            document.addEventListener('focusout', function (event) {
+                var related = event.relatedTarget;
+                if (!related) return;
+                var oldCard = closestCompat(event.target, '.project-card');
+                var newCard = closestCompat(related, '.project-card');
+                if (oldCard && oldCard !== newCard) oldCard.classList.remove('tv-card-active');
+            }, true);
+
+            document.addEventListener('click', function (event) {
+                var trigger = closestCompat(event.target,
+                    '#mobileMenuBtn, #aboutModalBtn, #mobileAboutBtn, #btnOpenPrivacyModal, ' +
+                    '[data-action="open-share-menu"], [data-action="open-version-modal"]'
+                );
+                if (trigger) lastTrigger = trigger;
+                window.setTimeout(syncOverlayFocus, 0);
+            }, true);
+
+            document.addEventListener('keydown', function (event) {
+                var direction = keyDirection(event);
+                if (direction) {
+                    /* Keep arrow keys for text caret only while the TV keyboard is editing. */
+                    var active = document.activeElement;
+                    var isTextField = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA');
+                    if (isTextField && active.getAttribute('data-tv-editing') === 'true') return;
+
+                    event.preventDefault();
+                    event.stopPropagation();
+                    moveFocus(direction);
+                    return;
+                }
+
+                if (isBackKey(event)) {
+                    var editing = document.activeElement && document.activeElement.getAttribute && document.activeElement.getAttribute('data-tv-editing') === 'true';
+                    if (editing) {
+                        document.activeElement.removeAttribute('data-tv-editing');
+                        event.preventDefault();
+                        return;
+                    }
+                    if (closeTopLayer()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    return;
+                }
+
+                var key = event.key || '';
+                var code = event.keyCode || event.which || 0;
+                if ((key === 'Enter' || key === 'Select' || code === 13) && document.activeElement) {
+                    var activeElement = document.activeElement;
+                    if (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA') {
+                        activeElement.setAttribute('data-tv-editing', 'true');
+                    }
+                }
+            }, true);
+
+            function initialize() {
+                stabilizeCards(document);
+
+                if (window.MutationObserver) {
+                    var grid = document.getElementById('projectsGrid');
+                    var categories = document.getElementById('categoryContainer');
+                    var recents = document.getElementById('recentContainer');
+                    var observer = new MutationObserver(function (mutations) {
+                        for (var i = 0; i < mutations.length; i += 1) {
+                            var added = mutations[i].addedNodes || [];
+                            for (var j = 0; j < added.length; j += 1) {
+                                var node = added[j];
+                                if (node && node.nodeType === 1) stabilizeCards(node);
+                            }
+                        }
+                        scheduleRestoreFocus();
+                    });
+                    if (grid) observer.observe(grid, { childList: true, subtree: true });
+                    if (categories) observer.observe(categories, { childList: true, subtree: true });
+                    if (recents) observer.observe(recents, { childList: true, subtree: true });
+
+                    var overlayObserver = new MutationObserver(function () {
+                        raf(syncOverlayFocus);
+                    });
+                    for (var k = 0; k < modalIds.length; k += 1) {
+                        var modal = document.getElementById(modalIds[k]);
+                        if (modal) overlayObserver.observe(modal, { attributes: true, attributeFilter: ['class'] });
+                    }
+                    var menu = document.getElementById('mobileMenuDropdown');
+                    if (menu) overlayObserver.observe(menu, { attributes: true, attributeFilter: ['class'] });
+                }
+
+                window.addEventListener('pageshow', function () {
+                    stabilizeCards(document);
+                    scheduleRestoreFocus();
+                }, false);
+
+                window.setTimeout(focusInitial, 350);
+                window.setTimeout(focusInitial, 1200);
+            }
+
+            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initialize, false);
+            else initialize();
         })();
     </script>
 
