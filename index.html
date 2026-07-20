@@ -2837,6 +2837,140 @@
         }
     </style>
 
+
+
+    <style id="ak-mobile-modern-modal-stability-v3">
+        /* Modern mobile browsers: use a single, cheap fade layer instead of scale + blur.
+           This avoids WebKit/Chromium compositor re-rasterisation and visible shaking. */
+        @media (hover: none), (pointer: coarse), (max-width: 900px) {
+            #shareModal,
+            #linkChoiceModal,
+            #versionModal,
+            #privacyModal,
+            #aboutModal {
+                -webkit-backdrop-filter: none !important;
+                backdrop-filter: none !important;
+                background: rgba(8, 13, 31, 0.78) !important;
+                transition: opacity 150ms ease-out !important;
+                transform: none !important;
+                perspective: none !important;
+                isolation: isolate;
+                align-items: center !important;
+                overflow-x: hidden !important;
+                overflow-y: auto !important;
+                -webkit-overflow-scrolling: auto !important;
+                overscroll-behavior: contain;
+                touch-action: pan-y;
+            }
+
+            @supports (height: 100svh) {
+                #shareModal,
+                #linkChoiceModal,
+                #versionModal,
+                #privacyModal,
+                #aboutModal {
+                    height: 100svh !important;
+                    min-height: 100svh !important;
+                }
+            }
+
+            #shareModal > div,
+            #linkChoiceModal > div,
+            #versionModal > div,
+            #privacyModal > div,
+            #aboutModal > div {
+                transform: none !important;
+                translate: none !important;
+                scale: none !important;
+                rotate: none !important;
+                animation: none !important;
+                transition: opacity 150ms ease-out !important;
+                -webkit-backdrop-filter: none !important;
+                backdrop-filter: none !important;
+                -webkit-backface-visibility: hidden;
+                backface-visibility: hidden;
+                transform-style: flat !important;
+                will-change: auto !important;
+                contain: layout paint style;
+                margin: auto !important;
+                flex-shrink: 0;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            @supports (height: 100svh) {
+                #shareModal > div,
+                #linkChoiceModal > div,
+                #versionModal > div,
+                #privacyModal > div,
+                #aboutModal > div {
+                    max-height: calc(100svh - 2rem) !important;
+                }
+            }
+
+            /* Tailwind scale utility classes are still toggled by the existing JS,
+               but are deliberately neutralised on touch screens. */
+            #shareModal > div.scale-95,
+            #shareModal > div.scale-100,
+            #linkChoiceModal > div.scale-95,
+            #linkChoiceModal > div.scale-100,
+            #versionModal > div.scale-95,
+            #versionModal > div.scale-100,
+            #privacyModal > div.scale-95,
+            #privacyModal > div.scale-100,
+            #aboutModal > div.scale-95,
+            #aboutModal > div.scale-100 {
+                transform: none !important;
+            }
+
+            /* The header dropdown also avoids scale animation on touch devices. */
+            #mobileMenuDropdown {
+                transform: none !important;
+                transform-origin: top right;
+                animation: akMobileMenuOpacityOnly 135ms ease-out both !important;
+                -webkit-backdrop-filter: none !important;
+                backdrop-filter: none !important;
+                contain: layout paint style;
+                -webkit-backface-visibility: hidden;
+                backface-visibility: hidden;
+                will-change: auto !important;
+            }
+
+            @keyframes akMobileMenuOpacityOnly {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+
+            /* Do not animate button scale while a dialog is being opened. */
+            html.ak-ui-opening [data-action="open-share-menu"],
+            html.ak-ui-opening [data-action="open-version-modal"],
+            html.ak-ui-opening #aboutModalBtn,
+            html.ak-ui-opening #mobileAboutBtn,
+            html.ak-ui-opening #btnOpenPrivacyModal,
+            html.ak-ui-open [data-action="open-share-menu"],
+            html.ak-ui-open [data-action="open-version-modal"] {
+                transform: none !important;
+                transition: none !important;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            #shareModal,
+            #linkChoiceModal,
+            #versionModal,
+            #privacyModal,
+            #aboutModal,
+            #shareModal > div,
+            #linkChoiceModal > div,
+            #versionModal > div,
+            #privacyModal > div,
+            #aboutModal > div,
+            #mobileMenuDropdown {
+                transition: none !important;
+                animation: none !important;
+            }
+        }
+    </style>
+
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-400 min-h-screen flex flex-col antialiased transition-colors duration-300">
 
@@ -4632,13 +4766,13 @@
                 inner.classList.remove('scale-95');
                 inner.classList.add('scale-100');
                 btn.setAttribute('aria-expanded', 'true');
-                setTimeout(() => modal.querySelector('button').focus(), 100);
+                if (!(window.matchMedia && window.matchMedia('(hover: none), (pointer: coarse)').matches)) setTimeout(() => modal.querySelector('button').focus(), 100);
             } else {
                 modal.classList.add('opacity-0', 'pointer-events-none');
                 inner.classList.remove('scale-100');
                 inner.classList.add('scale-95');
                 btn.setAttribute('aria-expanded', 'false');
-                btn.focus();
+                if (!(window.matchMedia && window.matchMedia('(hover: none), (pointer: coarse)').matches)) btn.focus();
             }
             setTimeout(syncModalScrollLock, 0);
         }
@@ -4650,7 +4784,7 @@
                 modal.classList.remove('opacity-0', 'pointer-events-none');
                 inner.classList.remove('scale-95');
                 inner.classList.add('scale-100');
-                setTimeout(() => modal.querySelector('button').focus(), 100);
+                if (!(window.matchMedia && window.matchMedia('(hover: none), (pointer: coarse)').matches)) setTimeout(() => modal.querySelector('button').focus(), 100);
             } else {
                 modal.classList.add('opacity-0', 'pointer-events-none');
                 inner.classList.remove('scale-100');
