@@ -43,6 +43,9 @@
             var isOtherInApp = /TikTok|Line\/|Twitter|Snapchat|Pinterest|GSA\/|; wv\)|\bwv\b/i.test(ua);
             var isAndroidWebView = /; wv\)/i.test(ua) || (/Version\/4\.0/i.test(ua) && /Chrome\//i.test(ua) && /Mobile Safari/i.test(ua));
             var isInApp = isInstagram || isFacebook || isOtherInApp || isAndroidWebView;
+            var isSmartTV = /SMART[- ]?TV|SmartTV|Android TV|GoogleTV|Tizen|Web0S|WebOS|NetCast|HbbTV|BRAVIA|VIERA|VIDAA|Hisense|PhilipsTV|Roku|AFTB|AFTM|AFTS|AFTT|FireTV|CrKey|DTV|CE-HTML|TV Safari|Maple|MiTV|SHIELD Android TV/i.test(ua);
+            var forcedTvLite = /(?:^|[?&])(?:tv|lite|performance)=(?:1|true|tv|lite)(?:&|$)/i.test(window.location.search || '');
+            var isLowPowerTV = !!(isSmartTV || forcedTvLite);
 
             function versionFrom(regex) {
                 var match = ua.match(regex);
@@ -80,9 +83,11 @@
                 !supportsGrid ||
                 !supportsSticky
             );
-            var preferStableScroll = isInApp || isAndroidWebView || isLegacy || !supportsSmoothScroll;
+            var preferStableScroll = isInApp || isAndroidWebView || isLegacy || isLowPowerTV || !supportsSmoothScroll;
 
-            if (isInApp || isLegacy) root.classList.add('compat-browser');
+            if (isInApp || isLegacy || isLowPowerTV) root.classList.add('compat-browser');
+            if (isSmartTV) root.classList.add('tv-browser');
+            if (isLowPowerTV) root.classList.add('low-power-tv');
             if (isLegacy) root.classList.add('legacy-engine');
             if (preferStableScroll) root.classList.add('stable-scroll-browser');
             if (!supportsBackdrop) root.classList.add('no-backdrop');
@@ -95,13 +100,15 @@
                 isInstagram: isInstagram,
                 isAndroidWebView: isAndroidWebView,
                 isLegacy: isLegacy,
+                isSmartTV: isSmartTV,
+                isLowPowerTV: isLowPowerTV,
                 supportsBackdrop: supportsBackdrop,
                 supportsDvh: supportsDvh,
                 supportsGrid: supportsGrid,
                 supportsSticky: supportsSticky,
                 supportsSmoothScroll: supportsSmoothScroll,
                 preferStableScroll: preferStableScroll,
-                canNativeShare: !!navigator.share && !isInApp && !isLegacy
+                canNativeShare: !!navigator.share && !isInApp && !isLegacy && !isLowPowerTV
             };
         })();
     </script>
@@ -2971,6 +2978,229 @@
         }
     </style>
 
+
+    <style id="ak-low-power-tv-performance-v1">
+        /*
+         * Smart TV / low-power rendering mode.
+         * Activated automatically by common TV user agents, or manually with ?tv=1 / ?lite=1.
+         * Keeps the design language while avoiding costly 4K blur, fixed compositing and animation work.
+         */
+        html.low-power-tv {
+            scroll-behavior: auto !important;
+            background: #eef3ff;
+        }
+
+        html.low-power-tv.dark {
+            background: #080d1d;
+        }
+
+        html.low-power-tv body {
+            background: linear-gradient(145deg, #f5f8ff 0%, #edf2ff 52%, #f7f2ff 100%) !important;
+            background-attachment: scroll !important;
+            text-rendering: optimizeSpeed;
+        }
+
+        html.low-power-tv.dark body {
+            background: linear-gradient(145deg, #070b18 0%, #0b1226 52%, #101126 100%) !important;
+        }
+
+        html.low-power-tv::before,
+        html.low-power-tv::after,
+        html.low-power-tv body::before,
+        html.low-power-tv body::after,
+        html.low-power-tv body > div[aria-hidden="true"] {
+            display: none !important;
+            content: none !important;
+            animation: none !important;
+        }
+
+        html.low-power-tv *,
+        html.low-power-tv *::before,
+        html.low-power-tv *::after {
+            -webkit-backdrop-filter: none !important;
+            backdrop-filter: none !important;
+            animation-duration: 0.01ms !important;
+            animation-delay: 0ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            transition-delay: 0ms !important;
+            text-shadow: none !important;
+        }
+
+        html.low-power-tv header {
+            position: relative !important;
+            top: auto !important;
+            background: rgba(248, 250, 255, 0.99) !important;
+            border-color: rgba(119, 132, 183, 0.2) !important;
+            box-shadow: 0 4px 18px rgba(46, 58, 105, 0.1) !important;
+        }
+
+        html.low-power-tv.dark header {
+            background: rgba(10, 16, 34, 0.99) !important;
+            border-color: rgba(131, 145, 220, 0.14) !important;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.28) !important;
+        }
+
+        html.low-power-tv main > .bg-white\/80,
+        html.low-power-tv .project-card,
+        html.low-power-tv #mobileMenuDropdown,
+        html.low-power-tv #shareModal > div,
+        html.low-power-tv #linkChoiceModal > div,
+        html.low-power-tv #versionModal > div,
+        html.low-power-tv #privacyModal > div,
+        html.low-power-tv #aboutModal > div,
+        html.low-power-tv footer {
+            background: #fbfcff !important;
+            border-color: rgba(116, 129, 179, 0.2) !important;
+            box-shadow: 0 5px 18px rgba(52, 63, 112, 0.1) !important;
+            filter: none !important;
+        }
+
+        html.low-power-tv.dark main > .bg-white\/80,
+        html.low-power-tv.dark .project-card,
+        html.low-power-tv.dark #mobileMenuDropdown,
+        html.low-power-tv.dark #shareModal > div,
+        html.low-power-tv.dark #linkChoiceModal > div,
+        html.low-power-tv.dark #versionModal > div,
+        html.low-power-tv.dark #privacyModal > div,
+        html.low-power-tv.dark #aboutModal > div,
+        html.low-power-tv.dark footer {
+            background: #111a34 !important;
+            border-color: rgba(132, 148, 225, 0.16) !important;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28) !important;
+        }
+
+        html.low-power-tv main > .bg-white\/80::before,
+        html.low-power-tv .project-card::before,
+        html.low-power-tv .project-card::after,
+        html.low-power-tv .go-app-btn::before,
+        html.low-power-tv header .absolute.left-1\/2 span::after {
+            display: none !important;
+            content: none !important;
+        }
+
+        html.low-power-tv #projectsGrid {
+            contain: layout style !important;
+        }
+
+        html.low-power-tv .project-card {
+            opacity: 1 !important;
+            transform: none !important;
+            contain: layout paint style !important;
+            content-visibility: auto;
+            contain-intrinsic-size: 340px;
+            will-change: auto !important;
+        }
+
+        html.low-power-tv .project-card:hover,
+        html.low-power-tv .project-card:active,
+        html.low-power-tv .project-card:hover .project-icon,
+        html.low-power-tv .project-card:active .project-icon,
+        html.low-power-tv .cat-btn:hover,
+        html.low-power-tv .go-app-btn:hover,
+        html.low-power-tv .share-btn:hover {
+            transform: none !important;
+        }
+
+        html.low-power-tv .project-card:hover,
+        html.low-power-tv .project-card:active {
+            border-color: rgba(86, 105, 218, 0.42) !important;
+            box-shadow: 0 6px 20px rgba(52, 63, 112, 0.13) !important;
+        }
+
+        html.low-power-tv.dark .project-card:hover,
+        html.low-power-tv.dark .project-card:active {
+            border-color: rgba(135, 153, 255, 0.4) !important;
+            box-shadow: 0 7px 22px rgba(0, 0, 0, 0.32) !important;
+        }
+
+        html.low-power-tv .project-card.deep-link-highlight {
+            outline: 4px solid rgba(82, 104, 255, 0.72) !important;
+            outline-offset: 4px !important;
+            border-color: rgba(82, 104, 255, 0.72) !important;
+            box-shadow: 0 0 0 7px rgba(82, 104, 255, 0.12), 0 8px 24px rgba(52, 63, 112, 0.16) !important;
+        }
+
+        html.low-power-tv.dark .project-card.deep-link-highlight {
+            outline-color: rgba(143, 161, 255, 0.8) !important;
+            border-color: rgba(143, 161, 255, 0.72) !important;
+            box-shadow: 0 0 0 7px rgba(114, 135, 255, 0.13), 0 9px 26px rgba(0, 0, 0, 0.34) !important;
+        }
+
+        html.low-power-tv #searchBar,
+        html.low-power-tv .cat-btn,
+        html.low-power-tv .project-icon,
+        html.low-power-tv .share-btn,
+        html.low-power-tv .project-card [data-element="version-btn"],
+        html.low-power-tv .project-card [data-element="fav-btn"] {
+            filter: none !important;
+            box-shadow: 0 2px 8px rgba(55, 66, 112, 0.08) !important;
+        }
+
+        html.low-power-tv.dark #searchBar,
+        html.low-power-tv.dark .cat-btn,
+        html.low-power-tv.dark .project-icon,
+        html.low-power-tv.dark .share-btn,
+        html.low-power-tv.dark .project-card [data-element="version-btn"],
+        html.low-power-tv.dark .project-card [data-element="fav-btn"] {
+            box-shadow: 0 3px 9px rgba(0, 0, 0, 0.2) !important;
+        }
+
+        html.low-power-tv #shareModal,
+        html.low-power-tv #linkChoiceModal,
+        html.low-power-tv #versionModal,
+        html.low-power-tv #privacyModal,
+        html.low-power-tv #aboutModal {
+            background: rgba(4, 8, 20, 0.82) !important;
+        }
+
+        html.low-power-tv #mobileMenuDropdown,
+        html.low-power-tv #shareModal,
+        html.low-power-tv #linkChoiceModal,
+        html.low-power-tv #versionModal,
+        html.low-power-tv #privacyModal,
+        html.low-power-tv #aboutModal,
+        html.low-power-tv #shareModal > div,
+        html.low-power-tv #linkChoiceModal > div,
+        html.low-power-tv #versionModal > div,
+        html.low-power-tv #privacyModal > div,
+        html.low-power-tv #aboutModal > div {
+            animation: none !important;
+            transform: none !important;
+            will-change: auto !important;
+        }
+
+        html.low-power-tv #categoryContainer,
+        html.low-power-tv .snap-x,
+        html.low-power-tv .snap-mandatory,
+        html.low-power-tv .snap-center {
+            scroll-snap-type: none !important;
+            scroll-snap-align: none !important;
+        }
+
+        /* TV remotes rely on keyboard focus rather than touch feedback. */
+        html.low-power-tv button:focus,
+        html.low-power-tv a:focus,
+        html.low-power-tv input:focus {
+            outline: 4px solid #5368ff !important;
+            outline-offset: 4px !important;
+            box-shadow: 0 0 0 7px rgba(83, 104, 255, 0.16) !important;
+        }
+
+        html.low-power-tv.dark button:focus,
+        html.low-power-tv.dark a:focus,
+        html.low-power-tv.dark input:focus {
+            outline-color: #9aabff !important;
+            box-shadow: 0 0 0 7px rgba(138, 157, 255, 0.18) !important;
+        }
+
+        @media (min-width: 1280px) {
+            html.low-power-tv .project-card {
+                min-height: 300px !important;
+            }
+        }
+    </style>
+
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-400 min-h-screen flex flex-col antialiased transition-colors duration-300">
 
@@ -3464,6 +3694,8 @@
                 isInstagram: false,
                 isAndroidWebView: false,
                 isLegacy: false,
+                isSmartTV: false,
+                isLowPowerTV: false,
                 preferStableScroll: false,
                 canNativeShare: !!navigator.share
             };
@@ -3476,6 +3708,7 @@
                 compat.preferStableScroll ||
                 compat.isInApp ||
                 compat.isAndroidWebView ||
+                compat.isLowPowerTV ||
                 reduceMotion ||
                 document.documentElement.classList.contains('stable-scroll-browser')
             );
@@ -4029,6 +4262,8 @@
             }
 
             let sortedProjects = [...projects];
+            const renderBatch = document.createDocumentFragment();
+            const lowPowerRendering = !!getCompatInfo().isLowPowerTV;
             
             const searchBar = document.getElementById('searchBar');
             if (activeCategory === 'Tümü' && favorites.length > 0 && (!searchBar || searchBar.value.length === 0)) {
@@ -4046,7 +4281,14 @@
                 
                 const card = clone.querySelector('.project-card');
                 card.id = `project-${normalizeText(project.adi)}`;
-                card.style.animation = `fadeInUp 0.4s ease forwards ${index * 0.05}s`;
+                if (lowPowerRendering) {
+                    card.classList.remove('opacity-0', 'translate-y-4');
+                    card.style.opacity = '1';
+                    card.style.transform = 'none';
+                    card.style.animation = 'none';
+                } else {
+                    card.style.animation = `fadeInUp 0.4s ease forwards ${index * 0.05}s`;
+                }
                 
                 if (project.duyur && project.duyur.trim() !== "") {
                     const ribbonContainer = clone.querySelector('[data-element="ribbon-container"]');
@@ -4127,8 +4369,10 @@
                     gBtn.dataset.name = project.id;
                 }
 
-                grid.appendChild(clone);
+                renderBatch.appendChild(clone);
             });
+
+            grid.appendChild(renderBatch);
         }
 
         function generateCategoryButtons() {
@@ -4716,6 +4960,11 @@
             };
 
             const compat = getCompatInfo();
+
+            if (compat.isLowPowerTV || html.classList.contains('low-power-tv')) {
+                applyTheme();
+                return;
+            }
 
             if ((compat.isInApp || compat.isLegacy || html.classList.contains('compat-browser')) && !reduceMotion) {
                 let curtain = document.getElementById('akCompatThemeCurtain');
