@@ -1,4 +1,16 @@
 [
+      
+      {
+    "id": "sesatolyesi-v1.0",
+    "grupId": "sesatolyesi",
+    "surumTipi": "Onerilen",
+    "adi": "Ses Atölyesi v1.0",
+    "url": "https://sesatolyesi.netlify.app/",
+    "duyur": "YENİ",
+    "kategori": "Ofis",
+    "ikon": "〰️",
+    "aciklama": "Ses dosyalarını ücretsiz olarak dönüştürmenizi, istediğiniz bölümü seçip ayrı kaydetmenizi veya seçili kısmı silmenizi sağlayan tarayıcı tabanlı bir ses düzenleme aracıdır. MP3, WAV, M4A, FLAC, OGG, OPUS ve daha birçok biçim olmak üzere toplam 19 çıktı seçeneği sunar. Dalga görünümü, tam ekran düzenleme, %10–%2000 yakınlaştırma, hassas zaman ayarı, döngüde dinleme, sessizliğe hizalama ve yumuşak geçiş özellikleriyle kolay kullanım sağlar. Dosyalarınız sunucuya yüklenmez; işlemler cihazınızda gerçekleştirilir. Mobil, tablet ve masaüstüyle uyumludur."
+  },
       {
     "id": "videodonustur-v1.0",
     "grupId": "videodonustur",
