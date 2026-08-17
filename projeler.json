@@ -1,5 +1,15 @@
 [
-      
+       {
+    "id": "gonderal-v1.4",
+    "grupId": "gonderal",
+    "surumTipi": "Onerilen",
+    "adi": "GönderAl v1.4",
+    "url": "https://gonderal.netlify.app/",
+    "duyur": "YENİ",
+    "kategori": "Ofis",
+    "ikon": "📤",
+    "aciklama": "GönderAl; telefon, tablet ve bilgisayarlar arasında dosya, metin, çoklu URL ve QR kod içeriklerini cihazdan cihaza aktarmanızı sağlayan ücretsiz bir uygulamadır. Veriler sunucuda tutulmaz veya dosya olarak depolanmaz. QR kod veya 6 haneli kodla eşleşir, aynı bağlantı üzerinden birden fazla aktarım yapabilir, dosya başına 1 GB’a kadar gönderimi destekler, aktarım sırasında yüzde, hız ve kalan süreyi gösterir, bağlantı kesildiğinde kaldığı yerden devam edebilir, çoklu QR kod tarayabilir ve gönderilen bağlantıları karşı cihazda tıklanabilir şekilde yeni sekmede açabilir."
+  }, 
       {
     "id": "sesatolyesi-v1.0",
     "grupId": "sesatolyesi",
