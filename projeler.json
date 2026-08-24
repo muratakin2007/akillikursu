@@ -1,4 +1,15 @@
 [
+        {
+    "id": "metinal-v1.0",
+    "grupId": "metinal",
+    "surumTipi": "Onerilen",
+    "adi": "Metin Al v1.0",
+    "url": "https://metinal.netlify.app/",
+    "duyur": "YENİ",
+    "kategori": "Ofis",
+    "ikon": "🔠",
+    "aciklama": "fotoğraf, taranmış belge, kitap sayfası ve PDF içindeki yazıları seçilebilir, düzenlenebilir metne dönüştürür. Böylece yazıları yeniden yazmadan kopyalayabilir ve kaydedebilirsiniz."
+  }, 
        {
     "id": "gonderal-v1.4",
     "grupId": "gonderal",
